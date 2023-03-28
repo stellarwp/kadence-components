@@ -65,6 +65,7 @@ export { default as URLInputInline } from './links/inline-link-control';
 export { default as InputSearch } from './links/input-search';
 export { default as URLInputControl } from './links/link-control';
 export { default as TextHighlight } from './links/text-highlight';
+export { default as URLExtenalInputControl } from './links/external-link-control';
 
 /* Icons */
 export { default as GenIcon } from './icons/gen-icon';
