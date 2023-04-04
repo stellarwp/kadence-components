@@ -459,15 +459,6 @@ class TypographyControls extends Component {
 		return (
 			<>
 				<div className={ 'components-base-control kb-typography-control' }>
-					{ label && (
-						<div className='kadence-title-bar kadence-component__header'>
-							<label
-								className="kadence-heading-fontfamily-title components-typography-control__label kadence-component__header__title"
-							>
-								{ label }
-							</label>
-						</div>
-					) }
 					<div className="kadence-title-bar">
 						{ label && (
 							<h2 className="kt-heading-fontfamily-title">{ label }</h2>
