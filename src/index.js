@@ -53,6 +53,7 @@ export { default as GapSizeControl } from './gap-controls';
 export { default as ResponsiveGapSizeControl } from './gap-controls/responsive';
 export { default as CopyPasteAttributes } from './copy-paste-attributes';
 export { default as KadencePanelButton } from './panel-button';
+export { default as SelectPostsModal } from './select-posts-modal';
 
 /* Panels */
 export { default as ColorGroup } from './panels/color-group';
