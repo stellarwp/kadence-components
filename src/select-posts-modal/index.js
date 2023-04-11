@@ -26,7 +26,7 @@ function SelectPostsModal( props ) {
 	const {
 		selectedPosts,
 		onSelect,
-		postType,
+		postType = '',
 		modalTitle = __( 'Select posts', 'kadence-blocks-pro' ),
 		buttonLabel = __( 'Select posts', 'kadence-blocks-pro' ),
 	} = props;
@@ -79,6 +79,10 @@ function SelectPostsModal( props ) {
 			query.search = searchTerm;
 		}
 
+		if( postType !== '' ) {
+			query.type = Array.isArray( postType ) ? postType : [ postType ];
+		}
+
 		return apiFetch( {
 			path  : addQueryArgs( postSelectEndpoint, query ),
 			method: 'GET',
@@ -109,14 +113,12 @@ function SelectPostsModal( props ) {
 		}
 
 		setIsLoadingMeta( true );
-		const postTypes = Array.isArray( postType ) ? postType : [ postType ];
 
 		apiFetch( {
 			path  : addQueryArgs( postSelectEndpoint, {
 				include : tmpSelectedPosts,
 				per_page: tmpSelectedPosts.length,
 				context : 'view',
-				types   : postTypes,
 			} ),
 			method: 'GET',
 		} ).then( ( response ) => {
