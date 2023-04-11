@@ -130,7 +130,7 @@ function SelectPostsModal( props ) {
 
 	useEffect( () => {
 		fetchPosts( false );
-	}, [ page ] );
+	}, [ page, postType ] );
 
 	useEffect( () => {
 		fetchSelected();
