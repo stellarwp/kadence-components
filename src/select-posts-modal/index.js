@@ -202,136 +202,135 @@ function SelectPostsModal( props ) {
 			</Button>
 
 			{isOpen && (
-				<div className={'post-select select-posts-modal'}>
-					<Modal
-						isFullScreen={true}
-						focusOnMount //focus on the first element in the modal
-						shouldCloseOnEsc
-						title={modalTitle}
-						onRequestClose={( e ) => {
-							setIsOpen( false );
-							setTmpSelectedPosts( selectedPosts );
-						}}
-					>
+				<Modal
+					className={'select-posts-modal'}
+					isFullScreen={true}
+					focusOnMount //focus on the first element in the modal
+					shouldCloseOnEsc
+					title={modalTitle}
+					onRequestClose={( e ) => {
+						setIsOpen( false );
+						setTmpSelectedPosts( selectedPosts );
+					}}
+				>
 
-						<Fragment>
-							{( currentView === 'browse' ) && (
-								<Flex
-									align="center"
-									justify="space-between"
-									style={{ height: '100%', gap: 0 }}
-								>
-									{window.innerWidth > 767 || ( showFilters && window.innerWidth < 767 ) ?
-										<FlexItem className={'post-filters'}>
-											<h4>{__( 'Filter Posts', 'kadence-blocks-pro' )}</h4>
+					<Fragment>
+						{( currentView === 'browse' ) && (
+							<Flex
+								align="center"
+								justify="space-between"
+								style={{ height: '100%', gap: 0 }}
+							>
+								{window.innerWidth > 767 || ( showFilters && window.innerWidth < 767 ) ?
+									<FlexItem className={'post-filters'}>
+										<h4>{__( 'Filter Posts', 'kadence-blocks-pro' )}</h4>
 
-											<TextControl
-												label={__( 'Search', 'kadence-blocks-pro' )}
-												value={searchTerm}
-												onChange={( value ) => setSearchTerm( value )}
-											/>
+										<TextControl
+											label={__( 'Search', 'kadence-blocks-pro' )}
+											value={searchTerm}
+											onChange={( value ) => setSearchTerm( value )}
+										/>
 
-											<KadenceSelectTerms
-												placeholder={__( 'Filter by Category', 'kadence-blocks' )}
-												restBase={'wp/v2/categories'}
-												fieldId={'tax-select-category'}
-												value={filterCategories}
-												onChange={( value ) => {
-													setFilterCategories( ( value ? value : [] ) );
-												}}
-											/>
+										<KadenceSelectTerms
+											placeholder={__( 'Filter by Category', 'kadence-blocks' )}
+											restBase={'wp/v2/categories'}
+											fieldId={'tax-select-category'}
+											value={filterCategories}
+											onChange={( value ) => {
+												setFilterCategories( ( value ? value : [] ) );
+											}}
+										/>
 
-											<br/>
+										<br/>
 
-											<KadenceSelectTerms
-												placeholder={__( 'Filter by Tag', 'kadence-blocks' )}
-												restBase={'wp/v2/tags'}
-												fieldId={'tax-select-tags'}
-												value={filterTags}
-												onChange={( value ) => {
-													setFilterTags( ( value ? value : [] ) );
-												}}
-											/>
+										<KadenceSelectTerms
+											placeholder={__( 'Filter by Tag', 'kadence-blocks' )}
+											restBase={'wp/v2/tags'}
+											fieldId={'tax-select-tags'}
+											value={filterTags}
+											onChange={( value ) => {
+												setFilterTags( ( value ? value : [] ) );
+											}}
+										/>
 
-											<br/>
-											<Button variant={'primary'} onClick={() => {
-												fetchPosts();
-												setShowFilters( false );
-											}}>
-												{__( 'Filter Posts', 'kadence-blocks-pro' )}
-											</Button>
+										<br/>
+										<Button variant={'primary'} onClick={() => {
+											fetchPosts();
+											setShowFilters( false );
+										}}>
+											{__( 'Filter Posts', 'kadence-blocks-pro' )}
+										</Button>
 
-										</FlexItem> : null}
+									</FlexItem> : null}
 
-									{window.innerWidth > 767 || ( !showFilters && window.innerWidth < 767 ) ?
-										<FlexBlock style={{ height: '100%', borderTop: '1px solid #ccc' }}>
-											{isLoading && (
-												<center><Spinner/></center>
-											)}
+								{window.innerWidth > 767 || ( !showFilters && window.innerWidth < 767 ) ?
+									<FlexBlock style={{ height: '100%', borderTop: '1px solid #ccc' }}>
+										{isLoading && (
+											<center><Spinner/></center>
+										)}
 
-											{!isLoading && fetchedPosts.length > 0 && (
-												<>
-													{renderPagination()}
-													<table width={'100%'} cellspacing={'0'}>
-														{fetchedPosts.map( ( post, index ) => (
-															renderPostRow( post )
-														) )}
-													</table>
-												</>
-											)}
+										{!isLoading && fetchedPosts.length > 0 && (
+											<>
+												{renderPagination()}
+												<table width={'100%'} cellspacing={'0'}>
+													{fetchedPosts.map( ( post, index ) => (
+														renderPostRow( post )
+													) )}
+												</table>
+											</>
+										)}
 
-											{!isLoading && fetchedPosts.length === 0 && (
-												<>
-													<p>{__( 'No posts found matching filters', 'kadence-blocks-pro' )}</p>
+										{!isLoading && fetchedPosts.length === 0 && (
+											<>
+												<p>{__( 'No posts found matching filters', 'kadence-blocks-pro' )}</p>
 
-													<Button className={'mobile-toggle'} variant={'primary'} onClick={() => setShowFilters( true )}>{__( 'Show Filters', 'kadence-blocks-pro' )}</Button>
-												</>
-											)}
+												<Button className={'mobile-toggle'} variant={'primary'} onClick={() => setShowFilters( true )}>{__( 'Show Filters', 'kadence-blocks-pro' )}</Button>
+											</>
+										)}
 
-										</FlexBlock> : null}
-								</Flex>
-							)}
-							{( currentView === 'selected' ) && (
-								<>
-									{isLoadingMeta && (
-										<center><Spinner/></center>
-									)}
+									</FlexBlock> : null}
+							</Flex>
+						)}
+						{( currentView === 'selected' ) && (
+							<>
+								{isLoadingMeta && (
+									<center><Spinner/></center>
+								)}
 
-									{!isLoadingMeta && selectedMeda.length === 0 && (
-										<p>{__( 'No posts have been selected', 'kadence-blocks-pro' )}</p>
-									)}
+								{!isLoadingMeta && selectedMeda.length === 0 && (
+									<p>{__( 'No posts have been selected', 'kadence-blocks-pro' )}</p>
+								)}
 
-									{!isLoadingMeta && selectedMeda.length > 0 && (
-										<table width={'100%'} cellspacing={'0'}>
-											{selectedMeda.map( ( post, index ) => (
-												renderPostRow( post )
-											) )}
-										</table>
-									)}
+								{!isLoadingMeta && selectedMeda.length > 0 && (
+									<table width={'100%'} cellspacing={'0'}>
+										{selectedMeda.map( ( post, index ) => (
+											renderPostRow( post )
+										) )}
+									</table>
+								)}
 
-								</>
-							)}
-						</Fragment>
+							</>
+						)}
+					</Fragment>
 
-						<div className={'modal-footer'}>
-							<Button
-								variant={'primary'}
-								style={{ marginLeft: '20px' }}
-								onClick={() => {
-									onSelect( tmpSelectedPosts );
-									setIsOpen( false );
-								}}
-							>{__( 'Select', 'kadence-blocks-pro' )}</Button>
+					<div className={'modal-footer'}>
+						<Button
+							variant={'primary'}
+							style={{ marginLeft: '20px' }}
+							onClick={() => {
+								onSelect( tmpSelectedPosts );
+								setIsOpen( false );
+							}}
+						>{__( 'Select', 'kadence-blocks-pro' )}</Button>
 
-							{currentView === 'browse' ?
-								<Button variant={'secondary'} onClick={() => setCurrentView( 'selected' )}>{__( 'View Selected', 'kadence-blocks-pro' )}</Button>
-								:
-								<Button variant={'secondary'} onClick={() => setCurrentView( 'browse' )}>{__( 'Browse Posts', 'kadence-blocks-pro' )}</Button>
-							}
-						</div>
+						{currentView === 'browse' ?
+							<Button variant={'secondary'} onClick={() => setCurrentView( 'selected' )}>{__( 'View Selected', 'kadence-blocks-pro' )}</Button>
+							:
+							<Button variant={'secondary'} onClick={() => setCurrentView( 'browse' )}>{__( 'Browse Posts', 'kadence-blocks-pro' )}</Button>
+						}
+					</div>
 
-					</Modal>
-				</div>
+				</Modal>
 			)}
 		</>
 	);
