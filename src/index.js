@@ -101,3 +101,4 @@ export { default as KadenceBlockDefaults } from './block-defaults';
 export { default as KadenceIconPicker } from './icon-picker';
 
 export { default as SelectParentBlock } from './select-parent-block';
+export { default as ObfuscateTextControl } from './obfuscate-text-control';
