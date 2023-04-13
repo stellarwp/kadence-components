@@ -6,8 +6,6 @@ import { dateI18n, __experimentalGetSettings } from '@wordpress/date';
 
 import './editor.scss';
 
-const { postSelectEndpoint } = window.kbpData;
-
 import {
 	KadenceSelectTerms,
 } from '@kadence/components';
@@ -24,6 +22,7 @@ import {
 
 function SelectPostsModal( props ) {
 	const {
+		postSelectEndpoint,
 		selectedPosts,
 		onSelect,
 		postType = '',
