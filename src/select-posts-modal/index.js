@@ -18,6 +18,7 @@ import {
 	FlexBlock,
 	Spinner,
 	TextControl,
+	Dashicon
 } from '@wordpress/components';
 
 function SelectPostsModal( props ) {
@@ -155,18 +156,66 @@ function SelectPostsModal( props ) {
 		}
 	};
 
-	const renderPostRow = ( post ) => {
+	const moveDown = ( currentIndex, id ) => {
+		const newTmpSelected = [ ...tmpSelectedPosts ];
+		const temp = newTmpSelected[ currentIndex + 1 ];
+		newTmpSelected[ currentIndex + 1 ] = newTmpSelected[ currentIndex ];
+		newTmpSelected[ currentIndex ] = temp;
+		setTmpSelectedPosts( newTmpSelected );
+
+		const newMetaArray = [ ...selectedMeda ];
+		const temp2 = newMetaArray[ currentIndex + 1 ];
+		newMetaArray[ currentIndex + 1 ] = newMetaArray[ currentIndex ];
+		newMetaArray[ currentIndex ] = temp2;
+		setSelectedMeta( newMetaArray );
+	}
+
+	const moveUp = ( currentIndex, id ) => {
+		const newTmpSelected = [ ...tmpSelectedPosts ];
+		const temp = newTmpSelected[ currentIndex - 1 ];
+		newTmpSelected[ currentIndex - 1 ] = newTmpSelected[ currentIndex ];
+		newTmpSelected[ currentIndex ] = temp;
+		setTmpSelectedPosts( newTmpSelected );
+
+		const newMetaArray = [ ...selectedMeda ];
+		const temp2 = newMetaArray[ currentIndex - 1 ];
+		newMetaArray[ currentIndex - 1 ] = newMetaArray[ currentIndex ];
+		newMetaArray[ currentIndex ] = temp2;
+		setSelectedMeta( newMetaArray );
+	}
+
+	const renderPostRow = ( post, view, currentIndex = 0, totalItems = 0 ) => {
+		const canMoveUp = currentIndex > 0;
+		const canMoveDown = currentIndex < totalItems - 1;
+
 		return (
 			<tr key={post.id} className={tmpSelectedPosts.includes( post.id ) ? 'is-selected' : ''}>
 				<td style={{ width: '5px' }}></td>
-				<td onClick={
-					() => {
-						updateSelected( post.id );
-					}
-				}>
+				<td onClick={ view !== 'selected' ? () => { updateSelected( post.id ); } : () => {} }>
 					<h2>{post.title.raw}</h2>
 					<strong>Type: </strong> {post.type} <strong>Published: </strong> {dateI18n( dateFormat, post.date_gmt )}
 				</td>
+				{ view === 'selected' &&
+					<td>
+						<Button onClick={() => { moveUp( currentIndex, post.id ); }}
+								disabled={ ! canMoveUp }
+								label={__( 'Move Up', 'kadence-blocks' )}
+								showTooltip={true}>
+							<Dashicon icon="arrow-up"/>
+						</Button>
+						<Button onClick={() => { moveDown( currentIndex, post.id ); }}
+								label={__( 'Move Down', 'kadence-blocks' )}
+								disabled={ ! canMoveDown }
+								showTooltip={true}>
+							<Dashicon icon="arrow-down"/>
+						</Button>
+						<Button onClick={() => { updateSelected( post.id ); }}
+								label={__( 'Unselect', 'kadence-blocks' )}
+								showTooltip={true}>
+							<Dashicon icon="no"/>
+						</Button>
+					</td>
+				}
 			</tr>
 		);
 	};
@@ -275,7 +324,7 @@ function SelectPostsModal( props ) {
 												{renderPagination()}
 												<table width={'100%'} cellspacing={'0'}>
 													{fetchedPosts.map( ( post, index ) => (
-														renderPostRow( post )
+														renderPostRow( post, currentView )
 													) )}
 												</table>
 											</>
@@ -305,7 +354,7 @@ function SelectPostsModal( props ) {
 								{!isLoadingMeta && selectedMeda.length > 0 && (
 									<table width={'100%'} cellspacing={'0'}>
 										{selectedMeda.map( ( post, index ) => (
-											renderPostRow( post )
+											renderPostRow( post, currentView, index, selectedMeda.length )
 										) )}
 									</table>
 								)}
