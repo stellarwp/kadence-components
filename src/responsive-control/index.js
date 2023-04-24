@@ -1,5 +1,5 @@
 /**
- * Responsive Range Component
+ * Generic Responsive Component, add your own controls
  *
  */
 
