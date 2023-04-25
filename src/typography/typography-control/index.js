@@ -295,37 +295,6 @@ class TypographyControls extends Component {
 			subset: fontSubset,
 			loadGoogle: loadGoogleFont,
 		};
-		const headingOptions = range( tagLowLevel, tagHighLevel ).map( createhtmlTagControl );
-		if ( otherTags.p ) {
-			headingOptions.push( [
-				{
-					icon: <HeadingLevelIcon level={ 'p' } isPressed={ ( htmlTag && htmlTag === 'p' ? true : false ) } />,
-					title: __( 'Paragraph', 'kadence-blocks' ),
-					isActive: ( htmlTag && htmlTag === 'p' ? true : false ),
-					onClick: () => onTagLevelHTML( 2, 'p' ),
-				},
-			] );
-		}
-		if ( otherTags.span ) {
-			headingOptions.push( [
-				{
-					icon: <HeadingLevelIcon level={ 'span' } isPressed={ ( htmlTag && htmlTag === 'span' ? true : false ) } />,
-					title: __( 'Span', 'kadence-blocks' ),
-					isActive: ( htmlTag && htmlTag === 'span' ? true : false ),
-					onClick: () => onTagLevelHTML( 2, 'span' ),
-				},
-			] );
-		}
-		if ( otherTags.div ) {
-			headingOptions.push( [
-				{
-					icon: <HeadingLevelIcon level={ 'div' } isPressed={ ( htmlTag && htmlTag === 'div' ? true : false ) } />,
-					title: __( 'Div', 'kadence-blocks' ),
-					isActive: ( htmlTag && htmlTag === 'div' ? true : false ),
-					onClick: () => onTagLevelHTML( 2, 'div' ),
-				},
-			] );
-		}
 
 		const onTypoFontChange = ( select ) => {
 			if ( select === null ) {
@@ -479,7 +448,7 @@ class TypographyControls extends Component {
 							{ onTagLevelHTML && (
 								<TagSelect
 									label={__( 'HTML Tag', 'kadence-blocks' )}
-									value={ 'heading' === htmlTag ? level : htmlTag }
+									value={ 'heading' === htmlTag ? tagLevel : htmlTag }
 									onChange={ (value) => {
 										if ( 'div' === value || 'p' === value || 'span' === value ) {
 											onTagLevelHTML( 2, value );
@@ -487,6 +456,7 @@ class TypographyControls extends Component {
 											onTagLevelHTML( value, 'heading' );
 										}
 									} }
+									otherTags={ otherTags }
 								/>
 							) }
 							{ ! onTagLevelHTML && (

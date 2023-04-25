@@ -50,83 +50,10 @@ export default function tagSelect( {
 	headingOnly = false,
 	tagLowLevel = 1,
 	tagHighLevel = 7,
+	otherTags,
 } ) {
 	const level = ( value !== 'span' && value !== 'div' && value !== 'p' ? value : 2 );
 	const htmlTag = ( value === 'span' || value === 'div' || value === 'p' ? value : 'heading' );
-	const headingOptions = [
-		[
-			{
-				icon    : <HeadingLevelIcon level={1} isPressed={( 1 === level && htmlTag && htmlTag === 'heading' ? true : false )}/>,
-				title   : __( 'Heading 1', 'kadence-blocks' ),
-				isActive: ( 1 === level && htmlTag && htmlTag === 'heading' ? true : false ),
-				onClick : () => onChange( 1 ),
-			},
-		],
-		[
-			{
-				icon    : <HeadingLevelIcon level={2} isPressed={( 2 === level && htmlTag && htmlTag === 'heading' ? true : false )}/>,
-				title   : __( 'Heading 2', 'kadence-blocks' ),
-				isActive: ( 2 === level && htmlTag && htmlTag === 'heading' ? true : false ),
-				onClick : () => onChange( 2 ),
-			},
-		],
-		[
-			{
-				icon    : <HeadingLevelIcon level={3} isPressed={( 3 === level && htmlTag && htmlTag === 'heading' ? true : false )}/>,
-				title   : __( 'Heading 3', 'kadence-blocks' ),
-				isActive: ( 3 === level && htmlTag && htmlTag === 'heading' ? true : false ),
-				onClick : () => onChange( 3 ),
-			},
-		],
-		[
-			{
-				icon    : <HeadingLevelIcon level={4} isPressed={( 4 === level && htmlTag && htmlTag === 'heading' ? true : false )}/>,
-				title   : __( 'Heading 4', 'kadence-blocks' ),
-				isActive: ( 4 === level && htmlTag && htmlTag === 'heading' ? true : false ),
-				onClick : () => onChange( 4 ),
-			},
-		],
-		[
-			{
-				icon    : <HeadingLevelIcon level={5} isPressed={( 5 === level && htmlTag && htmlTag === 'heading' ? true : false )}/>,
-				title   : __( 'Heading 5', 'kadence-blocks' ),
-				isActive: ( 5 === level && htmlTag && htmlTag === 'heading' ? true : false ),
-				onClick : () => onChange( 5 ),
-			},
-		],
-		[
-			{
-				icon    : <HeadingLevelIcon level={6} isPressed={( 6 === level && htmlTag && htmlTag === 'heading' ? true : false )}/>,
-				title   : __( 'Heading 6', 'kadence-blocks' ),
-				isActive: ( 6 === level && htmlTag && htmlTag === 'heading' ? true : false ),
-				onClick : () => onChange( 6 ),
-			},
-		],
-		[
-			{
-				icon    : <HeadingLevelIcon level={'p'} isPressed={( htmlTag && htmlTag === 'p' ? true : false )}/>,
-				title   : __( 'Paragraph', 'kadence-blocks' ),
-				isActive: ( htmlTag && htmlTag === 'p' ? true : false ),
-				onClick : () => onChange( 'p' ),
-			},
-		],
-		[
-			{
-				icon    : <HeadingLevelIcon level={'span'} isPressed={( htmlTag && htmlTag === 'span' ? true : false )}/>,
-				title   : __( 'Span', 'kadence-blocks' ),
-				isActive: ( htmlTag && htmlTag === 'span' ? true : false ),
-				onClick : () => onChange( 'span' ),
-			},
-		],
-		[
-			{
-				icon    : <HeadingLevelIcon level={'div'} isPressed={( htmlTag && htmlTag === 'div' ? true : false )}/>,
-				title   : __( 'div', 'kadence-blocks' ),
-				isActive: ( htmlTag && htmlTag === 'div' ? true : false ),
-				onClick : () => onChange( 'div' ),
-			},
-		],
-	];
 	const createhtmlTagControl = ( targetLevel ) => {
 		return [ {
 			icon: <HeadingLevelIcon level={ targetLevel } isPressed={ ( targetLevel === level && htmlTag && htmlTag === 'heading' ? true : false ) } />,
@@ -140,6 +67,39 @@ export default function tagSelect( {
 		} ];
 	};
 	const headingOnlyOptions = range( tagLowLevel, tagHighLevel ).map( createhtmlTagControl );
+	const headingOptions = headingOnlyOptions.map((val) => val);
+
+	if ( ( otherTags && otherTags.p ) || ! otherTags ) {
+		headingOptions.push( [
+			{
+				icon    : <HeadingLevelIcon level={'p'} isPressed={( htmlTag && htmlTag === 'p' ? true : false )}/>,
+				title   : __( 'Paragraph', 'kadence-blocks' ),
+				isActive: ( htmlTag && htmlTag === 'p' ? true : false ),
+				onClick : () => onChange( 'p' ),
+			},
+		] );
+	}
+	if ( ( otherTags && otherTags.span ) || ! otherTags ) {
+		headingOptions.push( [
+			{
+				icon    : <HeadingLevelIcon level={'span'} isPressed={( htmlTag && htmlTag === 'span' ? true : false )}/>,
+				title   : __( 'Span', 'kadence-blocks' ),
+				isActive: ( htmlTag && htmlTag === 'span' ? true : false ),
+				onClick : () => onChange( 'span' ),
+			},
+		] );
+	}
+	if ( ( otherTags && otherTags.div ) || ! otherTags ) {
+		headingOptions.push( [
+			{
+				icon    : <HeadingLevelIcon level={'div'} isPressed={( htmlTag && htmlTag === 'div' ? true : false )}/>,
+				title   : __( 'div', 'kadence-blocks' ),
+				isActive: ( htmlTag && htmlTag === 'div' ? true : false ),
+				onClick : () => onChange( 'div' ),
+			},
+		] );
+	}
+
 	return [
 		onChange && (
 			<div className={ `kb-tag-level-control components-base-control${ className ? ' ' + className : '' }`}>
