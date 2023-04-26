@@ -45,7 +45,7 @@ class KadenceImageControl extends Component {
 			kadenceDynamic,
 			dynamicAttribute = '' } = this.props;
 		return (
-			<div className="kadence-image-media-control kadence-image-background-control">
+			<div className="components-base-control kadence-image-media-control kadence-image-background-control">
 				{ ! hasImage && (
 					<Fragment>
 						{ label && (

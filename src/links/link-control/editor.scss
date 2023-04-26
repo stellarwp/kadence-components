@@ -178,3 +178,9 @@
     border-left: 0;
     border-right: 0;
 }
+.kb-side-link-control.kb-side-link-external .kb-side-link-control-inner-row .components-button.kb-dynamic-url-sidebar.has-icon {
+    border-right: 1px solid var(--kb-border-color, #859CB6);
+}
+.kb-side-link-control.has-dynamic-support.kb-side-link-external .kb-search-selection-name {
+	max-width: calc(100% - 30px);
+}
