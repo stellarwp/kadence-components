@@ -71,7 +71,8 @@ class URLExtenalInputControl extends Component {
                                    </div>
                                </Fragment>,
                                this.props.attributes,
-                               dynamicAttribute
+                               dynamicAttribute, 
+                               this.props
                            ) }
                        </div>
                    ) }
