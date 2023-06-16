@@ -162,12 +162,15 @@ class BackgroundControl extends Component {
 								onChange={ value => onSaveRepeat( value ) }
 							/>
 						) }
-						<KadenceRadioButtons
-							label={ __( 'Background Image Attachment', 'kadence-blocks' ) }
-							value={ ( imageAttachment ? imageAttachment : 'scroll' ) }
-							options={ attachmentOptions }
-							onChange={ value => onSaveAttachment( value ) }
-						/>
+						
+						{ onSaveAttachment && (
+							<KadenceRadioButtons
+								label={ __( 'Background Image Attachment', 'kadence-blocks' ) }
+								value={ ( imageAttachment ? imageAttachment : 'scroll' ) }
+								options={ attachmentOptions }
+								onChange={ value => onSaveAttachment( value ) }
+							/>
+						) }
 						{ ( imageAttachment ? imageAttachment : 'scroll' ) === 'fixed' && (
 							<p className="kb-sidebar-help">
 								{ __( 'Note: Attachment Fixed works only on desktop.', 'kadence-blocks' ) }
