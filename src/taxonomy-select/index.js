@@ -8,7 +8,7 @@ import { useState, useEffect } from '@wordpress/element';
 import { Spinner } from '@wordpress/components';
 import { addQueryArgs } from '@wordpress/url';
 import apiFetch from '@wordpress/api-fetch';
-import KadenceSelectTerms from '../select-terms-control';
+import KadencePostSelectTerms from '../post-select-terms-control';
 import { useInstanceId } from '@wordpress/compose';
 import { isArrayLike, has, isEmpty } from 'lodash';
 
@@ -126,7 +126,7 @@ export default function TaxonomySelect( {
 				} }
 			/>
 			{ '' !== tax && ! taxOnly && (
-				<KadenceSelectTerms
+				<KadencePostSelectTerms
 					source={ tax }
 					value={ value }
 					isMulti={ termIsMulti }

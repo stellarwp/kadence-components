@@ -37,6 +37,7 @@ export { default as SubsectionWrap } from './common/subsection-wrap';
 export { default as KadencePanelBody } from './panel-body';
 export { default as KadenceInspectorControls } from './inspector-controls';
 export { default as KadenceSelectTerms } from './select-terms-control';
+export { default as KadencePostSelectTerms } from './post-select-terms-control';
 export { default as SmallResponsiveControl } from './small-responsive-control';
 export { default as ResponsiveControl } from './responsive-control';
 export { default as StepControls } from './step-control';
