@@ -29,6 +29,7 @@ function SelectPostsModal( props ) {
 		postType = '',
 		modalTitle = __( 'Select posts', 'kadence-blocks-pro' ),
 		buttonLabel = __( 'Select posts', 'kadence-blocks-pro' ),
+		categoryRestBase = 'wp/v2/categories'
 	} = props;
 
 	const [ isOpen, setIsOpen ] = useState( false );
@@ -283,7 +284,7 @@ function SelectPostsModal( props ) {
 
 										<KadenceSelectTerms
 											placeholder={__( 'Filter by Category', 'kadence-blocks' )}
-											restBase={'wp/v2/categories'}
+											restBase={ categoryRestBase }
 											fieldId={'tax-select-category'}
 											value={filterCategories}
 											onChange={( value ) => {
