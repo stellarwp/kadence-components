@@ -268,7 +268,7 @@ function SelectPostsModal( props ) {
 					<Fragment>
 						{( currentView === 'browse' ) && (
 							<Flex
-								align="center"
+								align="start"
 								justify="space-between"
 								style={{ height: '100%', gap: 0 }}
 							>
