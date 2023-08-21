@@ -3,7 +3,7 @@
  * Provides and index property to the sub component so it can save to a array
  */
 
-import { Button } from '@wordpress/components'
+import { Button, TextControl, SelectControl } from '@wordpress/components'
 import { Fragment } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import Select from 'react-select';
@@ -43,9 +43,22 @@ function FieldMultiRule ( {
     // const fields = [].concat.apply( [], kadenceDynamicParams.conditionalFields.map( option => option.options ) );
     const fields = [{label:'Select Field',value:''},{label:'One',value:'one'}, {label:'Two',value:'two'}, {label:'Three',value:'three'}];
 
+    const compareOptions = [
+        { value: 'not_empty', label: __( 'Not Empty', 'kadence-blocks-pro' ) },
+        { value: 'is_empty', label: __( 'Empty', 'kadence-blocks-pro' ) },
+        { value: 'is_true', label: __( 'True', 'kadence-blocks-pro' ) },
+        { value: 'is_false', label: __( 'False', 'kadence-blocks-pro' ) },
+        { value: 'equals', label: '=' },
+        { value: 'not_equals', label: '!=' },
+        { value: 'equals_or_greater', label: '>=' },
+        { value: 'equals_or_less', label: '<=' },
+        { value: 'greater', label: '>' },
+        { value: 'less', label: '<' },
+    ];
+
     const blankRule = {
         field: '',
-        condition: '',
+        compare: '',
         value: ''
     }
 
@@ -86,29 +99,60 @@ function FieldMultiRule ( {
     for (const [key, value] of Object.entries(conditionalOptions.rules)) {
         rows.push(
             <Fragment>
+                <span className="kb-dynamic-title kb-dynamic-components-label">{ __( 'Conditional', 'kadence-blocks-pro' ) }</span>
                 <div className="components-base-control">
-                    <span className="kb-dynamic-title kb-dynamic-components-label">{ __( 'Conditional', 'kadence-blocks-pro' ) }</span>
-                    <div className="kb-dynamic-select-wrap">
-                        <Select
-                            options={ fields }
+                    <SelectControl
+                        label={ __( 'Field', 'kadence-blocks-pro' ) }
+                        options={ fields }
+                        className="kb-dynamic-select"
+                        classNamePrefix="kbp"
+                        value={ ( undefined !== conditionalOptions.rules[key].field ? conditionalOptions.rules[key].field : '' ) }
+                        onChange={ ( val ) => {
+                            if ( ! val ) {
+                                saveConditionalRule( { field: '' }, key );
+                            } else {
+                                saveConditionalRule( { field: val }, key );
+                            }
+                        } }
+                    />
+                </div>
+				{ conditionalOptions.rules[key].field && (
+                    <div className="components-base-control">
+                        <SelectControl
+                            label={ __( 'Compare Type', 'kadence-blocks-pro' ) }
+                            options={ compareOptions }
                             className="kb-dynamic-select"
                             classNamePrefix="kbp"
-                            value={ ( undefined !== conditionalOptions.rules[key] ? fields.filter( ( { value } ) => value === conditionalOptions.rules[key].field ) : '' ) }
-                            isMulti={ false }
-                            isSearchable={ true }
-                            isClearable={ true }
-                            maxMenuHeight={ 200 }
-                            placeholder={ __( 'None', 'kadence-blocks-pro' ) }
+                            value={ ( undefined !== conditionalOptions.rules[key].compare ? conditionalOptions.rules[key].compare : 'not_empty' ) }
                             onChange={ ( val ) => {
                                 if ( ! val ) {
-                                    saveConditionalRule( { field: '' }, key );
+                                    saveConditionalRule( { compare: '' }, key );
                                 } else {
-                                    saveConditionalRule( { field: val.value }, key );
+                                    saveConditionalRule( { compare: val }, key );
                                 }
                             } }
                         />
                     </div>
-                </div>
+                ) }
+				{ conditionalOptions.rules[key].compare && (
+                    <div className="components-base-control">
+                        <span className="kb-dynamic-title kb-dynamic-components-label">{ __( 'Value', 'kadence-blocks-pro' ) }</span>
+                        <div className="kb-dynamic-select-wrap">
+                            <TextControl
+                                // label={__( 'Value', 'kadence-blocks' )}
+                                placeholder={__( 'Compare to...', 'kadence-blocks' )}
+                                value={conditionalOptions.rules[key].value}
+                                onChange={ ( val ) => {
+                                    if ( ! val ) {
+                                        saveConditionalRule( { value: '' }, key );
+                                    } else {
+                                        saveConditionalRule( { value: val }, key );
+                                    }
+                                } }
+                            />
+                        </div>
+                    </div>
+                ) }
                 <Button
                     text={'Remove Rule'}
                     size={'small'}
