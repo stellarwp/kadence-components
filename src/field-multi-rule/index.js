@@ -116,8 +116,7 @@ function FieldMultiRule ( {
 
     for (const [key, value] of Object.entries(conditionalOptions.rules)) {
         rows.push(
-            <Fragment>
-                <span className="kb-dynamic-title kb-dynamic-components-label">{ __( 'Conditional', 'kadence-blocks-pro' ) }</span>
+            <div className='kb-field-rule'>
                 <div className="components-base-control">
                     <SelectControl
                         label={ __( 'Field', 'kadence-blocks-pro' ) }
@@ -155,7 +154,7 @@ function FieldMultiRule ( {
 				{ conditionalOptions.rules[key].compare && (
                     <div className="components-base-control">
                         <TextControl
-                            label={__( 'Value', 'kadence-blocks' )}
+                            label={__( 'Compare Value', 'kadence-blocks' )}
                             placeholder={__( 'Compare to...', 'kadence-blocks' )}
                             value={conditionalOptions.rules[key].value}
                             onChange={ ( val ) => {
@@ -173,21 +172,23 @@ function FieldMultiRule ( {
                     size={'small'}
                     variant={'primary'}
                     onClick={ () => removeConditionalRule( key ) }
+                    className='kb-field-rule-remove'
                 />
-            </Fragment>
+            </div>
         );
     }
 
     return (
-        <Fragment>
+        <div className='kb-field-rules'>
             {rows}
             <Button
                 text={'Add Rule'}
                 size={'small'}
                 variant={'primary'}
                 onClick={ addConditionalRule }
+                className='kb-field-rule-add'
             />
-        </Fragment>
+        </div>
     )
 }
 
