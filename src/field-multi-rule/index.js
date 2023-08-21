@@ -66,6 +66,12 @@ function FieldMultiRule ( {
         { value: 'equals_or_less', label: '<=' },
         { value: 'greater', label: '>' },
         { value: 'less', label: '<' },
+        { value: 'contains', label: __( 'Contains', 'kadence-blocks-pro' ) },
+        { value: 'doesnotcontain', label: __( 'Does Not Contain', 'kadence-blocks-pro' ) },
+        { value: 'beginswith', label: __( 'Begins With', 'kadence-blocks-pro' ) },
+        { value: 'doesnotbeginwith', label: __( 'Does Not Begin With', 'kadence-blocks-pro' ) },
+        { value: 'endswith', label: __( 'Ends With', 'kadence-blocks-pro' ) },
+        { value: 'doesnotendwith', label: __( 'Does Not End With', 'kadence-blocks-pro' ) },
     ];
 
     const blankRule = {
