@@ -4,10 +4,14 @@
  */
 
 import { Button, TextControl, SelectControl } from '@wordpress/components'
+import { useCallback } from '@wordpress/element';
 import { Fragment } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import Select from 'react-select';
 import { isEmpty } from 'lodash';
+import {
+	useEntityProp,
+} from '@wordpress/core-data';
 
 function FieldMultiRule ( {
     props,
@@ -38,16 +42,24 @@ function FieldMultiRule ( {
 
     const conditionalOptions = ( kadenceFieldConditional && kadenceFieldConditional.conditionalData ? kadenceFieldConditional.conditionalData : defaultOptions );
 
-    const rows = [];
+	const [ currentFields ] = useFormMeta( '_kad_form_fields' );
 
-    // const fields = [].concat.apply( [], kadenceDynamicParams.conditionalFields.map( option => option.options ) );
-    const fields = [{label:'Select Field',value:''},{label:'One',value:'one'}, {label:'Two',value:'two'}, {label:'Three',value:'three'}];
+    let currentFieldsSelect = [];
+    if ( currentFields ) {
+        currentFieldsSelect = currentFields.reduce(function(result, item) {
+            if ( 'undefined' != typeof( item.uniqueID ) && item.uniqueID != attributes.uniqueID ) {
+              result.push({label: item.label, value: item.uniqueID});
+            }
+            return result;
+        }, []);
+    }
+    currentFieldsSelect.unshift({label: 'Select Field', value: ''});
+
+    const rows = [];
 
     const compareOptions = [
         { value: 'not_empty', label: __( 'Not Empty', 'kadence-blocks-pro' ) },
         { value: 'is_empty', label: __( 'Empty', 'kadence-blocks-pro' ) },
-        { value: 'is_true', label: __( 'True', 'kadence-blocks-pro' ) },
-        { value: 'is_false', label: __( 'False', 'kadence-blocks-pro' ) },
         { value: 'equals', label: '=' },
         { value: 'not_equals', label: '!=' },
         { value: 'equals_or_greater', label: '>=' },
@@ -103,7 +115,7 @@ function FieldMultiRule ( {
                 <div className="components-base-control">
                     <SelectControl
                         label={ __( 'Field', 'kadence-blocks-pro' ) }
-                        options={ fields }
+                        options={ currentFieldsSelect }
                         className="kb-dynamic-select"
                         classNamePrefix="kbp"
                         value={ ( undefined !== conditionalOptions.rules[key].field ? conditionalOptions.rules[key].field : '' ) }
@@ -136,21 +148,18 @@ function FieldMultiRule ( {
                 ) }
 				{ conditionalOptions.rules[key].compare && (
                     <div className="components-base-control">
-                        <span className="kb-dynamic-title kb-dynamic-components-label">{ __( 'Value', 'kadence-blocks-pro' ) }</span>
-                        <div className="kb-dynamic-select-wrap">
-                            <TextControl
-                                // label={__( 'Value', 'kadence-blocks' )}
-                                placeholder={__( 'Compare to...', 'kadence-blocks' )}
-                                value={conditionalOptions.rules[key].value}
-                                onChange={ ( val ) => {
-                                    if ( ! val ) {
-                                        saveConditionalRule( { value: '' }, key );
-                                    } else {
-                                        saveConditionalRule( { value: val }, key );
-                                    }
-                                } }
-                            />
-                        </div>
+                        <TextControl
+                            label={__( 'Value', 'kadence-blocks' )}
+                            placeholder={__( 'Compare to...', 'kadence-blocks' )}
+                            value={conditionalOptions.rules[key].value}
+                            onChange={ ( val ) => {
+                                if ( ! val ) {
+                                    saveConditionalRule( { value: '' }, key );
+                                } else {
+                                    saveConditionalRule( { value: val }, key );
+                                }
+                            } }
+                        />
                     </div>
                 ) }
                 <Button
@@ -177,3 +186,21 @@ function FieldMultiRule ( {
 }
 
 export default FieldMultiRule;
+
+function useFormProp( prop ) {
+	return useEntityProp( 'postType', 'kadence_form', prop );
+}
+
+function useFormMeta( key ) {
+	const [ meta, setMeta ] = useFormProp( 'meta' );
+
+	return [
+		meta[ key ],
+		useCallback(
+			( newValue ) => {
+				setMeta( { ...meta, [ key ]: newValue } );
+			},
+			[ key, setMeta ],
+		),
+	];
+}
