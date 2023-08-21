@@ -48,7 +48,7 @@ function FieldMultiRule ( {
     if ( currentFields ) {
         currentFieldsSelect = currentFields.reduce(function(result, item) {
             if ( 'undefined' != typeof( item.uniqueID ) && item.uniqueID != attributes.uniqueID ) {
-              result.push({label: item.label, value: item.uniqueID});
+                result.push({label: item.label, value: item.uniqueID});
             }
             return result;
         }, []);
@@ -57,22 +57,32 @@ function FieldMultiRule ( {
 
     const rows = [];
 
-    const compareOptions = [
-        { value: 'not_empty', label: __( 'Not Empty', 'kadence-blocks-pro' ) },
-        { value: 'is_empty', label: __( 'Empty', 'kadence-blocks-pro' ) },
-        { value: 'equals', label: '=' },
-        { value: 'not_equals', label: '!=' },
-        { value: 'equals_or_greater', label: '>=' },
-        { value: 'equals_or_less', label: '<=' },
-        { value: 'greater', label: '>' },
-        { value: 'less', label: '<' },
-        { value: 'contains', label: __( 'Contains', 'kadence-blocks-pro' ) },
-        { value: 'doesnotcontain', label: __( 'Does Not Contain', 'kadence-blocks-pro' ) },
-        { value: 'beginswith', label: __( 'Begins With', 'kadence-blocks-pro' ) },
-        { value: 'doesnotbeginwith', label: __( 'Does Not Begin With', 'kadence-blocks-pro' ) },
-        { value: 'endswith', label: __( 'Ends With', 'kadence-blocks-pro' ) },
-        { value: 'doesnotendwith', label: __( 'Does Not End With', 'kadence-blocks-pro' ) },
-    ];
+    const numberTypes = ['number', 'date']
+
+    const compareOptions = {
+        'text': [
+            { value: 'not_empty', label: __( 'Not Empty', 'kadence-blocks-pro' ) },
+            { value: 'is_empty', label: __( 'Empty', 'kadence-blocks-pro' ) },
+            { value: 'equals', label: '=' },
+            { value: 'not_equals', label: '!=' },
+            { value: 'contains', label: __( 'Contains', 'kadence-blocks-pro' ) },
+            { value: 'doesnotcontain', label: __( 'Does Not Contain', 'kadence-blocks-pro' ) },
+            { value: 'beginswith', label: __( 'Begins With', 'kadence-blocks-pro' ) },
+            { value: 'doesnotbeginwith', label: __( 'Does Not Begin With', 'kadence-blocks-pro' ) },
+            { value: 'endswith', label: __( 'Ends With', 'kadence-blocks-pro' ) },
+            { value: 'doesnotendwith', label: __( 'Does Not End With', 'kadence-blocks-pro' ) },
+        ],
+        'number': [
+            { value: 'not_empty', label: __( 'Not Empty', 'kadence-blocks-pro' ) },
+            { value: 'is_empty', label: __( 'Empty', 'kadence-blocks-pro' ) },
+            { value: 'equals', label: '=' },
+            { value: 'not_equals', label: '!=' },
+            { value: 'equals_or_greater', label: '>=' },
+            { value: 'equals_or_less', label: '<=' },
+            { value: 'greater', label: '>' },
+            { value: 'less', label: '<' },
+        ]
+    }
 
     const blankRule = {
         field: '',
@@ -115,6 +125,9 @@ function FieldMultiRule ( {
     }
 
     for (const [key, value] of Object.entries(conditionalOptions.rules)) {
+        const selectedField = currentFields.find(e => e.uniqueID === conditionalOptions.rules[key].field);
+        const selectedFieldType = selectedField && numberTypes.includes( selectedField.type ) ? 'number' : 'text';
+
         rows.push(
             <div className='kb-field-rule'>
                 <div className="components-base-control">
@@ -137,7 +150,7 @@ function FieldMultiRule ( {
                     <div className="components-base-control">
                         <SelectControl
                             label={ __( 'Compare Type', 'kadence-blocks-pro' ) }
-                            options={ compareOptions }
+                            options={ compareOptions[selectedFieldType] }
                             className="kb-dynamic-select"
                             classNamePrefix="kbp"
                             value={ ( undefined !== conditionalOptions.rules[key].compare ? conditionalOptions.rules[key].compare : 'not_empty' ) }
