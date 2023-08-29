@@ -185,12 +185,21 @@ function FieldMultiRule ( {
             selectedFieldOptions = getOptionFieldOptions( selectedField );
         }
 
-        const defaultCompare = compareOptions[selectedFieldType][0].value;
         const rField = conditionalOptions.rules[key].field;
-        const rCompare = '' != conditionalOptions.rules[key].compare ? conditionalOptions.rules[key].compare : defaultCompare;
+        const rCompare = conditionalOptions.rules[key].compare;
         const rValue = conditionalOptions.rules[key].value;
+        const defaultCompare = compareOptions[selectedFieldType][0].value;
+        const needsValue = ! ( 'not_empty' == rCompare || 'is_empty' == rCompare || '' == rCompare );
 
-        const needsValue = ( 'not_empty' != rCompare && 'empty' != rCompare );
+        // Set compare to default based on field type, it should only be empty if we haven't selected a field yet.
+        if ( selectedField?.type && '' == rCompare ) {
+            saveConditionalRule( { compare: defaultCompare }, key );
+        }
+        // Set value to current time if empty and on a date or time field
+        if ( ( selectedField?.type && ('date' == selectedField.type || 'time' == selectedField.type ) ) && '' == rValue && needsValue) {
+			const currentDateTime = new Date(new Date().toUTCString());
+            saveConditionalRule( { value: currentDateTime }, key );
+        }
 
         const renderValueControl = () => {
             if ( needsValue ) {
@@ -213,7 +222,7 @@ function FieldMultiRule ( {
                             />
                         </div>
                     );
-                } else if ( 'date' == selectedField.type ) {
+                } else if ( 'date' == selectedField?.type ) {
                     return (
                         <div className="components-base-control">
                             <DatePicker
@@ -228,7 +237,7 @@ function FieldMultiRule ( {
                             />
                         </div>
                     );
-                } else if ( 'time' == selectedField.type ) {
+                } else if ( 'time' == selectedField?.type ) {
                     return (
                         <div className="components-base-control kb-time-only">
                             <TimePicker
@@ -290,7 +299,7 @@ function FieldMultiRule ( {
                             options={ compareOptions[selectedFieldType] }
                             className="kb-dynamic-select"
                             classNamePrefix="kbp"
-                            value={ ( undefined !== rCompare ? rCompare : defaultCompare ) }
+                            value={ rCompare }
                             onChange={ ( val ) => {
                                 if ( ! val ) {
                                     saveConditionalRule( { compare: '' }, key );
