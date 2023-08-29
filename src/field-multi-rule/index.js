@@ -160,7 +160,7 @@ function FieldMultiRule ( {
             ]
         } else {
             const block = getBlockByUniqueID(formInnerBlocks, selectedField?.uniqueID)
-            options = block?.attributes?.options;
+            options = [...block?.attributes?.options];
             options.unshift({label: 'Select Option', value: ''});
         }
         return options;
