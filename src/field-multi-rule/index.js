@@ -3,15 +3,16 @@
  * Provides and index property to the sub component so it can save to a array
  */
 
-import { Button, TextControl, SelectControl } from '@wordpress/components'
+import { Button, TextControl, SelectControl, DatePicker, TimePicker, DateTimePicker } from '@wordpress/components'
 import { useCallback } from '@wordpress/element';
-import { Fragment } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import Select from 'react-select';
-import { isEmpty } from 'lodash';
+import { isEmpty, get } from 'lodash';
 import {
+	useEntityBlockEditor,
 	useEntityProp,
 } from '@wordpress/core-data';
+
+import { getBlockByUniqueID } from '@kadence/helpers'
 
 function FieldMultiRule ( {
     props,
@@ -53,11 +54,23 @@ function FieldMultiRule ( {
             return result;
         }, []);
     }
+
+    const formId = currentFields?.[0]?.postId;
+
+    const [ blocks ] = useEntityBlockEditor(
+        'postType',
+        'kadence_form',
+        formId,
+    );
+    const formInnerBlocks = get( blocks, [ 0, 'innerBlocks' ], [] );
+
     currentFieldsSelect.unshift({label: 'Select Field', value: ''});
 
     const rows = [];
 
-    const numberTypes = ['number', 'date']
+    const numberTypes = ['number', 'date', 'time']
+    const optionTypes = ['select', 'checkbox', 'radio', 'accept']
+    const fillTypes = ['file']
 
     const compareOptions = {
         'text': [
@@ -81,7 +94,15 @@ function FieldMultiRule ( {
             { value: 'equals_or_less', label: '<=' },
             { value: 'greater', label: '>' },
             { value: 'less', label: '<' },
-        ]
+        ],
+        'option': [
+            { value: 'equals', label: '=' },
+            { value: 'not_equals', label: '!=' },
+        ],
+        'fill': [
+            { value: 'not_empty', label: __( 'Not Empty', 'kadence-blocks-pro' ) },
+            { value: 'is_empty', label: __( 'Empty', 'kadence-blocks-pro' ) },
+        ],
     }
 
     const blankRule = {
@@ -124,9 +145,125 @@ function FieldMultiRule ( {
         } );
     }
 
+    const getOptionFieldOptions = ( selectedField ) => {
+        let options = [];
+        if ( 'accept' == selectedField?.type ) {
+            options = [,
+                {
+                    label: 'not checked',
+                    value: ''
+                },
+                {
+                    label: 'checked',
+                    value: 'accept'
+                }
+            ]
+        } else {
+            const block = getBlockByUniqueID(formInnerBlocks, selectedField?.uniqueID)
+            options = block?.attributes?.options;
+            options.unshift({label: 'Select Option', value: ''});
+        }
+        return options;
+    }
+
     for (const [key, value] of Object.entries(conditionalOptions.rules)) {
-        const selectedField = currentFields.find(e => e.uniqueID === conditionalOptions.rules[key].field);
-        const selectedFieldType = selectedField && numberTypes.includes( selectedField.type ) ? 'number' : 'text';
+        const selectedField = conditionalOptions.rules[key].field ? currentFields.find(e => e.uniqueID === conditionalOptions.rules[key].field) : {};
+        let selectedFieldType = 'text';
+        let selectedFieldOptions = [];
+        
+        if ( numberTypes.includes( selectedField?.type ) ) {
+            selectedFieldType = 'number';
+        }
+        if ( optionTypes.includes( selectedField?.type ) ) {
+            selectedFieldType = 'option';
+        }
+        if ( fillTypes.includes( selectedField?.type ) ) {
+            selectedFieldType = 'fill';
+        }
+
+        if ( 'option' == selectedFieldType ) {
+            selectedFieldOptions = getOptionFieldOptions( selectedField );
+        }
+
+        const defaultCompare = compareOptions[selectedFieldType][0].value;
+        const rField = conditionalOptions.rules[key].field;
+        const rCompare = '' != conditionalOptions.rules[key].compare ? conditionalOptions.rules[key].compare : defaultCompare;
+        const rValue = conditionalOptions.rules[key].value;
+
+        const needsValue = ( 'not_empty' != rCompare && 'empty' != rCompare );
+
+        const renderValueControl = () => {
+            if ( needsValue ) {
+                if ( 'option' == selectedFieldType ) {
+                    return (
+                        <div className="components-base-control">
+                            <SelectControl
+                                label={ __( 'Compare Value', 'kadence-blocks-pro' ) }
+                                options={ selectedFieldOptions }
+                                className="kb-dynamic-select"
+                                classNamePrefix="kbp"
+                                value={rValue}
+                                onChange={ ( val ) => {
+                                    if ( ! val ) {
+                                        saveConditionalRule( { value: '' }, key );
+                                    } else {
+                                        saveConditionalRule( { value: val }, key );
+                                    }
+                                } }
+                            />
+                        </div>
+                    );
+                } else if ( 'date' == selectedField.type ) {
+                    return (
+                        <div className="components-base-control">
+                            <DatePicker
+                                currentDate={rValue}
+                                onChange={ ( val ) => {
+                                    if ( ! val ) {
+                                        saveConditionalRule( { value: '' }, key );
+                                    } else {
+                                        saveConditionalRule( { value: val }, key );
+                                    }
+                                } }
+                            />
+                        </div>
+                    );
+                } else if ( 'time' == selectedField.type ) {
+                    return (
+                        <div className="components-base-control kb-time-only">
+                            <TimePicker
+                                currentTime={rValue}
+                                onChange={ ( val ) => {
+                                    if ( ! val ) {
+                                        saveConditionalRule( { value: '' }, key );
+                                    } else {
+                                        saveConditionalRule( { value: val }, key );
+                                    }
+                                } }
+                                is12Hour={ true }
+                            />
+                        </div>
+                    );
+                } else {
+                    return (
+                        <div className="components-base-control">
+                            <TextControl
+                                label={__( 'Compare Value', 'kadence-blocks' )}
+                                placeholder={__( 'Compare to...', 'kadence-blocks' )}
+                                value={rValue}
+                                onChange={ ( val ) => {
+                                    if ( ! val ) {
+                                        saveConditionalRule( { value: '' }, key );
+                                    } else {
+                                        saveConditionalRule( { value: val }, key );
+                                    }
+                                } }
+                            />
+                        </div>
+                    )
+                }
+            }
+        }
 
         rows.push(
             <div className='kb-field-rule'>
@@ -136,24 +273,24 @@ function FieldMultiRule ( {
                         options={ currentFieldsSelect }
                         className="kb-dynamic-select"
                         classNamePrefix="kbp"
-                        value={ ( undefined !== conditionalOptions.rules[key].field ? conditionalOptions.rules[key].field : '' ) }
+                        value={ ( undefined !== rField ? rField : '' ) }
                         onChange={ ( val ) => {
                             if ( ! val ) {
-                                saveConditionalRule( { field: '' }, key );
+                                saveConditionalRule( { field: '', compare: '', value: '' }, key );
                             } else {
-                                saveConditionalRule( { field: val }, key );
+                                saveConditionalRule( { field: val, compare: '', value: '' }, key );
                             }
                         } }
                     />
                 </div>
-				{ conditionalOptions.rules[key].field && (
+				{ rField && (
                     <div className="components-base-control">
                         <SelectControl
                             label={ __( 'Compare Type', 'kadence-blocks-pro' ) }
                             options={ compareOptions[selectedFieldType] }
                             className="kb-dynamic-select"
                             classNamePrefix="kbp"
-                            value={ ( undefined !== conditionalOptions.rules[key].compare ? conditionalOptions.rules[key].compare : 'not_empty' ) }
+                            value={ ( undefined !== rCompare ? rCompare : defaultCompare ) }
                             onChange={ ( val ) => {
                                 if ( ! val ) {
                                     saveConditionalRule( { compare: '' }, key );
@@ -164,22 +301,7 @@ function FieldMultiRule ( {
                         />
                     </div>
                 ) }
-				{ conditionalOptions.rules[key].compare && (
-                    <div className="components-base-control">
-                        <TextControl
-                            label={__( 'Compare Value', 'kadence-blocks' )}
-                            placeholder={__( 'Compare to...', 'kadence-blocks' )}
-                            value={conditionalOptions.rules[key].value}
-                            onChange={ ( val ) => {
-                                if ( ! val ) {
-                                    saveConditionalRule( { value: '' }, key );
-                                } else {
-                                    saveConditionalRule( { value: val }, key );
-                                }
-                            } }
-                        />
-                    </div>
-                ) }
+                {renderValueControl()}
                 <Button
                     text={'Remove Rule'}
                     size={'small'}
