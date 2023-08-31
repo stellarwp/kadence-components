@@ -6,6 +6,7 @@
 import { Button, TextControl, SelectControl, DatePicker, TimePicker, DateTimePicker } from '@wordpress/components'
 import { useCallback } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
+import { closeSmall as closeIcon } from '@wordpress/icons'
 import { isEmpty, get } from 'lodash';
 import {
 	useEntityBlockEditor,
@@ -17,6 +18,7 @@ import { getBlockByUniqueID } from '@kadence/helpers'
 function FieldMultiRule ( {
     props,
     setAttributes,
+    combine
 } ) {
     // StoreAttribute hsould be the attribute that will store the state of this multi component.
     // It should come as an empty object {}
@@ -175,7 +177,10 @@ function FieldMultiRule ( {
         return options;
     }
 
+    // The main loop that poulates the rows of individual rules
+    var z = Object.entries(conditionalOptions.rules).length;
     for (const [key, value] of Object.entries(conditionalOptions.rules)) {
+
         const selectedField = conditionalOptions.rules[key].field ? currentFields.find(e => e.uniqueID === conditionalOptions.rules[key].field) : {};
         let selectedFieldType = 'text';
         let selectedFieldOptions = [];
@@ -284,51 +289,66 @@ function FieldMultiRule ( {
         }
 
         rows.push(
-            <div className='kb-field-rule'>
-                <div className="components-base-control">
-                    <SelectControl
-                        label={ __( 'Field', 'kadence-blocks-pro' ) }
-                        options={ currentFieldsSelect }
-                        className="kb-dynamic-select"
-                        classNamePrefix="kbp"
-                        value={ ( undefined !== rField ? rField : '' ) }
-                        onChange={ ( val ) => {
-                            if ( ! val ) {
-                                saveConditionalRule( { field: '', compare: '', value: '' }, key );
-                            } else {
-                                saveConditionalRule( { field: val, compare: '', value: '' }, key );
-                            }
-                        } }
-                    />
-                </div>
-				{ rField && (
+            <>
+                <div className='kb-field-rule'>
                     <div className="components-base-control">
                         <SelectControl
-                            label={ __( 'Compare Type', 'kadence-blocks-pro' ) }
-                            options={ compareOptions[selectedFieldType] }
+                            label={ __( 'Field', 'kadence-blocks-pro' ) }
+                            options={ currentFieldsSelect }
                             className="kb-dynamic-select"
                             classNamePrefix="kbp"
-                            value={ rCompare }
+                            value={ ( undefined !== rField ? rField : '' ) }
                             onChange={ ( val ) => {
                                 if ( ! val ) {
-                                    saveConditionalRule( { compare: '' }, key );
+                                    saveConditionalRule( { field: '', compare: '', value: '' }, key );
                                 } else {
-                                    saveConditionalRule( { compare: val }, key );
+                                    saveConditionalRule( { field: val, compare: '', value: '' }, key );
                                 }
                             } }
                         />
                     </div>
+                    { rField && (
+                        <div className="components-base-control">
+                            <SelectControl
+                                label={ __( 'Compare Type', 'kadence-blocks-pro' ) }
+                                options={ compareOptions[selectedFieldType] }
+                                className="kb-dynamic-select"
+                                classNamePrefix="kbp"
+                                value={ rCompare }
+                                onChange={ ( val ) => {
+                                    if ( ! val ) {
+                                        saveConditionalRule( { compare: '' }, key );
+                                    } else {
+                                        saveConditionalRule( { compare: val }, key );
+                                    }
+                                } }
+                            />
+                        </div>
+                    ) }
+                    {renderValueControl()}
+                    {/* <Button
+                        text={'X'}
+                        size={'small'}
+                        variant={'primary'}
+                        onClick={ () => removeConditionalRule( key ) }
+                        className='kb-field-rule-remove'
+                    /> */}
+                    <Button
+                        label={'Remove Rule'}
+                        icon={closeIcon}
+                        size={'small'}
+                        // iconSize={18}
+                        // variant={'secondary'}
+                        onClick={ () => removeConditionalRule( key ) }
+                        className='kb-field-rule-remove'
+                    />
+                </div>
+                { z > 1 && (
+                    <div class="combine"><i>{combine ? combine : ''}</i></div>
                 ) }
-                {renderValueControl()}
-                <Button
-                    text={'Remove Rule'}
-                    size={'small'}
-                    variant={'primary'}
-                    onClick={ () => removeConditionalRule( key ) }
-                    className='kb-field-rule-remove'
-                />
-            </div>
+            </>
         );
+        z--;
     }
 
     return (
