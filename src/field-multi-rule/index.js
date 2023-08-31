@@ -161,7 +161,16 @@ function FieldMultiRule ( {
         } else {
             const block = getBlockByUniqueID(formInnerBlocks, selectedField?.uniqueID)
             options = [...block?.attributes?.options];
+
+            if ( 'radio' == selectedField?.type || 'checkbox' == selectedField?.type ) {
+                options = options.map((option)=>{
+                    return {label: option.label, value: option.label};
+                })
+            }
+
+
             options.unshift({label: 'Select Option', value: ''});
+            console.log(1, block, options)
         }
         return options;
     }
