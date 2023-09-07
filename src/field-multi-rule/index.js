@@ -6,7 +6,7 @@
 import { Button, TextControl, SelectControl, DatePicker, TimePicker, DateTimePicker } from '@wordpress/components'
 import { useCallback } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
-import { closeSmall as closeIcon } from '@wordpress/icons'
+import { closeSmall as closeIcon, plus } from '@wordpress/icons'
 import { isEmpty, get } from 'lodash';
 import {
 	useEntityBlockEditor,
@@ -17,6 +17,7 @@ import { getBlockByUniqueID } from '@kadence/helpers'
 
 function FieldMultiRule ( {
     props,
+    formPostID,
     setAttributes,
     combine
 } ) {
@@ -57,16 +58,14 @@ function FieldMultiRule ( {
         }, []);
     }
 
-    const formId = currentFields?.[0]?.postId;
-
     const [ blocks ] = useEntityBlockEditor(
         'postType',
         'kadence_form',
-        formId,
+        formPostID,
     );
     const formInnerBlocks = get( blocks, [ 0, 'innerBlocks' ], [] );
 
-    currentFieldsSelect.unshift({label: 'Select Field', value: ''});
+    currentFieldsSelect.unshift({label: __( 'Select Field', 'kadence-blocks-pro' ), value: ''});
 
     const rows = [];
 
@@ -171,8 +170,8 @@ function FieldMultiRule ( {
             }
 
 
-            options.unshift({label: 'Select Option', value: ''});
-            console.log(1, block, options)
+            options.unshift({label: __( 'Select Option', 'kadence-blocks-pro' ), value: ''});
+            // console.log(1, block, options);
         }
         return options;
     }
@@ -291,6 +290,15 @@ function FieldMultiRule ( {
         rows.push(
             <>
                 <div className='kb-field-rule'>
+                    <Button
+                        label={__('Remove Rule', 'kadence-blocks-pro' ) }
+                        icon={closeIcon}
+                        size={'small'}
+                        // iconSize={18}
+                        // variant={'secondary'}
+                        onClick={ () => removeConditionalRule( key ) }
+                        className='kb-field-rule-remove'
+                    />
                     <div className="components-base-control">
                         <SelectControl
                             label={ __( 'Field', 'kadence-blocks-pro' ) }
@@ -333,15 +341,6 @@ function FieldMultiRule ( {
                         onClick={ () => removeConditionalRule( key ) }
                         className='kb-field-rule-remove'
                     /> */}
-                    <Button
-                        label={'Remove Rule'}
-                        icon={closeIcon}
-                        size={'small'}
-                        // iconSize={18}
-                        // variant={'secondary'}
-                        onClick={ () => removeConditionalRule( key ) }
-                        className='kb-field-rule-remove'
-                    />
                 </div>
                 { z > 1 && (
                     <div class="combine"><i>{combine ? combine : ''}</i></div>
@@ -355,9 +354,9 @@ function FieldMultiRule ( {
         <div className='kb-field-rules'>
             {rows}
             <Button
-                text={'Add Rule'}
-                size={'small'}
-                variant={'primary'}
+                text={ __('Add Rule', 'kadence-blocks-pro' ) }
+                variant="primary"
+				icon={ plus }
                 onClick={ addConditionalRule }
                 className='kb-field-rule-add'
             />
