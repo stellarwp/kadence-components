@@ -43,20 +43,15 @@ function FieldMultiRule ( {
 
 
     const { attributes, attributes:{ kadenceFieldConditional } } = props;
-
+    const defaultOptions = {
+        enable: false,
+        rules: []
+    };
     const conditionalOptions = ( kadenceFieldConditional && kadenceFieldConditional.conditionalData ? kadenceFieldConditional.conditionalData : defaultOptions );
 
 	const [ currentFields ] = useFormMeta( '_kad_form_fields' );
 
     let currentFieldsSelect = [];
-    if ( currentFields ) {
-        currentFieldsSelect = currentFields.reduce(function(result, item) {
-            if ( 'undefined' != typeof( item.uniqueID ) && item.uniqueID != attributes.uniqueID ) {
-                result.push({label: item.label, value: item.uniqueID});
-            }
-            return result;
-        }, []);
-    }
 
     const [ blocks ] = useEntityBlockEditor(
         'postType',
@@ -64,8 +59,15 @@ function FieldMultiRule ( {
         formPostID,
     );
     const formInnerBlocks = get( blocks, [ 0, 'innerBlocks' ], [] );
-
-    currentFieldsSelect.unshift({label: __( 'Select Field', 'kadence-blocks-pro' ), value: ''});
+    if ( currentFields ) {
+        currentFieldsSelect = currentFields.reduce(function(result, item) {
+            if ( 'undefined' != typeof( item.uniqueID ) && item.uniqueID != attributes.uniqueID ) {
+                result.push({label: item.label, value: item.uniqueID});
+            }
+            return result;
+        }, []);
+        currentFieldsSelect.unshift({label: __( 'Select Field', 'kadence-blocks-pro' ), value: ''});
+    }
 
     const rows = [];
 
@@ -162,13 +164,9 @@ function FieldMultiRule ( {
         } else {
             const block = getBlockByUniqueID(formInnerBlocks, selectedField?.uniqueID)
             options = [...block?.attributes?.options];
-
-            if ( 'radio' == selectedField?.type || 'checkbox' == selectedField?.type ) {
-                options = options.map((option)=>{
-                    return {label: option.label, value: option.label};
-                })
-            }
-
+            options = options.map((option)=>{
+                return {label: option.label, value: option?.value ? option.value : option.label};
+            })
 
             options.unshift({label: __( 'Select Option', 'kadence-blocks-pro' ), value: ''});
             // console.log(1, block, options);
@@ -197,7 +195,6 @@ function FieldMultiRule ( {
         if ( 'option' == selectedFieldType ) {
             selectedFieldOptions = getOptionFieldOptions( selectedField );
         }
-
         const rField = conditionalOptions.rules[key].field;
         const rCompare = conditionalOptions.rules[key].compare;
         const rValue = conditionalOptions.rules[key].value;
