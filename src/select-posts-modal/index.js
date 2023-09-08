@@ -52,7 +52,7 @@ function SelectPostsModal( props ) {
 	const dateFormat = __experimentalGetSettings().formats.date;
 
 	const showTagFilter = ( '' === postType || postType === 'post' ? true : false );
-	const showCategoryFilter = ( showTagFilter || categoryRestBase === 'kt-wc-blocks/v1/products/categories' ? true : false );;
+	const showCategoryFilter = ( showTagFilter || categoryRestBase === 'kt-wc-blocks/v1/products/categories' ? true : false );
 
 	const fetchPosts = ( resetPage ) => {
 		if ( isLoading ) {
