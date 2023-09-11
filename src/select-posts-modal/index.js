@@ -51,6 +51,9 @@ function SelectPostsModal( props ) {
 
 	const dateFormat = __experimentalGetSettings().formats.date;
 
+	const showTagFilter = ( '' === postType || postType === 'post' ? true : false );
+	const showCategoryFilter = ( showTagFilter || categoryRestBase === 'kt-wc-blocks/v1/products/categories' ? true : false );
+
 	const fetchPosts = ( resetPage ) => {
 		if ( isLoading ) {
 			return;
@@ -68,8 +71,10 @@ function SelectPostsModal( props ) {
 			per_page: 26,
 		};
 
-		if ( filterCategories.length !== 0 ) {
+		if ( 'wp/v2/categories' === categoryRestBase && filterCategories.length !== 0 ) {
 			query.categories = filterCategories.map( o => o.value );
+		} else if ( 'wp/v2/categories' !== categoryRestBase && filterCategories.length !== 0 ) {
+			query.product_cat = filterCategories.map( o => o.value );
 		}
 
 		if ( filterTags.length !== 0 ) {
@@ -268,7 +273,7 @@ function SelectPostsModal( props ) {
 					<Fragment>
 						{( currentView === 'browse' ) && (
 							<Flex
-								align="center"
+								align="start"
 								justify="space-between"
 								style={{ height: '100%', gap: 0 }}
 							>
@@ -281,28 +286,30 @@ function SelectPostsModal( props ) {
 											value={searchTerm}
 											onChange={( value ) => setSearchTerm( value )}
 										/>
-
-										<KadenceSelectTerms
-											placeholder={__( 'Filter by Category', 'kadence-blocks' )}
-											restBase={ categoryRestBase }
-											fieldId={'tax-select-category'}
-											value={filterCategories}
-											onChange={( value ) => {
-												setFilterCategories( ( value ? value : [] ) );
-											}}
-										/>
+										{ showCategoryFilter && (
+											<KadenceSelectTerms
+												placeholder={__( 'Filter by Category', 'kadence-blocks' )}
+												restBase={ categoryRestBase }
+												fieldId={'tax-select-category'}
+												value={filterCategories}
+												onChange={( value ) => {
+													setFilterCategories( ( value ? value : [] ) );
+												}}
+											/>
+										) }
 
 										<br/>
-
-										<KadenceSelectTerms
-											placeholder={__( 'Filter by Tag', 'kadence-blocks' )}
-											restBase={'wp/v2/tags'}
-											fieldId={'tax-select-tags'}
-											value={filterTags}
-											onChange={( value ) => {
-												setFilterTags( ( value ? value : [] ) );
-											}}
-										/>
+										{ showTagFilter && (
+											<KadenceSelectTerms
+												placeholder={__( 'Filter by Tag', 'kadence-blocks' )}
+												restBase={'wp/v2/tags'}
+												fieldId={'tax-select-tags'}
+												value={filterTags}
+												onChange={( value ) => {
+													setFilterTags( ( value ? value : [] ) );
+												}}
+											/>
+										) }
 
 										<br/>
 										<Button variant={'primary'} onClick={() => {
