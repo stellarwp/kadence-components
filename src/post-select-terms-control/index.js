@@ -10,11 +10,11 @@ import { addQueryArgs } from '@wordpress/url';
 import apiFetch from '@wordpress/api-fetch';
 
 export default function KadencePostSelectTerms( {
-										value,
-										onChange,
-										source,
-										isMulti = false,
-									} ) {
+	value,
+	onChange,
+	source,
+	isMulti = false,
+} ) {
 	const [ isLoading, setIsLoading ] = useState( true );
 	const [ terms, setTerms ] = useState( [] );
 	const [ page, setPage ] = useState( 1 );
