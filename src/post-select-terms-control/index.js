@@ -14,12 +14,18 @@ export default function KadencePostSelectTerms( {
 	onChange,
 	source,
 	isMulti = false,
+	termOnly = false
 } ) {
 	const [ isLoading, setIsLoading ] = useState( true );
 	const [ terms, setTerms ] = useState( [] );
 	const [ page, setPage ] = useState( 1 );
 	const [ hasMore, setHasMore ] = useState( false );
 	const theValue = value;
+	const termOnlyValue = value.map((option) => {
+		const optValWithSource = source + '|' + option.value;
+		return { value: optValWithSource, label: option.label }
+	});
+
 	useEffect( () => {
 		if( source && typeof(window.kbpData.taxonomies[source]) != 'undefined' && window.kbpData.taxonomies[source] ){
 			setTerms( Array.from(window.kbpData.taxonomies[source]) );
@@ -71,7 +77,7 @@ export default function KadencePostSelectTerms( {
 				options={ terms }
 				className="kb-dynamic-select"
 				classNamePrefix="kbp"
-				value={ isMulti ? value : ( '' !== value ? terms.filter( ( { value } ) => value === theValue ) : '' ) }
+				value={ isMulti ? ( termOnly ? termOnlyValue : value ) : ( '' !== value ? terms.filter( ( { value } ) => value === theValue ) : '' ) }
 				isMulti={ isMulti }
 				isSearchable={ true }
 				isClearable={ true }
@@ -83,8 +89,18 @@ export default function KadencePostSelectTerms( {
 					if ( ! val ) {
 						onChange( '' );
 					} else if ( isMulti ) {
-						onChange( val );
+						var toReturn = val;
+						if ( termOnly ) {
+							toReturn = val.map((option) => {
+								const optValTermOnly = option.value.split("|")?.[1];
+								return { value: optValTermOnly, label: option.label }
+							})
+						}
+						onChange( toReturn );
 					} else {
+						if ( termOnly ) {
+							onChange( val.value.split("|")?.[1] );
+						}
 						onChange( val.value );
 					}
 				} }
