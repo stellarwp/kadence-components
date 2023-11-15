@@ -21,7 +21,7 @@ export default function KadencePostSelectTerms( {
 	const [ page, setPage ] = useState( 1 );
 	const [ hasMore, setHasMore ] = useState( false );
 	const theValue = value;
-	const termOnlyValue = 'array' == typeof( value ) ? value.map((option) => {
+	const termOnlyValue = 'array' == typeof( value ) || 'object' == typeof( value ) ? value.map((option) => {
 		const optValWithSource = source + '|' + option.value;
 		return { value: optValWithSource, label: option.label }
 	}) : value;
