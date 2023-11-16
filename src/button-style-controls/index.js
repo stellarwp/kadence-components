@@ -45,8 +45,6 @@ export default function ButtonStyleControls( {
         [shadowKey]: shadow
     } = attributes;
 
-    console.log(1, colorKey, color)
-
 	const saveShadow = ( value ) => {
 		const newUpdate = shadow.map( ( item, index ) => {
 			if ( 0 === index ) {
@@ -62,7 +60,7 @@ export default function ButtonStyleControls( {
     return (
         <>
             <PopColorControl
-                label={colorKey}
+                label={__( 'Color', 'kadence-blocks' )}
                 value={( color ? color : '' )}
                 default={''}
                 onChange={value => setAttributes( { [colorKey]: value } )}
