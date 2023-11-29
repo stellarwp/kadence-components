@@ -72,7 +72,8 @@ function FieldMultiRule ( {
     const rows = [];
 
     const numberTypes = ['number', 'date', 'time']
-    const optionTypes = ['select', 'checkbox', 'radio', 'accept']
+    const optionTypes = ['select', 'radio', 'accept']
+    const optionMultiTypes = ['checkbox']
     const fillTypes = ['file']
 
     const compareOptions = {
@@ -101,6 +102,11 @@ function FieldMultiRule ( {
         'option': [
             { value: 'equals', label: '=' },
             { value: 'not_equals', label: '!=' },
+        ],
+        'optionMulti': [
+            { value: 'equals', label: '=' },
+            { value: 'not_equals', label: '!=' },
+            { value: 'contains', label: __( 'Contains', 'kadence-blocks-pro' ) },
         ],
         'fill': [
             { value: 'not_empty', label: __( 'Not Empty', 'kadence-blocks-pro' ) },
@@ -188,11 +194,14 @@ function FieldMultiRule ( {
         if ( optionTypes.includes( selectedField?.type ) ) {
             selectedFieldType = 'option';
         }
+        if ( optionMultiTypes.includes( selectedField?.type ) ) {
+            selectedFieldType = 'optionMulti';
+        }
         if ( fillTypes.includes( selectedField?.type ) ) {
             selectedFieldType = 'fill';
         }
 
-        if ( 'option' == selectedFieldType ) {
+        if ( 'option' == selectedFieldType ||  'optionMulti' == selectedFieldType ) {
             selectedFieldOptions = getOptionFieldOptions( selectedField );
         }
         const rField = conditionalOptions.rules[key].field;
@@ -213,7 +222,7 @@ function FieldMultiRule ( {
 
         const renderValueControl = () => {
             if ( needsValue ) {
-                if ( 'option' == selectedFieldType ) {
+                if ( 'option' == selectedFieldType || 'optionMulti' == selectedFieldType ) {
                     return (
                         <div className="components-base-control">
                             <SelectControl
