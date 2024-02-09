@@ -27,8 +27,8 @@ export default function KadencePostSelectTerms( {
 	}) : value;
 
 	useEffect( () => {
-		if( source && typeof(window.kbpData.taxonomies[source]) != 'undefined' && window.kbpData.taxonomies[source] ){
-			setTerms( Array.from(window.kbpData.taxonomies[source]) );
+		if( source && typeof(window.kadence_blocks_params.taxonomies[source]) != 'undefined' && window.kadence_blocks_params.taxonomies[source] ){
+			setTerms( Array.from(window.kadence_blocks_params.taxonomies[source]) );
 			setIsLoading( false );
 		} else {
 			const options = {
@@ -39,24 +39,24 @@ export default function KadencePostSelectTerms( {
 			setIsLoading( true );
 			apiFetch( {
 				path: addQueryArgs(
-					window.kbpData.termEndpoint,
+					window.kadence_blocks_params.termEndpoint,
 					options
 				),
 			} )
 				.then( ( taxonomyItems ) => {
 					if ( ! taxonomyItems ) {
 						setTerms( [] );
-						window.kbpData.taxonomies[source] = [];
+						window.kadence_blocks_params.taxonomies[source] = [];
 					} else {
 						setTerms( taxonomyItems );
-						window.kbpData.taxonomies[source] = taxonomyItems;
+						window.kadence_blocks_params.taxonomies[source] = taxonomyItems;
 					}
 					setIsLoading( false );
 				} )
 				.catch( () => {
 					setIsLoading( false );
 					setTerms( [] );
-					window.kbpData.taxonomies[source] = [];
+					window.kadence_blocks_params.taxonomies[source] = [];
 				} );
 		}
 	}, [ source ] );

@@ -57,7 +57,7 @@ export default function TaxonomySelect( {
 		setIsLoading( true );
 		apiFetch( {
 			path: addQueryArgs(
-				window.kbpData.taxonomiesEndpoint,
+				window.kadence_blocks_params.taxonomiesEndpoint,
 				options
 			),
 		} )
