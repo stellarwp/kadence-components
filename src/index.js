@@ -13,7 +13,6 @@ export { default as ResponsiveAlignControls } from './responsive-align-control';
 export { default as KadenceSelectPosts } from './select-posts-controls';
 export { default as WebfontLoader } from './web-font-loader';
 export { default as KadenceWebfontLoader } from './kadence-web-font-loader';
-export { default as KadenceFormConditionals } from './form-conditionals';
 export { default as HeadingLevelIcon } from './heading-level-icon';
 export { default as BoxShadowControl } from './box-shadow-control';
 export { default as ButtonStyleControls } from './button-style-controls';
@@ -108,8 +107,6 @@ export { default as BorderColorControls } from './color/border-color-control';
 export { default as KadenceBlockDefaults } from './block-defaults';
 
 export { default as KadenceIconPicker } from './icon-picker';
-
-export { default as TaxonomySelect } from './taxonomy-select';
 
 export { default as SelectParentBlock } from './select-parent-block';
 export { default as ObfuscateTextControl } from './obfuscate-text-control';
