@@ -21,7 +21,7 @@ import { plus } from '@wordpress/icons';
 // import { ColorPicker } from '../../color-picker';
 // import { VisuallyHidden } from '../../visually-hidden';
 import ColorPicker from '../../color-picker';
-import { __experimentalHStack as HStack, Button, VisuallyHidden, Popover, Dashicon, Tooltip } from '@wordpress/components';
+import { __experimentalHStack as HStack, Button, VisuallyHidden, Popover, Dashicon, Tooltip, __experimentalNumberControl as NumberControl } from '@wordpress/components';
 import {
 	addControlPoint,
 	clampPercent,
@@ -262,14 +262,36 @@ function getReadableColor( value, colors ) {
 		return value;
 	}
 	if ( value.startsWith( 'var(--global-' ) ) {
+		const foundColor = colors.find( ( option ) => option.value === value );
+		if ( foundColor ) {
+			return foundColor.color;
+		}
 		let slug = value.replace( 'var(--global-', '' );
 		slug = slug.substring(0,8);
 		slug = 'theme-' + slug;
 		const found = colors.find( ( option ) => option.slug === slug );
 		if ( found ) {
-			return found.color;
+			if ( ! found.color.startsWith( 'var(' ) ) {
+				return found.color;
+			}
+		}
+		let temp_value = window.getComputedStyle( document.documentElement ).getPropertyValue( value.replace( 'var(', '' ).replace( ' ', '' ).replace( ')', '' ) );
+		if ( '' === temp_value ) {
+			temp_value = window.getComputedStyle( document.documentElement ).getPropertyValue( value.replace( 'var(', '' ).replace( ' ', '' ).split(',')[0].replace( ')', '' ) );
+		}
+		if ( temp_value ) {
+			return temp_value;
+		}
+	} else if ( value.startsWith( 'var(' ) ) {
+		let temp_value = window.getComputedStyle( document.documentElement ).getPropertyValue( value.replace( 'var(', '' ).replace( ' ', '' ).replace( ')', '' ) );
+		if ( '' === temp_value ) {
+			temp_value = window.getComputedStyle( document.documentElement ).getPropertyValue( value.replace( 'var(', '' ).replace( ' ', '' ).split(',')[0].replace( ')', '' ) );
+		}
+		if ( temp_value ) {
+			return temp_value;
 		}
 	}
+	
 	return value;
 }
 
@@ -444,7 +466,8 @@ function ControlPoints( {
 									{ map( colors, ( { color, slug, name } ) => {
 										const style = { color };
 										const palette = slug.replace( 'theme-', '' );
-										const isActive = ( ( slug.startsWith( 'theme-palette' ) && pointColor === color ) );
+										const isActive = ( (  slug.startsWith( 'theme-palette' ) && color === point.color ) || ( slug.startsWith( 'theme-palette' ) && pointColor === color ) );
+										const isLinked = ( ( ! slug.startsWith( 'theme-palette' ) && color.startsWith( 'var(' ) && ( pointColor === color || color === point.color ) ) );
 										return (
 											<div key={ color } className="kadence-color-palette__item-wrapper">
 												<Tooltip
@@ -454,15 +477,23 @@ function ControlPoints( {
 													}>
 													<Button
 														type="button"
-														className={ `kadence-color-palette__item ${ ( isActive ? 'is-active' : '' ) }` }
+														className={ `kadence-color-palette__item ${ ( isActive || isLinked ? 'is-active' : '' ) }` }
 														style={ style }
 														onClick={ () => {
-															if ( slug.startsWith( 'theme-palette' ) ) {
+															if ( slug.startsWith( 'theme-palette' ) && ! color.startsWith( 'var(' ) ) {
 																onChange(
 																	updateControlPointColor(
 																		controlPoints,
 																		index,
 																		'var(--global-' + palette + ',' + color + ')'
+																	)
+																);
+															} else if ( color.startsWith( 'var(' ) ) {
+																onChange(
+																	updateControlPointColor(
+																		controlPoints,
+																		index,
+																		color
 																	)
 																);
 															} else {
@@ -480,7 +511,7 @@ function ControlPoints( {
 															sprintf( __( 'Color: %s', 'kadence-blocks' ), name ) :
 															// translators: %s: color hex code e.g: "#f00".
 															sprintf( __( 'Color code: %s', 'kadence-blocks' ), color ) }
-														aria-pressed={ isActive }
+														aria-pressed={ isActive || isLinked }
 													/>
 												</Tooltip>
 												{ isActive && <Dashicon icon="admin-site" /> }
@@ -489,6 +520,26 @@ function ControlPoints( {
 										);
 									} ) }
 								</div>
+							) }
+							{ point?.position !== undefined && (
+								<NumberControl
+									label={__( 'Control Point Position %', 'kadence-blocks' )}
+									value={ point.position }
+									onChange={ ( value ) => {
+										onChange(
+											updateControlPointPosition(
+												controlPoints,
+												index,
+												clampPercent(
+													parseFloat( value )
+												)
+											)
+										);
+									}}
+									min={0}
+									step={1}
+									max={100}
+								/>
 							) }
 							{ ! disableRemove && controlPoints.length > 2 && (
 								<HStack
@@ -614,7 +665,9 @@ function InsertPoint( {
 							{ map( colors, ( { color, slug, name } ) => {
 								const style = { color };
 								const palette = slug.replace( 'theme-', '' );
-								const isActive = ( ( slug.startsWith( 'theme-palette' ) && pointColor === color ) );
+								//const isActive = ( ( slug.startsWith( 'theme-palette' ) && pointColor === color ) );
+								const isActive = ( ( slug.startsWith( 'theme-palette' ) && color === tempColor ) || ( slug.startsWith( 'theme-palette' ) && pointColor === color ) );
+								const isLinked = ( ( ! slug.startsWith( 'theme-palette' ) && color.startsWith( 'var(' ) && tempColor === color ) );
 								return (
 									<div key={ color } className="kadence-color-palette__item-wrapper">
 										<Tooltip
@@ -624,11 +677,11 @@ function InsertPoint( {
 											}>
 											<Button
 												type="button"
-												className={ `kadence-color-palette__item ${ ( isActive ? 'is-active' : '' ) }` }
+												className={ `kadence-color-palette__item ${ ( isActive || isLinked ? 'is-active' : '' ) }` }
 												style={ style }
 												onClick={ () => {
 													setTempColor( colord( color ).toRgbString() );
-													if ( slug.startsWith( 'theme-palette' ) ) {
+													if ( slug.startsWith( 'theme-palette' ) && ! color.startsWith( 'var(' ) ) {
 														if ( ! alreadyInsertedPoint ) {
 															onChange(
 																addControlPoint(
@@ -644,6 +697,26 @@ function InsertPoint( {
 																	controlPoints,
 																	insertPosition,
 																	'var(--global-' + palette + ',' + color + ')'
+																)
+															);
+														}
+													} else if ( color.startsWith( 'var(' ) ) {
+														setTempColor( color );
+														if ( ! alreadyInsertedPoint ) {
+															onChange(
+																addControlPoint(
+																	controlPoints,
+																	insertPosition,
+																	color,
+																)
+															);
+															setAlreadyInsertedPoint( true );
+														} else {
+															onChange(
+																updateControlPointColorByPosition(
+																	controlPoints,
+																	insertPosition,
+																	color,
 																)
 															);
 														}
@@ -676,7 +749,7 @@ function InsertPoint( {
 											/>
 										</Tooltip>
 										{ isActive && <Dashicon icon="admin-site" /> }
-										{ ! slug.startsWith( 'theme-palette' ) && pointColor === color && <Dashicon icon="saved" /> }
+										{ ! slug.startsWith( 'theme-palette' ) && tempColor === color && <Dashicon icon="saved" /> }
 									</div>
 								);
 							} ) }
