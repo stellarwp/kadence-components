@@ -8,6 +8,7 @@ import { fetchJson } from '@kadence/helpers';
 
 import { addQueryArgs } from '@wordpress/url';
 import { Component } from '@wordpress/element';
+import { BaseControl } from '@wordpress/components';
 
 class KadenceSelectTerms extends Component {
 	constructor() {
@@ -29,12 +30,13 @@ class KadenceSelectTerms extends Component {
 	}
 
 	fetchTerms() {
-		const { restBase } = this.props;
+		const { restBase, extra } = this.props;
 		const { page, options, search } = this.state;
 
 		const query = {
 			page,
 			per_page: 10,
+			extra,
 		};
 
 		if ( search && search.length >= 3 ) {
@@ -90,24 +92,26 @@ class KadenceSelectTerms extends Component {
 
 	render() {
 		return (
-			<div className="term-select-form-row">
-				<label htmlFor={ this.props.fieldId } className="screen-reader-text">
-					{ this.props.placeholder }
-				</label>
-				<Select
-					value={ this.props.value }
-					onChange={ value => this.handleChange( value ) }
-					id={ this.props.fieldId }
-					options={ this.state.options }
-					isMulti={ true }
-					classNamePrefix="kt-tax-select"
-					isLoading={ this.state.isLoading }
-					onMenuScrollToBottom={ () => this.fetchMoreTerms() }
-					onInputChange={ s => this.updateSearch( s ) }
-					maxMenuHeight={ 300 }
-					placeholder={ this.props.placeholder }
-				/>
-			</div>
+			<BaseControl>
+				<div className="term-select-form-row">
+					<label htmlFor={ this.props.fieldId } className="screen-reader-text">
+						{ this.props.placeholder }
+					</label>
+					<Select
+						value={ this.props.value }
+						onChange={ value => this.handleChange( value ) }
+						id={ this.props.fieldId }
+						options={ this.state.options }
+						isMulti={ true }
+						classNamePrefix="kt-tax-select"
+						isLoading={ this.state.isLoading }
+						onMenuScrollToBottom={ () => this.fetchMoreTerms() }
+						onInputChange={ s => this.updateSearch( s ) }
+						maxMenuHeight={ 300 }
+						placeholder={ this.props.placeholder }
+					/>
+				</div>
+			</BaseControl>
 		);
 	}
 }
