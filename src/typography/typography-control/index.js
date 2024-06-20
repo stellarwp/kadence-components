@@ -169,9 +169,13 @@ class TypographyControls extends Component {
 		];
 		const isKadenceT = ( typeof kadence_blocks_params !== 'undefined' && kadence_blocks_params.isKadenceT ? true : false );
 		const headingWeights = ( typeof kadence_blocks_params !== 'undefined' && kadence_blocks_params.headingWeights ? kadence_blocks_params.headingWeights : [] );
+		const bodyWeights = ( typeof kadence_blocks_params !== 'undefined' && kadence_blocks_params.bodyWeights ? kadence_blocks_params.bodyWeights : [] );
 		const buttonWeights = ( typeof kadence_blocks_params !== 'undefined' && kadence_blocks_params.buttonWeights ? kadence_blocks_params.buttonWeights : [] );
 		if ( isKadenceT && this.props.fontGroup === 'heading' && headingWeights && Array.isArray( headingWeights ) && headingWeights.length ) {
 			standardWeights = headingWeights;
+		}
+		if ( isKadenceT && this.props.fontGroup === 'body' && bodyWeights && Array.isArray( bodyWeights ) && bodyWeights.length ) {
+			standardWeights = bodyWeights;
 		}
 		if ( isKadenceT && this.props.fontGroup === 'button' && buttonWeights && Array.isArray( buttonWeights ) && buttonWeights.length ) {
 			standardWeights = buttonWeights;
@@ -192,13 +196,16 @@ class TypographyControls extends Component {
 				fontStandardStyles = activeFont[ 0 ].styles;
 			}
 		}
-		if ( this.props.googleFont && this.props.fontFamily && typeof kadence_blocks_params !== 'undefined' && kadence_blocks_params.g_fonts && kadence_blocks_params.g_fonts[ this.props.fontFamily ] ) {
+		if ( this.props.fontFamily === '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"' ) {
+			fontStandardWeights = systemWeights;
+		} else if ( this.props.fontFamily === 'var( --global-heading-font-family, inherit )' ) {
+			fontStandardWeights = headingWeights;
+		} else if ( this.props.fontFamily === 'var( --global-body-font-family, inherit )' ) {
+			fontStandardWeights = bodyWeights;
+		} else if ( this.props.googleFont && this.props.fontFamily && typeof kadence_blocks_params !== 'undefined' && kadence_blocks_params.g_fonts && kadence_blocks_params.g_fonts[ this.props.fontFamily ] ) {
 			fontStandardWeights = kadence_blocks_params.g_fonts[ this.props.fontFamily ].w.map( opt => ( { label: capitalizeFirstLetter( opt ), value: opt } ) );
 			fontStandardStyles = kadence_blocks_params.g_fonts[ this.props.fontFamily ].i.map( opt => ( { label: capitalizeFirstLetter( opt ), value: opt } ) );
 			typographySubsets = kadence_blocks_params.g_fonts[ this.props.fontFamily ].s.map( opt => ( { label: capitalizeFirstLetter( opt ), value: opt } ) );
-		}
-		if ( this.props.fontFamily === '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"' ) {
-			fontStandardWeights = systemWeights;
 		}
 		this.setState( { typographyWeights: fontStandardWeights } );
 		this.setState( { typographyStyles: fontStandardStyles } );
@@ -309,6 +316,37 @@ class TypographyControls extends Component {
 			subset: fontSubset,
 			loadGoogle: loadGoogleFont,
 		};
+		const headingOptions = range( tagLowLevel, tagHighLevel ).map( createhtmlTagControl );
+		if ( otherTags.p ) {
+			headingOptions.push( [
+				{
+					icon: <HeadingLevelIcon level={ 'p' } isPressed={ ( htmlTag && htmlTag === 'p' ? true : false ) } />,
+					title: __( 'Paragraph', 'kadence-blocks' ),
+					isActive: ( htmlTag && htmlTag === 'p' ? true : false ),
+					onClick: () => onTagLevelHTML( 2, 'p' ),
+				},
+			] );
+		}
+		if ( otherTags.span ) {
+			headingOptions.push( [
+				{
+					icon: <HeadingLevelIcon level={ 'span' } isPressed={ ( htmlTag && htmlTag === 'span' ? true : false ) } />,
+					title: __( 'Span', 'kadence-blocks' ),
+					isActive: ( htmlTag && htmlTag === 'span' ? true : false ),
+					onClick: () => onTagLevelHTML( 2, 'span' ),
+				},
+			] );
+		}
+		if ( otherTags.div ) {
+			headingOptions.push( [
+				{
+					icon: <HeadingLevelIcon level={ 'div' } isPressed={ ( htmlTag && htmlTag === 'div' ? true : false ) } />,
+					title: __( 'Div', 'kadence-blocks' ),
+					isActive: ( htmlTag && htmlTag === 'div' ? true : false ),
+					onClick: () => onTagLevelHTML( 2, 'div' ),
+				},
+			] );
+		}
 
 		const onTypoFontChange = ( select ) => {
 			if ( select === null ) {
@@ -336,7 +374,7 @@ class TypographyControls extends Component {
 				} else {
 					subset = '';
 					variant = '';
-					weight = 'inherit';
+					weight = undefined !== select.weights?.[0]?.value ? select.weights[0].value : 'inherit';
 				}
 				if ( onFontArrayChange ) {
 					onFontArrayChange( { google: select.google, family: select.value, variant: variant, weight: weight, style: 'normal', subset: subset } );
@@ -430,11 +468,11 @@ class TypographyControls extends Component {
 			{ value: 'capitalize', label: __( 'Ab', 'kadence-blocks' ), tooltip: __( 'Capitalize', 'kadence-blocks' ) },
 		];
 		const fontMin = ( fontSizeType !== 'px' ? 0.2 : 5 );
-		const fontMax = ( fontSizeType !== 'px' ? 12 : 300 );
-		const fontStep = ( fontSizeType !== 'px' ? 0.01 : 1 );
+		const fontMax = ( fontSizeType !== 'px' ? 120 : 3000 );
+		const fontStep = ( fontSizeType !== 'px' ? 0.001 : 1 );
 		const lineMin = ( lineHeightType !== 'px' ? 0.2 : 5 );
-		const lineMax = ( lineHeightType !== 'px' ? 12 : 200 );
-		const lineStep = ( lineHeightType !== 'px' ? 0.01 : 1 );
+		const lineMax = ( lineHeightType !== 'px' ? 120 : 3000 );
+		const lineStep = ( lineHeightType !== 'px' ? 0.001 : 1 );
 		const usingReg = typographyWeights.some(function(el) {
 			return el.value === 'regular';
 		});
@@ -442,6 +480,15 @@ class TypographyControls extends Component {
 		return (
 			<>
 				<div className={ 'components-base-control kb-typography-control' }>
+					{ label && (
+						<div className='kadence-title-bar kadence-component__header'>
+							<label
+								className="kadence-heading-fontfamily-title components-typography-control__label kadence-component__header__title"
+							>
+								{ label }
+							</label>
+						</div>
+					) }
 					<div className="kadence-title-bar">
 						{ label && (
 							<h2 className="kt-heading-fontfamily-title">{ label }</h2>
@@ -470,7 +517,6 @@ class TypographyControls extends Component {
 											onTagLevelHTML( value, 'heading' );
 										}
 									} }
-									otherTags={ otherTags }
 								/>
 							) }
 							{ ! onTagLevelHTML && (

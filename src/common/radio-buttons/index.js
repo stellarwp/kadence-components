@@ -5,7 +5,7 @@
 /**
  * Import Css
  */
-import './editor.scss';
+ import './editor.scss';
 
 import {
 	Button,

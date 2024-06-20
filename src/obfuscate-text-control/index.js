@@ -21,15 +21,15 @@ import './editor.scss';
  * @returns {object} Measure settings.
  */
 export default function ObfuscateTextControl( {
-												  label,
-												  onChange,
-												  isSaving,
-												  value = '',
-												  placeholder = null,
-												  className = '',
-												  obfuscate = true,
-												  help = '',
-											  } ) {
+	label,
+	onChange,
+	isSaving,
+	value = '',
+	placeholder = null,
+	className = '',
+	obfuscate = true,
+	help = '',
+} ) {
 	const [ tempValue, setTempValue ] = useState( '' );
 	const instanceId = useInstanceId( ObfuscateTextControl );
 	const id = `inspector-obfuscate-text-control-${instanceId}`;
