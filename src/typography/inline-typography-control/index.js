@@ -174,9 +174,13 @@ class InlineTypographyControls extends Component {
 		];
 		const isKadenceT = ( typeof kadence_blocks_params !== 'undefined' && kadence_blocks_params.isKadenceT ? true : false );
 		const headingWeights = ( typeof kadence_blocks_params !== 'undefined' && kadence_blocks_params.headingWeights ? kadence_blocks_params.headingWeights : [] );
+		const bodyWeights = ( typeof kadence_blocks_params !== 'undefined' && kadence_blocks_params.bodyWeights ? kadence_blocks_params.bodyWeights : [] );
 		const buttonWeights = ( typeof kadence_blocks_params !== 'undefined' && kadence_blocks_params.buttonWeights ? kadence_blocks_params.buttonWeights : [] );
 		if ( isKadenceT && this.props.fontGroup === 'heading' && headingWeights && Array.isArray( headingWeights ) && headingWeights.length ) {
 			standardWeights = headingWeights;
+		}
+		if ( isKadenceT && this.props.fontGroup === 'body' && bodyWeights && Array.isArray( bodyWeights ) && bodyWeights.length ) {
+			standardWeights = bodyWeights;
 		}
 		if ( isKadenceT && this.props.fontGroup === 'button' && buttonWeights && Array.isArray( buttonWeights ) && buttonWeights.length ) {
 			standardWeights = buttonWeights;
@@ -193,13 +197,16 @@ class InlineTypographyControls extends Component {
 				fontStandardStyles = activeFont[ 0 ].styles;
 			}
 		}
-		if ( this.props.googleFont && this.props.fontFamily && typeof kadence_blocks_params !== 'undefined' && kadence_blocks_params.g_fonts && kadence_blocks_params.g_fonts[ this.props.fontFamily ] ) {
+		if ( this.props.fontFamily === '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"' ) {
+			fontStandardWeights = systemWeights;
+		} else if ( this.props.fontFamily === 'var( --global-heading-font-family, inherit )' ) {
+			fontStandardWeights = headingWeights;
+		} else if ( this.props.fontFamily === 'var( --global-body-font-family, inherit )' ) {
+			fontStandardWeights = bodyWeights;
+		} else if ( this.props.googleFont && this.props.fontFamily && typeof kadence_blocks_params !== 'undefined' && kadence_blocks_params.g_fonts && kadence_blocks_params.g_fonts[ this.props.fontFamily ] ) {
 			fontStandardWeights = kadence_blocks_params.g_fonts[ this.props.fontFamily ].w.map( opt => ( { label: capitalizeFirstLetter( opt ), value: opt } ) );
 			fontStandardStyles = kadence_blocks_params.g_fonts[ this.props.fontFamily ].i.map( opt => ( { label: capitalizeFirstLetter( opt ), value: opt } ) );
 			typographySubsets = kadence_blocks_params.g_fonts[ this.props.fontFamily ].s.map( opt => ( { label: capitalizeFirstLetter( opt ), value: opt } ) );
-		}
-		if ( this.props.fontFamily === '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"' ) {
-			fontStandardWeights = systemWeights;
 		}
 		this.setState( { typographyWeights: fontStandardWeights } );
 		this.setState( { typographyStyles: fontStandardStyles } );
