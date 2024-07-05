@@ -1,4 +1,4 @@
-import { HoverToggleControl, PopColorControl } from '@kadence/components';
+import { HoverToggleControl, PopColorControl } from '../';
 import { __ } from '@wordpress/i18n';
 
 //a group of color controls for displaying background and/or color controls with hover and active states

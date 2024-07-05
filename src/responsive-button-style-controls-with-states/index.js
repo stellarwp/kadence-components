@@ -6,7 +6,7 @@ import {
 	BoxShadowControl,
 	BackgroundTypeControl,
 	GradientControl,
-} from '@kadence/components';
+} from '../';
 import { __ } from '@wordpress/i18n';
 
 //a group of color controls for displaying background and/or color controls with hover and active states
@@ -28,7 +28,7 @@ export default function ResponsiveButtonStyleControlsWithStates( {
 	shadowLabel = __( 'Box Shadow', 'kadence-blocks-pro' ),
 	includeActive = true,
 	setAttributes,
-	setMetaAttributes,
+	setMetaAttribute,
 	attributes,
 } ) {
 	const colorValue = attributes[ colorBase ];
@@ -81,8 +81,8 @@ export default function ResponsiveButtonStyleControlsWithStates( {
 	const shadowValueActive = attributes[ shadowBase + 'Active' ];
 
 	const saveFunction = ( attributeName, value ) => {
-		if ( setMetaAttributes ) {
-			setMetaAttributes( value, attributeName );
+		if ( setMetaAttribute ) {
+			setMetaAttribute( value, attributeName );
 		} else {
 			setAttributes( { [ attributeName ]: value } );
 		}
