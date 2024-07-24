@@ -5,7 +5,7 @@
 
 /**
  * Import Icons
-*/
+ */
 import ColorPicker from '../color-picker';
 import ColorIcons from '../color-icons';
 import { hexToRGBA } from '@kadence/helpers';
@@ -18,13 +18,7 @@ import { useState } from '@wordpress/element';
  */
 import { __, sprintf } from '@wordpress/i18n';
 import { withSelect } from '@wordpress/data';
-import {
-	Button,
-	Popover,
-	ColorIndicator,
-	Tooltip,
-	Dashicon,
-} from '@wordpress/components';
+import { Button, Popover, ColorIndicator, Tooltip, Dashicon } from '@wordpress/components';
 
 function unConvertOpacity( value ) {
 	let val = 100;
@@ -54,7 +48,7 @@ export default function SinglePopColorControl( {
 	const [ currentColor, setCurrentColor ] = useState( '' );
 	const [ currentOpacity, setCurrentOpacity ] = useState( opacityValue !== '' ? opacityValue : 1 );
 	const [ isPalette, setIsPalette ] = useState( value && value.startsWith( 'palette' ) ? true : false );
-	const isDisableCustomColors = ( ! disableCustomColors ? ! useSetting( 'color.custom' ) : true );
+	const isDisableCustomColors = ! disableCustomColors ? ! useSetting( 'color.custom' ) : true;
 	const colors = useSetting( 'color.palette' );
 	const toggleVisible = () => {
 		setIsVisible( true );
@@ -66,11 +60,11 @@ export default function SinglePopColorControl( {
 	};
 	if ( reload ) {
 		reloaded( true );
-		setTimeout(() => {
+		setTimeout( () => {
 			setCurrentColor( '' );
 			setCurrentOpacity( '' );
 			setIsPalette( false );
-		}, 100);
+		}, 100 );
 	}
 	const convertOpacity = ( value ) => {
 		let val = 1;
@@ -79,16 +73,27 @@ export default function SinglePopColorControl( {
 		}
 		return val;
 	};
-	const convertedOpacityValue = ( 100 === opacityUnit ? convertOpacity( currentOpacity ) : currentOpacity );
-	const colorVal = ( currentColor ? currentColor : value );
-	let currentColorString = ( isPalette && colors && colors[ parseInt( colorVal.slice( -1 ), 10 ) - 1 ] ? colors[ parseInt( colorVal.slice( -1 ), 10 ) - 1 ].color : colorVal );
+	const convertedOpacityValue = 100 === opacityUnit ? convertOpacity( currentOpacity ) : currentOpacity;
+	const colorVal = currentColor ? currentColor : value;
+	let currentColorString =
+		isPalette && colors && colorVal && colors[ parseInt( colorVal.slice( -1 ), 10 ) - 1 ]
+			? colors[ parseInt( colorVal.slice( -1 ), 10 ) - 1 ].color
+			: colorVal;
 	if ( ! isPalette && currentColorString && currentColorString.startsWith( 'var(' ) ) {
-		currentColorString = window.getComputedStyle( document.documentElement ).getPropertyValue( value.replace( 'var(', '' ).split(',')[0].replace( ')', '' ) );
+		currentColorString = window
+			.getComputedStyle( document.documentElement )
+			.getPropertyValue( value.replace( 'var(', '' ).split( ',' )[ 0 ].replace( ')', '' ) );
 	}
 	if ( currentColorString && currentColorString.startsWith( 'var(' ) ) {
-		let temp_currentColorString = window.getComputedStyle( document.documentElement ).getPropertyValue( currentColorString.replace( 'var(', '' ).replace( ' ', '' ).replace( ')', '' ) );
+		let temp_currentColorString = window
+			.getComputedStyle( document.documentElement )
+			.getPropertyValue( currentColorString.replace( 'var(', '' ).replace( ' ', '' ).replace( ')', '' ) );
 		if ( '' === temp_currentColorString ) {
-			temp_currentColorString = window.getComputedStyle( document.documentElement ).getPropertyValue( currentColorString.replace( 'var(', '' ).replace( ' ', '' ).split(',')[0].replace( ')', '' ) );
+			temp_currentColorString = window
+				.getComputedStyle( document.documentElement )
+				.getPropertyValue(
+					currentColorString.replace( 'var(', '' ).replace( ' ', '' ).split( ',' )[ 0 ].replace( ')', '' )
+				);
 		}
 		currentColorString = temp_currentColorString;
 	}
@@ -99,45 +104,52 @@ export default function SinglePopColorControl( {
 	// 	currentColorString = hexToRGBA( ( undefined === currentColorString ? '' : currentColorString ), ( convertedOpacityValue !== undefined && convertedOpacityValue !== '' ? convertedOpacityValue : 1 ) );
 	// }
 	if ( onOpacityChange && ! isPalette ) {
-		if ( Number( convertedOpacityValue !== undefined && convertedOpacityValue !== '' ? convertedOpacityValue : 1 ) !== 1 ) {
-			currentColorString = hexToRGBA( ( undefined === currentColorString ? '' : currentColorString ), ( convertedOpacityValue !== undefined && convertedOpacityValue !== '' ? convertedOpacityValue : 1 ) );
+		if (
+			Number(
+				convertedOpacityValue !== undefined && convertedOpacityValue !== '' ? convertedOpacityValue : 1
+			) !== 1
+		) {
+			currentColorString = hexToRGBA(
+				undefined === currentColorString ? '' : currentColorString,
+				convertedOpacityValue !== undefined && convertedOpacityValue !== '' ? convertedOpacityValue : 1
+			);
 		}
 	}
-	 let previewColorString = currentColorString;
-	 if (isPalette && colorVal) {
-		 switch (colorVal) {
-			 case 'palette1':
-				 previewColorString = 'var(--global-palette1,#2B6CB0)';
-				 break;
-			 case 'palette2':
-				 previewColorString = 'var(--global-palette2,#215387)';
-				 break;
-			 case 'palette3':
-				 previewColorString = 'var(--global-palette3,#1A202C)';
-				 break;
-			 case 'palette4':
-				 previewColorString = 'var(--global-palette4,#2D3748)';
-				 break;
-			 case 'palette5':
-				 previewColorString = 'var(--global-palette5,#4A5568)';
-				 break;
-			 case 'palette6':
-				 previewColorString = 'var(--global-palette6,#718096)';
-				 break;
-			 case 'palette7':
-				 previewColorString = 'var(--global-palette7,#EDF2F7)';
-				 break;
-			 case 'palette8':
-				 previewColorString = 'var(--global-palette8,#F7FAFC)';
-				 break;
-			 case 'palette9':
-				 previewColorString = 'var(--global-palette9,#ffffff)';
-				 break;
-		 }
+	let previewColorString = currentColorString;
+	if ( isPalette && colorVal ) {
+		switch ( colorVal ) {
+			case 'palette1':
+				previewColorString = 'var(--global-palette1,#2B6CB0)';
+				break;
+			case 'palette2':
+				previewColorString = 'var(--global-palette2,#215387)';
+				break;
+			case 'palette3':
+				previewColorString = 'var(--global-palette3,#1A202C)';
+				break;
+			case 'palette4':
+				previewColorString = 'var(--global-palette4,#2D3748)';
+				break;
+			case 'palette5':
+				previewColorString = 'var(--global-palette5,#4A5568)';
+				break;
+			case 'palette6':
+				previewColorString = 'var(--global-palette6,#718096)';
+				break;
+			case 'palette7':
+				previewColorString = 'var(--global-palette7,#EDF2F7)';
+				break;
+			case 'palette8':
+				previewColorString = 'var(--global-palette8,#F7FAFC)';
+				break;
+			case 'palette9':
+				previewColorString = 'var(--global-palette9,#ffffff)';
+				break;
+		}
 	}
 	const onChangeState = ( tempColor, tempPalette ) => {
 		let newColor;
-		let opacity = ( 100 === opacityUnit ? 100 : 1 );
+		let opacity = 100 === opacityUnit ? 100 : 1;
 		if ( tempPalette ) {
 			newColor = tempPalette;
 		} else if ( undefined !== tempColor.rgb && undefined !== tempColor.rgb.a && 1 !== tempColor.rgb.a ) {
@@ -147,9 +159,18 @@ export default function SinglePopColorControl( {
 				} else {
 					newColor = tempColor.hex;
 				}
-				opacity = ( 100 === opacityUnit ? unConvertOpacity( tempColor.rgb.a ) : tempColor.rgb.a );
+				opacity = 100 === opacityUnit ? unConvertOpacity( tempColor.rgb.a ) : tempColor.rgb.a;
 			} else {
-				newColor = 'rgba(' + tempColor.rgb.r + ',' + tempColor.rgb.g + ',' + tempColor.rgb.b + ',' + tempColor.rgb.a + ')';
+				newColor =
+					'rgba(' +
+					tempColor.rgb.r +
+					',' +
+					tempColor.rgb.g +
+					',' +
+					tempColor.rgb.b +
+					',' +
+					tempColor.rgb.a +
+					')';
 			}
 		} else if ( undefined !== tempColor.hex ) {
 			newColor = tempColor.hex;
@@ -159,10 +180,10 @@ export default function SinglePopColorControl( {
 		setCurrentColor( newColor );
 		setCurrentOpacity( opacity );
 		setIsPalette( tempPalette ? true : false );
-	}
+	};
 	const onChangeComplete = ( tempColorCom, tempPalettCom ) => {
 		let newColor;
-		let opacity = ( 100 === opacityUnit ? 100 : 1 );
+		let opacity = 100 === opacityUnit ? 100 : 1;
 		if ( tempPalettCom ) {
 			newColor = tempPalettCom;
 		} else if ( undefined !== tempColorCom.rgb && undefined !== tempColorCom.rgb.a && 1 !== tempColorCom.rgb.a ) {
@@ -172,9 +193,18 @@ export default function SinglePopColorControl( {
 				} else {
 					newColor = tempColorCom.hex;
 				}
-				opacity = ( 100 === opacityUnit ? unConvertOpacity( tempColorCom.rgb.a ) : tempColorCom.rgb.a );
+				opacity = 100 === opacityUnit ? unConvertOpacity( tempColorCom.rgb.a ) : tempColorCom.rgb.a;
 			} else {
-				newColor = 'rgba(' + tempColorCom.rgb.r + ',' + tempColorCom.rgb.g + ',' + tempColorCom.rgb.b + ',' + tempColorCom.rgb.a + ')';
+				newColor =
+					'rgba(' +
+					tempColorCom.rgb.r +
+					',' +
+					tempColorCom.rgb.g +
+					',' +
+					tempColorCom.rgb.b +
+					',' +
+					tempColorCom.rgb.a +
+					')';
 			}
 		} else if ( undefined !== tempColorCom.hex ) {
 			newColor = tempColorCom.hex;
@@ -194,7 +224,7 @@ export default function SinglePopColorControl( {
 				}, 50 );
 			}
 		}
-	}
+	};
 	return (
 		<div className="single-pop-color">
 			{ isVisible && (
@@ -214,17 +244,22 @@ export default function SinglePopColorControl( {
 							{ map( colors, ( { color, slug, name } ) => {
 								const style = { color };
 								const palette = slug.replace( 'theme-', '' );
-								const isActive = ( ( palette === value ) || ( ! slug.startsWith( 'theme-palette' ) && value === color ) );
+								const isActive =
+									palette === value || ( ! slug.startsWith( 'theme-palette' ) && value === color );
 								return (
 									<div key={ color } className="kadence-color-palette__item-wrapper">
 										<Tooltip
-											text={ name ||
+											text={
+												name ||
 												// translators: %s: color hex code e.g: "#f00".
 												sprintf( __( 'Color code: %s' ), color )
-											}>
+											}
+										>
 											<Button
 												type="button"
-												className={ `kadence-color-palette__item ${ ( isActive ? 'is-active' : '' ) }` }
+												className={ `kadence-color-palette__item ${
+													isActive ? 'is-active' : ''
+												}` }
 												style={ style }
 												onClick={ () => {
 													if ( slug.startsWith( 'theme-palette' ) ) {
@@ -236,16 +271,20 @@ export default function SinglePopColorControl( {
 														onClassChange( slug );
 													}
 												} }
-												aria-label={ name ?
-													// translators: %s: The name of the color e.g: "vivid red".
-													sprintf( __( 'Color: %s', 'kadence-blocks' ), name ) :
-													// translators: %s: color hex code e.g: "#f00".
-													sprintf( __( 'Color code: %s', 'kadence-blocks' ), color ) }
+												aria-label={
+													name
+														? // translators: %s: The name of the color e.g: "vivid red".
+														  sprintf( __( 'Color: %s', 'kadence-blocks' ), name )
+														: // translators: %s: color hex code e.g: "#f00".
+														  sprintf( __( 'Color code: %s', 'kadence-blocks' ), color )
+												}
 												aria-pressed={ isActive }
 											/>
 										</Tooltip>
 										{ palette === value && <Dashicon icon="admin-site" /> }
-										{ ! slug.startsWith( 'theme-palette' ) && value === color && <Dashicon icon="saved" /> }
+										{ ! slug.startsWith( 'theme-palette' ) && value === color && (
+											<Dashicon icon="saved" />
+										) }
 									</div>
 								);
 							} ) }
@@ -255,30 +294,34 @@ export default function SinglePopColorControl( {
 			) }
 			{ isVisible && (
 				<Button
-					className={ `kadence-pop-color-icon-indicate ${ ( alpha ? 'kadence-has-alpha' : 'kadence-no-alpha' ) }` }
+					className={ `kadence-pop-color-icon-indicate ${
+						alpha ? 'kadence-has-alpha' : 'kadence-no-alpha'
+					}` }
 					onClick={ toggleVisible }
 					showTooltip={ true }
 					label={ label }
-					>
+				>
 					<ColorIndicator className="kadence-pop-color-indicate" colorValue={ previewColorString } />
-					{ ( value && value.startsWith( 'palette' )  ) && (
+					{ value && value.startsWith( 'palette' ) && (
 						<span className="color-indicator-icon">{ <Dashicon icon="admin-site" /> }</span>
 					) }
 				</Button>
 			) }
 			{ ! isVisible && (
 				<Button
-					className={ `kadence-pop-color-icon-indicate ${ ( alpha ? 'kadence-has-alpha' : 'kadence-no-alpha' ) }` }
+					className={ `kadence-pop-color-icon-indicate ${
+						alpha ? 'kadence-has-alpha' : 'kadence-no-alpha'
+					}` }
 					onClick={ toggleVisible }
 					showTooltip={ true }
 					label={ label }
-					>
+				>
 					<ColorIndicator className="kadence-pop-color-indicate" colorValue={ previewColorString } />
-					{ ( value && value.startsWith( 'palette' )  ) && (
+					{ value && value.startsWith( 'palette' ) && (
 						<span className="color-indicator-icon">{ <Dashicon icon="admin-site" /> }</span>
 					) }
 				</Button>
 			) }
 		</div>
-	 );
+	);
 }
