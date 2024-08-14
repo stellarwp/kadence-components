@@ -111,3 +111,4 @@ export { default as ObfuscateTextControl } from './obfuscate-text-control';
 export { default as TaxonomySelect } from './taxonomy-select';
 
 export { default as FieldMultiRule } from './field-multi-rule';
+export { default as ColumnDragResizer } from './column-drag-resizer';
