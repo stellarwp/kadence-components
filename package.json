@@ -9,7 +9,8 @@
   "dependencies": {
     "@kadence/icons": "file:../icons",
     "@kadence/helpers": "file:../helpers",
-    "@floating-ui/react": "^0.26.16"
+    "@floating-ui/react": "^0.26.16",
+    "react-container-dimensions": "^1.4.1"
   },
   "repository": {
     "type": "git",
