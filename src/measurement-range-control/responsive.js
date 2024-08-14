@@ -11,7 +11,7 @@ import { useState, useRef, useEffect } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { map, isEqual } from 'lodash';
 import MeasureRangeControl from './index';
-import { capitalizeFirstLetter } from '@kadence/helpers';
+import { capitalizeFirstLetter, objectSameFill, clearNonMatchingValues } from '@kadence/helpers';
 import { undo } from '@wordpress/icons';
 /**
  * Import Css
@@ -70,6 +70,7 @@ export default function ResponsiveMeasureRangeControl( {
 		setCustomControl = null,
 		onMouseOver,
 		onMouseOut,
+		allowAuto = false,
 	} ) {
 	const ref = useRef();
 	const measureIcons = {
@@ -84,26 +85,61 @@ export default function ResponsiveMeasureRangeControl( {
 	const [ theControl, setTheControl ] = useState( control );
 	const realIsCustomControl = setCustomControl ? customControl : isCustom;
 	const realSetIsCustom = setCustomControl ? setCustomControl : setIsCustom;
+	const reviewOptions = JSON.parse(JSON.stringify(options));
+	reviewOptions.push( {
+		value: 'ss-auto',
+		output: 'var(--global-kb-spacing-auto, auto)',
+		label: __( 'Auto', 'kadence-blocks' ),
+		size: 0,
+		name: __( 'Auto', 'kadence-blocks' ),
+	} );
 	const onSetIsCustom = () => {
-		if ( ! realIsCustomControl ) {
-			const newValue = [
-				getOptionSize( options, ( value ? value[ 0 ] : '' ), unit ),
-				getOptionSize( options, ( value ? value[ 1 ] : '' ), unit ),
-				getOptionSize( options, ( value ? value[ 2 ] : '' ), unit ),
-				getOptionSize( options, ( value ? value[ 3 ] : '' ), unit ),
-			];
-			onChange( newValue );
-		} else {
-			const newValue = [
-				getOptionFromSize( options, ( value ? value[ 0 ] : '' ), unit ),
-				getOptionFromSize( options, ( value ? value[ 1 ] : '' ), unit ),
-				getOptionFromSize( options, ( value ? value[ 2 ] : '' ), unit ),
-				getOptionFromSize( options, ( value ? value[ 3 ] : '' ), unit ),
-			];
-			onChange( newValue );
-		}
+		convertValueToFromCustomByDeviceType()
+
 		realSetIsCustom( ! realIsCustomControl );
 	}
+
+	const convertValueToFromCustomByDeviceType = () => {
+		if ( deviceType == 'Mobile' ) {
+			const newValue = convertValueToFromCustom( mobileValue );
+			if ( objectSameFill( mobileValue, newValue ) ) {
+				onChangeMobile( newValue );
+			}
+		} else if ( deviceType == 'Tablet' ) {
+			const newValue = convertValueToFromCustom( tabletValue );
+			if ( objectSameFill( tabletValue, newValue ) ) {
+				onChangeTablet( newValue );
+			}
+		} else {	
+			const newValue = convertValueToFromCustom( value );
+			if ( objectSameFill( value, newValue ) ) {
+				onChange( newValue );
+			}
+		}
+	}
+
+	const convertValueToFromCustom = ( valueToConvert ) => {
+		let convertedValue = [];
+		//convert to custom
+		if ( ! realIsCustomControl ) {
+			convertedValue = [
+				getOptionSize( options, ( valueToConvert ? valueToConvert[ 0 ] : '' ), unit ),
+				getOptionSize( options, ( valueToConvert ? valueToConvert[ 1 ] : '' ), unit ),
+				getOptionSize( options, ( valueToConvert ? valueToConvert[ 2 ] : '' ), unit ),
+				getOptionSize( options, ( valueToConvert ? valueToConvert[ 3 ] : '' ), unit ),
+			];
+		//convert to option
+		} else {
+			convertedValue = [
+				getOptionFromSize( options, ( valueToConvert ? valueToConvert[ 0 ] : '' ), unit ),
+				getOptionFromSize( options, ( valueToConvert ? valueToConvert[ 1 ] : '' ), unit ),
+				getOptionFromSize( options, ( valueToConvert ? valueToConvert[ 2 ] : '' ), unit ),
+				getOptionFromSize( options, ( valueToConvert ? valueToConvert[ 3 ] : '' ), unit ),
+			];
+		}
+		return convertedValue;
+	}
+
 	const realControl = onControl ? control : theControl;
 	const realSetOnControl = onControl ? onControl : setTheControl;
 	const [ deviceType, setDeviceType ] = useState( 'Desktop' );
@@ -120,7 +156,7 @@ export default function ResponsiveMeasureRangeControl( {
 		}else if ( theDevice == 'Mobile' ) {
 			valueToCheck = mobileValue;
 		}
-		setIsCustom( isCustomOption( options, valueToCheck ) );
+		setIsCustom( isCustomOption( reviewOptions, valueToCheck ) );
 	}, [theDevice] );
 
 	const {
@@ -163,6 +199,19 @@ export default function ResponsiveMeasureRangeControl( {
 			onChange( deskDefault );
 		}
 	}
+	let mobilePlaceholder = tabletValue ? JSON.parse( JSON.stringify( tabletValue ) ) : [ '', '', '', '' ];
+	if ( ! mobilePlaceholder?.[0] ) {
+		mobilePlaceholder[0] = value?.[0] ? value[0] : '';
+	}
+	if ( ! mobilePlaceholder?.[1] ) {
+		mobilePlaceholder[1] = value?.[1] ? value[1] : '';
+	}
+	if ( ! mobilePlaceholder?.[2] ) {
+		mobilePlaceholder[2] = value?.[2] ? value[2] : '';
+	}
+	if ( ! mobilePlaceholder?.[3] ) {
+		mobilePlaceholder[3] = value?.[3] ? value[3] : '';
+	}
 	const output = {};
 	output.Mobile = (
 		<MeasureRangeControl
@@ -171,7 +220,8 @@ export default function ResponsiveMeasureRangeControl( {
 			parentLabel={ label }
 			label={ ( subLabel ? __( 'Mobile:', 'kadence-blocks' ) + subLabel : undefined ) }
 			value={ ( mobileValue ? mobileValue : [ '', '', '', '' ] ) }
-			onChange={ ( size ) => onChangeMobile( size ) }
+			placeholder={ mobilePlaceholder }
+			onChange={ ( size ) => onChangeMobile( clearNonMatchingValues( mobileValue, size ) ) }
 			control={ realControl }
 			onControl={ ( value ) => realSetOnControl( value ) }
 			setCustomControl={ realSetIsCustom }
@@ -194,6 +244,7 @@ export default function ResponsiveMeasureRangeControl( {
 			unlinkIcon={ unlinkIcon }
 			onMouseOver={ onMouseOver }
 			onMouseOut={ onMouseOut }
+			allowAuto={ allowAuto }
 		/>
 	);
 	output.Tablet = (
@@ -203,7 +254,8 @@ export default function ResponsiveMeasureRangeControl( {
 			parentLabel={ label }
 			label={ ( subLabel ? __( 'Tablet:', 'kadence-blocks' ) + subLabel : undefined ) }
 			value={ ( tabletValue ? tabletValue : [ '', '', '', '' ] ) }
-			onChange={ ( size ) => onChangeTablet( size ) }
+			placeholder={ ( value ? value : [ '', '', '', '' ] ) }
+			onChange={ ( size ) => onChangeTablet( clearNonMatchingValues( tabletValue, size ) ) }
 			control={ realControl }
 			onControl={ ( value ) => realSetOnControl( value ) }
 			setCustomControl={ realSetIsCustom }
@@ -226,6 +278,7 @@ export default function ResponsiveMeasureRangeControl( {
 			unlinkIcon={ unlinkIcon }
 			onMouseOver={ onMouseOver }
 			onMouseOut={ onMouseOut }
+			allowAuto={ allowAuto }
 		/>
 	);
 	output.Desktop = (
@@ -235,7 +288,7 @@ export default function ResponsiveMeasureRangeControl( {
 			parentLabel={ label }
 			label={ ( subLabel ? subLabel : undefined ) }
 			value={ ( value ? value : [ '', '', '', '' ] ) }
-			onChange={ ( size ) => onChange( size ) }
+			onChange={ ( size ) => onChange( clearNonMatchingValues( value, size ) ) }
 			control={ realControl }
 			onControl={ ( value ) => realSetOnControl( value ) }
 			setCustomControl={ realSetIsCustom }
@@ -258,6 +311,7 @@ export default function ResponsiveMeasureRangeControl( {
 			unlinkIcon={ unlinkIcon }
 			onMouseOver={ onMouseOver }
 			onMouseOut={ onMouseOut }
+			allowAuto={ allowAuto }
 		/>
 	);
 	let currentDefault = deskDefault;

@@ -67,6 +67,7 @@ export default function MeasureRangeControl( {
 	min = 0,
 	beforeIcon = '',
 	help = '',
+	placeholder = [ '', '', '', '' ],
 	defaultValue = [ '', '', '', '' ],
 	control = 'individual',
 	unit = '',
@@ -86,6 +87,7 @@ export default function MeasureRangeControl( {
 	reset,
 	onMouseOver,
 	onMouseOut,
+	allowAuto = false,
 } ) {
 	const measureIcons = {
 		first: isBorderRadius ? topLeftIcon : firstIcon,
@@ -97,8 +99,16 @@ export default function MeasureRangeControl( {
 	}
 	const [ isCustom, setIsCustom ] = useState( false );
 	const [ theControl, setTheControl ] = useState( control );
+	const reviewOptions = JSON.parse(JSON.stringify(options));
+	reviewOptions.push( {
+		value: 'ss-auto',
+		output: 'var(--global-kb-spacing-auto, auto)',
+		label: __( 'Auto', 'kadence-blocks' ),
+		size: 0,
+		name: __( 'Auto', 'kadence-blocks' ),
+	} );
 	useEffect( () => {
-		setIsCustom( isCustomOption( options, value ) );
+		setIsCustom( isCustomOption( reviewOptions, value ) );
 	}, [] );
 	const realIsCustomControl = setCustomControl ? customControl : isCustom;
 	const realSetIsCustom = setCustomControl ? setCustomControl : setIsCustom;
@@ -196,6 +206,7 @@ export default function MeasureRangeControl( {
 								units={ units }
 								onUnit={ onUnit }
 								defaultValue={ defaultValue[0] }
+								placeholder={ placeholder?.[0] ? placeholder?.[0] : '' }
 								allowReset={ false }
 								disableCustomSizes={ true }
 								setCustomControl={ realSetIsCustom }
@@ -204,6 +215,7 @@ export default function MeasureRangeControl( {
 								isSingle={ true }
 								onMouseOver={ onMouseOver }
 								onMouseOut={ onMouseOut }
+								allowAuto={ allowAuto }
 							/>
 						</>
 					) }
@@ -226,6 +238,7 @@ export default function MeasureRangeControl( {
 								units={ units }
 								onUnit={ onUnit }
 								defaultValue={ defaultValue[0] }
+								placeholder={ placeholder?.[0] ? placeholder?.[0] : '' }
 								allowReset={ false }
 								disableCustomSizes={ true }
 								setCustomControl={ realSetIsCustom }
@@ -233,6 +246,7 @@ export default function MeasureRangeControl( {
 								isPopover={ true }
 								onMouseOver={ onMouseOver }
 								onMouseOut={ onMouseOut }
+								allowAuto={ allowAuto }
 							/>
 							<SingleMeasureRangeControl
 								parentLabel={ parentLabel ? parentLabel : label }
@@ -249,6 +263,7 @@ export default function MeasureRangeControl( {
 								units={ units }
 								onUnit={ onUnit }
 								defaultValue={ defaultValue[1] }
+								placeholder={ placeholder?.[1] ? placeholder?.[1] : '' }
 								allowReset={ false }
 								disableCustomSizes={ true }
 								setCustomControl={ realSetIsCustom }
@@ -256,6 +271,7 @@ export default function MeasureRangeControl( {
 								isPopover={ true }
 								onMouseOver={ onMouseOver }
 								onMouseOut={ onMouseOut }
+								allowAuto={ allowAuto }
 							/>
 							<SingleMeasureRangeControl
 								parentLabel={ parentLabel ? parentLabel : label }
@@ -272,6 +288,7 @@ export default function MeasureRangeControl( {
 								units={ units }
 								onUnit={ onUnit }
 								defaultValue={ defaultValue[2] }
+								placeholder={ placeholder?.[2] ? placeholder?.[2] : '' }
 								allowReset={ false }
 								disableCustomSizes={ true }
 								setCustomControl={ realSetIsCustom }
@@ -279,6 +296,7 @@ export default function MeasureRangeControl( {
 								isPopover={ true }
 								onMouseOver={ onMouseOver }
 								onMouseOut={ onMouseOut }
+								allowAuto={ allowAuto }
 							/>
 							<SingleMeasureRangeControl
 								parentLabel={ parentLabel ? parentLabel : label }
@@ -295,6 +313,7 @@ export default function MeasureRangeControl( {
 								units={ units }
 								onUnit={ onUnit }
 								defaultValue={ defaultValue[3] }
+								placeholder={ placeholder?.[3] ? placeholder?.[3] : '' }
 								allowReset={ false }
 								disableCustomSizes={ true }
 								setCustomControl={ realSetIsCustom }
@@ -302,6 +321,7 @@ export default function MeasureRangeControl( {
 								isPopover={ true }
 								onMouseOver={ onMouseOver }
 								onMouseOut={ onMouseOut }
+								allowAuto={ allowAuto }
 							/>
 							{ realIsCustomControl && (
 								<div className={ 'kadence-units kadence-measure-control-select-wrapper' }>

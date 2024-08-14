@@ -79,6 +79,7 @@ export default function SingleMeasureRangeControl( {
 	label,
 	onChange,
 	value = '',
+	placeholder = '',
 	className = '',
 	options = OPTIONS_MAP,
 	step = 1,
@@ -98,11 +99,20 @@ export default function SingleMeasureRangeControl( {
 	parentLabel = null,
 	onMouseOver,
 	onMouseOut,
+	allowAuto = false,
 } ) {
 	const [ isCustom, setIsCustom ] = useState( false );
 	const [ isOpen, setIsOpen ] = useState( false );
+	const reviewOptions = JSON.parse(JSON.stringify(options));
+	reviewOptions.push( {
+		value: 'ss-auto',
+		output: 'var(--global-kb-spacing-auto, auto)',
+		label: __( 'Auto', 'kadence-blocks' ),
+		size: 0,
+		name: __( 'Auto', 'kadence-blocks' ),
+	} );
 	useEffect( () => {
-		setIsCustom( isCustomOption( options, value ) );
+		setIsCustom( isCustomOption( reviewOptions, value ) );
 	}, [] );
 	const realIsCustomControl = setCustomControl ? customControl : isCustom;
 	const realSetIsCustom = setCustomControl ? setCustomControl : setIsCustom;
@@ -141,17 +151,18 @@ export default function SingleMeasureRangeControl( {
 		value: unitItem,
 		label: unitItem,
 	} ) );
-	const currentValue = ! realIsCustomControl ? getOptionIndex( options, value ) : Number( value );
+	const currentValue = ! realIsCustomControl ? getOptionIndex( reviewOptions, value ) : Number( value );
+	const currentPlaceholder = ! realIsCustomControl ? getOptionIndex( reviewOptions, placeholder ) : Number( placeholder )
 	const setInitialValue = () => {
 		if ( value === undefined ) {
 			onChange( '0' );
 		}
 	};
 	const customTooltipContent = ( newValue ) => {
-		return options[ newValue ]?.label;
+		return reviewOptions[ newValue ]?.label;
 	}
-	const currentValueLabel = options[ currentValue ]?.label ? options[ currentValue ]?.label : __( 'Unset', 'kadence-blocks' );
-	const currentValueName = options[ currentValue ]?.name ? options[ currentValue ]?.name + ' ' + options[ currentValue ]?.size + 'px' : __( 'Unset', 'kadence-blocks' );
+	const currentValueLabel = reviewOptions[ currentValue ]?.label ? reviewOptions[ currentValue ]?.label : __( 'Unset', 'kadence-blocks' );
+	const currentValueName = reviewOptions[ currentValue ]?.name ? reviewOptions[ currentValue ]?.name + ' ' + reviewOptions[ currentValue ]?.size + 'px' : __( 'Unset', 'kadence-blocks' );
 	const addParent = parentLabel ? parentLabel + ' ' : '';
 	let rangeLabel = label;
 	if ( isSingle ) {
@@ -159,14 +170,13 @@ export default function SingleMeasureRangeControl( {
 	} else if ( label && addParent ) {
 		rangeLabel = addParent + label + ' ' + currentValueLabel
 	}
-
 	const customRange = (
 		<>
 			<CoreRangeControl
 				label={ rangeLabel ? rangeLabel : undefined }
 				className={ 'components-spacing-sizes-control__range-control' }
 				beforeIcon={ beforeIcon }
-				value={ currentValue }
+				value={ 'ss-auto' == value ? '' : currentValue }
 				onChange={ ( newVal ) => {
 					if ( undefined === newVal ) {
 						onChange( defaultValue );
@@ -184,7 +194,7 @@ export default function SingleMeasureRangeControl( {
 				aria-valuetext={ options[ currentValue ]?.label }
 				renderTooltipContent={ customTooltipContent }
 				initialPosition={ defaultValue ? defaultValue : 0 }
-				allowReset={ ( isPopover || isSingle ) ? true : false  }
+				allowReset={ isSingle ? true : false  }
 				hideLabelFromVision={ ( isPopover || isSingle ) ? false : true }
 				onMouseOver={ onMouseOver }
 				onMouseOut={ onMouseOut }
@@ -237,14 +247,39 @@ export default function SingleMeasureRangeControl( {
 									{ parentLabel && label && (
 										<span className='kadence-placement-label'>{ label }</span>
 									) }
-									<span className='kadence-spacing-btn-val'>{ options[ currentValue ]?.label }</span>
+									<span className='kadence-spacing-btn-val'>
+										{ reviewOptions[ currentValue ]?.label }
+										{ ! reviewOptions[ currentValue ]?.label && (
+											<span className='kadence-spacing-btn-placeholder'>{ reviewOptions?.[ currentPlaceholder ]?.label ? reviewOptions?.[ currentPlaceholder ]?.label : placeholder }</span>
+										) }
+									</span>
 								</Button>
 								{ isOpen && (
 									<Popover
 										onClose={ close }
 										className={ 'kadence-range-popover-settings' }
 									>
-										{ customRange }
+
+										<div className={ 'kadence-range-popover-settings-inner' }>
+											{ customRange }
+											{ allowAuto && (
+												<Button
+													className={'custom-auto-button'}
+													variant='secondary'
+													isSmall
+													text={ __( 'Auto', 'kadence-blocks' ) }
+													onClick={ () => onChange( 'ss-auto' ) }
+													isPressed={ ( value && 'ss-auto' == value ? true : false ) }
+												/>
+											) }
+											<Button
+												className={'custom-reset-button'}
+												variant='secondary'
+												isSmall
+												text={ __( 'Reset', 'kadence-blocks' ) }
+												onClick={ () => onChange( '' ) }
+											/>
+										</div>
 									</Popover>
 								) }
 							</>
@@ -265,6 +300,7 @@ export default function SingleMeasureRangeControl( {
 							step={ step }
 							units={ controlUnits }
 							value={ value }
+							placeholder={ placeholder ? placeholder : undefined }
 							disableUnits={ true }
 							onChange={ ( newVal ) => onChangeCustom( newVal ) }
 							onMouseOver={ onMouseOver }
