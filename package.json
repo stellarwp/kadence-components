@@ -7,8 +7,6 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "@kadence/icons": "github:stellarwp/kadence-icons",
-    "@kadence/helpers": "github:stellarwp/kadence-helpers",
     "@floating-ui/react": "^0.26.16",
     "react-container-dimensions": "^1.4.1"
   },
