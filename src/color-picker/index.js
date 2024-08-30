@@ -4,7 +4,7 @@ import { ChromePointerCircle } from 'react-color/lib/components/chrome/ChromePoi
 import { ChromePointer } from 'react-color/lib/components/chrome/ChromePointer';
 import ColorFields from '../color-fields';
 
-const ColorPicker = ( { rgb, hex, hsv, hsl, onChange, renderers } ) => {
+const ColorPicker = ({ rgb, hex, hsv, hsl, onChange, renderers }) => {
 	const styles = {
 		picker: {
 			width: 300,
@@ -28,7 +28,7 @@ const ColorPicker = ( { rgb, hex, hsv, hsl, onChange, renderers } ) => {
 		},
 		input: {
 			height: 34,
-			border: `1px solid ${ hex }`,
+			border: `1px solid ${hex}`,
 			paddingLeft: 10,
 		},
 		body: {
@@ -53,7 +53,7 @@ const ColorPicker = ( { rgb, hex, hsv, hsl, onChange, renderers } ) => {
 			top: 0,
 			bottom: 0,
 			borderRadius: '50%',
-			background: `rgba(${ rgb.r },${ rgb.g },${ rgb.b },${ rgb.a })`,
+			background: `rgba(${rgb.r},${rgb.g},${rgb.b},${rgb.a})`,
 			boxShadow: 'inset 0 0 0 1px rgba(0,0,0,.1)',
 		},
 		swatch: {
@@ -77,51 +77,41 @@ const ColorPicker = ( { rgb, hex, hsv, hsl, onChange, renderers } ) => {
 		},
 	};
 	return (
-		<div style={ styles.picker } className={ 'kadence-picker' }>
-			<div style={ styles.saturation }>
+		<div style={styles.picker} className={'kadence-picker'}>
+			<div style={styles.saturation}>
 				<Saturation
-					style={ styles.Saturation }
-					hsl={ hsl }
-					hsv={ hsv }
-					pointer={ ChromePointerCircle }
-					onChange={ onChange }
+					style={styles.Saturation}
+					hsl={hsl}
+					hsv={hsv}
+					pointer={ChromePointerCircle}
+					onChange={onChange}
 				/>
 			</div>
-			<div style={ styles.body }>
-				<div style={ styles.controls } className="flexbox-fix">
-					<div style={ styles.sliders }>
-						<div style={ styles.hue }>
-							<Hue
-								style={ styles.Hue }
-								hsl={ hsl }
-								onChange={ onChange }
-								pointer={ ChromePointer }
-							/>
+			<div style={styles.body}>
+				<div style={styles.controls} className="flexbox-fix">
+					<div style={styles.sliders}>
+						<div style={styles.hue}>
+							<Hue style={styles.Hue} hsl={hsl} onChange={onChange} pointer={ChromePointer} />
 						</div>
-						<div style={ styles.alpha }>
+						<div style={styles.alpha}>
 							<Alpha
-								style={ styles.Alpha }
-								rgb={ rgb }
-								hsl={ hsl }
-								renderers={ renderers }
-								pointer={ ChromePointer }
-								onChange={ onChange }
+								style={styles.Alpha}
+								rgb={rgb}
+								hsl={hsl}
+								renderers={renderers}
+								pointer={ChromePointer}
+								onChange={onChange}
 							/>
 						</div>
 					</div>
-					<div style={ styles.color }>
+					<div style={styles.color}>
 						<Checkboard />
-						<div style={ styles.activeColor } />
+						<div style={styles.activeColor} />
 					</div>
 				</div>
 			</div>
-			<ColorFields
-				rgb={ rgb }
-				hsl={ hsl }
-				hex={ hex }
-				onChange={ onChange }
-			/>
+			<ColorFields rgb={rgb} hsl={hsl} hex={hex} onChange={onChange} />
 		</div>
 	);
 };
-export default CustomPicker( ColorPicker );
+export default CustomPicker(ColorPicker);

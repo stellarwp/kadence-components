@@ -9,11 +9,11 @@ import { withFilters } from '@wordpress/components';
  */
 class DynamicInlineReplaceControl extends Component {
 	constructor() {
-		super( ...arguments );
+		super(...arguments);
 	}
 	render() {
 		return;
 	}
-};
+}
 
-export default withFilters( 'kadence.InlineReplaceDynamicControl' )( DynamicInlineReplaceControl );
+export default withFilters('kadence.InlineReplaceDynamicControl')(DynamicInlineReplaceControl);

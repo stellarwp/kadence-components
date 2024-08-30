@@ -13,18 +13,10 @@ import { map, get } from 'lodash';
 /**
  * Internal block libraries
  */
- import { useSetting } from '@wordpress/block-editor';
+import { useSetting } from '@wordpress/block-editor';
 import { __, sprintf } from '@wordpress/i18n';
 import { Component, Fragment } from '@wordpress/element';
-import {
-	Button,
-	Tooltip,
-	Dashicon,
-	Dropdown,
-	ToolbarGroup,
-	SVG,
-	Path,
-} from '@wordpress/components';
+import { Button, Tooltip, Dashicon, Dropdown, ToolbarGroup, SVG, Path } from '@wordpress/components';
 import { withSelect } from '@wordpress/data';
 import { DOWN } from '@wordpress/keycodes';
 
@@ -41,9 +33,9 @@ const ColorSelectorSVGIcon = () => (
  */
 class InlinePopColorControl extends Component {
 	constructor() {
-		super( ...arguments );
-		this.onChangeState = this.onChangeState.bind( this );
-		this.onChangeComplete = this.onChangeComplete.bind( this );
+		super(...arguments);
+		this.onChangeState = this.onChangeState.bind(this);
+		this.onChangeComplete = this.onChangeComplete.bind(this);
 		this.state = {
 			alpha: false === this.props.alpha ? false : true,
 			isVisible: false,
@@ -52,236 +44,262 @@ class InlinePopColorControl extends Component {
 			currentColor: '',
 			inherit: false,
 			currentOpacity: this.props.opacityValue !== undefined ? this.props.opacityValue : 1,
-			isPalette: ( this.props.value && this.props.value.startsWith( 'palette' ) ? true : false ),
+			isPalette: this.props.value && this.props.value.startsWith('palette') ? true : false,
 		};
 	}
 	render() {
-		if ( this.props.reload ) {
-			this.props.reloaded( true );
-			this.setState( { currentColor: '', currentOpacity: '', isPalette: ( this.props.value && this.props.value.startsWith( 'palette' ) ? true : false ) } );
+		if (this.props.reload) {
+			this.props.reloaded(true);
+			this.setState({
+				currentColor: '',
+				currentOpacity: '',
+				isPalette: this.props.value && this.props.value.startsWith('palette') ? true : false,
+			});
 		}
-		const convertOpacity = ( value ) => {
+		const convertOpacity = (value) => {
 			let val = 1;
-			if ( value ) {
+			if (value) {
 				val = value / 100;
 			}
 			return val;
 		};
-		const convertedOpacityValue = ( 100 === this.props.opacityUnit ? convertOpacity( this.state.currentOpacity ) : this.state.currentOpacity );
-		const colorVal = ( this.state.currentColor ? this.state.currentColor : this.props.value );
-		let currentColorString = ( this.state.isPalette && this.props.colors && this.props.colors[ parseInt( colorVal.slice( -1 ), 10 ) - 1 ] ? this.props.colors[ parseInt( colorVal.slice( -1 ), 10 ) - 1 ].color : colorVal );
-		if ( currentColorString && currentColorString.startsWith( 'var(' ) ) {
-			currentColorString = window.getComputedStyle( document.documentElement ).getPropertyValue( this.props.value.replace( 'var(', '' ).replace( ')', '' ) );
+		const convertedOpacityValue =
+			100 === this.props.opacityUnit ? convertOpacity(this.state.currentOpacity) : this.state.currentOpacity;
+		const colorVal = this.state.currentColor ? this.state.currentColor : this.props.value;
+		let currentColorString =
+			this.state.isPalette && this.props.colors && this.props.colors[parseInt(colorVal.slice(-1), 10) - 1]
+				? this.props.colors[parseInt(colorVal.slice(-1), 10) - 1].color
+				: colorVal;
+		if (currentColorString && currentColorString.startsWith('var(')) {
+			currentColorString = window
+				.getComputedStyle(document.documentElement)
+				.getPropertyValue(this.props.value.replace('var(', '').replace(')', ''));
 		}
-		if ( '' === currentColorString ) {
+		if ('' === currentColorString) {
 			currentColorString = this.props.default;
 		}
-		if ( this.props.onOpacityChange && ! this.state.isPalette ) {
-			if ( Number( convertedOpacityValue !== undefined && convertedOpacityValue !== '' ? convertedOpacityValue : 1 ) !== 1 ) {
-				currentColorString = hexToRGBA( ( undefined === currentColorString ? '' : currentColorString ), ( convertedOpacityValue !== undefined && convertedOpacityValue !== '' ? convertedOpacityValue : 1 ) );
+		if (this.props.onOpacityChange && !this.state.isPalette) {
+			if (
+				Number(
+					convertedOpacityValue !== undefined && convertedOpacityValue !== '' ? convertedOpacityValue : 1
+				) !== 1
+			) {
+				currentColorString = hexToRGBA(
+					undefined === currentColorString ? '' : currentColorString,
+					convertedOpacityValue !== undefined && convertedOpacityValue !== '' ? convertedOpacityValue : 1
+				);
 			}
 		}
-		const renderToggleComponent = () => ( {
-												  onToggle,
-												  isOpen,
-											  } ) => {
-			const openOnArrowDown = ( event ) => {
-				if ( ! isOpen && event.keyCode === DOWN ) {
-					event.preventDefault();
-					event.stopPropagation();
-					onToggle();
-				}
-			};
-			return (
-				<ToolbarGroup>
-					<Button
-						className="components-toolbar__control kb-colors-selector__toggle"
-						label={ this.props.label }
-						onClick={ onToggle }
-						onKeyDown={ openOnArrowDown }
-						icon={
-							<div className="kb-colors-selector__icon-container">
-								<div
-									className={ 'kb-colors-selector__state-selection' }
-									style={ { color: currentColorString } }
-								>
-									<ColorSelectorSVGIcon />
+		const renderToggleComponent =
+			() =>
+			({ onToggle, isOpen }) => {
+				const openOnArrowDown = (event) => {
+					if (!isOpen && event.keyCode === DOWN) {
+						event.preventDefault();
+						event.stopPropagation();
+						onToggle();
+					}
+				};
+				return (
+					<ToolbarGroup>
+						<Button
+							className="components-toolbar__control kb-colors-selector__toggle"
+							label={this.props.label}
+							onClick={onToggle}
+							onKeyDown={openOnArrowDown}
+							icon={
+								<div className="kb-colors-selector__icon-container">
+									<div
+										className={'kb-colors-selector__state-selection'}
+										style={{ color: currentColorString }}
+									>
+										<ColorSelectorSVGIcon />
+									</div>
 								</div>
-							</div>
-						}
-					/>
-				</ToolbarGroup>
-			);
-		};
+							}
+						/>
+					</ToolbarGroup>
+				);
+			};
 		return (
 			<Dropdown
 				position="top right"
 				className="kb-colors-selector components-dropdown-menu components-toolbar new-kadence-advanced-colors"
 				contentClassName="block-library-colors-selector__popover kt-popover-color kadence-pop-color-popover"
 				//renderToggle={ renderToggleComponent() }
-				renderToggle={ ( { isOpen, onToggle } ) => (
+				renderToggle={({ isOpen, onToggle }) => (
 					<Fragment>
 						<Button
 							className="components-toolbar__control components-dropdown-menu__toggle kb-colors-selector__toggle"
-							label={ this.props.label }
-							tooltip={ this.props.label }
+							label={this.props.label}
+							tooltip={this.props.label}
 							icon={
 								<div className="kb-colors-selector__icon-container">
 									<div
-										className={ 'kb-colors-selector__state-selection' }
-										style={ { color: currentColorString } }
+										className={'kb-colors-selector__state-selection'}
+										style={{ color: currentColorString }}
 									>
 										<ColorSelectorSVGIcon />
 									</div>
 								</div>
 							}
-							onClick={ onToggle }
-							aria-expanded={ isOpen }>
-						</Button>
+							onClick={onToggle}
+							aria-expanded={isOpen}
+						></Button>
 					</Fragment>
-				) }
-				renderContent={ () => (
+				)}
+				renderContent={() => (
 					<div className="inline-color-popup-inner-wrap block-editor-block-toolbar">
-						{ this.state.classSat === 'first' && ! this.props.disableCustomColors && (
+						{this.state.classSat === 'first' && !this.props.disableCustomColors && (
 							<ColorPicker
-								color={ currentColorString }
-								onChange={ ( color ) => this.onChangeState( color, '' ) }
-								onChangeComplete={ ( color ) => {
-									this.onChangeComplete( color, '' );
-									if ( this.props.onClassChange ) {
-										this.props.onClassChange( '' );
+								color={currentColorString}
+								onChange={(color) => this.onChangeState(color, '')}
+								onChangeComplete={(color) => {
+									this.onChangeComplete(color, '');
+									if (this.props.onClassChange) {
+										this.props.onClassChange('');
 									}
-								} }
+								}}
 							/>
-						) }
-						{ this.state.classSat !== 'first' && ! this.props.disableCustomColors && (
+						)}
+						{this.state.classSat !== 'first' && !this.props.disableCustomColors && (
 							<ColorPicker
-								color={ currentColorString }
-								onChange={ ( color ) => this.onChangeState( color, '' ) }
-								onChangeComplete={ ( color ) => {
-									this.onChangeComplete( color, '' );
-									if ( this.props.onClassChange ) {
-										this.props.onClassChange( '' );
+								color={currentColorString}
+								onChange={(color) => this.onChangeState(color, '')}
+								onChangeComplete={(color) => {
+									this.onChangeComplete(color, '');
+									if (this.props.onClassChange) {
+										this.props.onClassChange('');
 									}
-								} }
+								}}
 							/>
-						) }
-						{ this.props.colors && (
+						)}
+						{this.props.colors && (
 							<div className="kadence-pop-color-palette-swatches">
-								{ map( this.props.colors, ( { color, slug, name } ) => {
+								{map(this.props.colors, ({ color, slug, name }) => {
 									const style = { color };
-									const palette = slug.replace( 'theme-', '' );
-									const isActive = ( ( palette === this.props.value ) || ( ! slug.startsWith( 'theme-palette' ) && this.props.value === color ) );
+									const palette = slug.replace('theme-', '');
+									const isActive =
+										palette === this.props.value ||
+										(!slug.startsWith('theme-palette') && this.props.value === color);
 									return (
-										<div key={ color } className="kadence-color-palette__item-wrapper">
+										<div key={color} className="kadence-color-palette__item-wrapper">
 											<Tooltip
-												text={ name ||
+												text={
+													name ||
 													// translators: %s: color hex code e.g: "#f00".
-													sprintf( __( 'Color code: %s' ), color )
-												}>
+													sprintf(__('Color code: %s'), color)
+												}
+											>
 												<Button
 													type="button"
-													className={ `kadence-color-palette__item ${ ( isActive ? 'is-active' : '' ) }` }
-													style={ style }
-													onClick={ () => {
-														if ( slug.startsWith( 'theme-palette' ) ) {
-															this.onChangeComplete( color, palette );
+													className={`kadence-color-palette__item ${
+														isActive ? 'is-active' : ''
+													}`}
+													style={style}
+													onClick={() => {
+														if (slug.startsWith('theme-palette')) {
+															this.onChangeComplete(color, palette);
 														} else {
-															this.onChangeComplete( color, false );
+															this.onChangeComplete(color, false);
 														}
-														if ( this.props.onClassChange ) {
-															this.props.onClassChange( slug );
+														if (this.props.onClassChange) {
+															this.props.onClassChange(slug);
 														}
-													} }
-													aria-label={ name ?
-														// translators: %s: The name of the color e.g: "vivid red".
-														sprintf( __( 'Color: %s', 'kadence-blocks' ), name ) :
-														// translators: %s: color hex code e.g: "#f00".
-														sprintf( __( 'Color code: %s', 'kadence-blocks' ), color ) }
-													aria-pressed={ isActive }
+													}}
+													aria-label={
+														name
+															? // translators: %s: The name of the color e.g: "vivid red".
+															  sprintf(__('Color: %s', 'kadence-blocks'), name)
+															: // translators: %s: color hex code e.g: "#f00".
+															  sprintf(__('Color code: %s', 'kadence-blocks'), color)
+													}
+													aria-pressed={isActive}
 												/>
 											</Tooltip>
-											{ palette === this.props.value && <Dashicon icon="admin-site" /> }
-											{ ! slug.startsWith( 'theme-palette' ) && this.props.value === color && <Dashicon icon="saved" /> }
+											{palette === this.props.value && <Dashicon icon="admin-site" />}
+											{!slug.startsWith('theme-palette') && this.props.value === color && (
+												<Dashicon icon="saved" />
+											)}
 										</div>
 									);
-								} ) }
+								})}
 							</div>
-						) }
+						)}
 					</div>
-				) }
+				)}
 			/>
 		);
 	}
-	unConvertOpacity( value ) {
+	unConvertOpacity(value) {
 		let val = 100;
-		if ( value ) {
+		if (value) {
 			val = value * 100;
 		}
 		return val;
 	}
-	onChangeState( color, palette ) {
+	onChangeState(color, palette) {
 		let newColor;
-		let opacity = ( 100 === this.props.opacityUnit ? 100 : 1 );
-		if ( palette ) {
+		let opacity = 100 === this.props.opacityUnit ? 100 : 1;
+		if (palette) {
 			newColor = palette;
-		} else if ( undefined !== color.rgb && undefined !== color.rgb.a && 1 !== color.rgb.a ) {
-			if ( this.props.onOpacityChange ) {
-				if ( color.hex === 'transparent' ) {
+		} else if (undefined !== color.rgb && undefined !== color.rgb.a && 1 !== color.rgb.a) {
+			if (this.props.onOpacityChange) {
+				if (color.hex === 'transparent') {
 					newColor = '#000000';
 				} else {
 					newColor = color.hex;
 				}
-				opacity = ( 100 === this.props.opacityUnit ? this.unConvertOpacity( color.rgb.a ) : color.rgb.a );
+				opacity = 100 === this.props.opacityUnit ? this.unConvertOpacity(color.rgb.a) : color.rgb.a;
 			} else {
 				newColor = 'rgba(' + color.rgb.r + ',' + color.rgb.g + ',' + color.rgb.b + ',' + color.rgb.a + ')';
 			}
-		} else if ( undefined !== color.hex ) {
+		} else if (undefined !== color.hex) {
 			newColor = color.hex;
 		} else {
 			newColor = color;
 		}
-		this.setState( { currentColor: newColor, currentOpacity: opacity, isPalette: ( palette ? true : false ) } );
+		this.setState({ currentColor: newColor, currentOpacity: opacity, isPalette: palette ? true : false });
 	}
-	onChangeComplete( color, palette ) {
+	onChangeComplete(color, palette) {
 		let newColor;
-		let opacity = ( 100 === this.props.opacityUnit ? 100 : 1 );
-		if ( palette ) {
+		let opacity = 100 === this.props.opacityUnit ? 100 : 1;
+		if (palette) {
 			newColor = palette;
-		} else if ( undefined !== color.rgb && undefined !== color.rgb.a && 1 !== color.rgb.a ) {
-			if ( this.props.onOpacityChange ) {
-				if ( color.hex === 'transparent' ) {
+		} else if (undefined !== color.rgb && undefined !== color.rgb.a && 1 !== color.rgb.a) {
+			if (this.props.onOpacityChange) {
+				if (color.hex === 'transparent') {
 					newColor = '#000000';
 				} else {
 					newColor = color.hex;
 				}
-				opacity = ( 100 === this.props.opacityUnit ? this.unConvertOpacity( color.rgb.a ) : color.rgb.a );
+				opacity = 100 === this.props.opacityUnit ? this.unConvertOpacity(color.rgb.a) : color.rgb.a;
 			} else {
 				newColor = 'rgba(' + color.rgb.r + ',' + color.rgb.g + ',' + color.rgb.b + ',' + color.rgb.a + ')';
 			}
-		} else if ( undefined !== color.hex ) {
+		} else if (undefined !== color.hex) {
 			newColor = color.hex;
 		} else {
 			newColor = color;
 		}
-		this.setState( { currentColor: newColor, currentOpacity: opacity, isPalette: ( palette ? true : false ) } );
-		if ( undefined !== this.props.onArrayChange ) {
-			this.props.onArrayChange( newColor, opacity );
+		this.setState({ currentColor: newColor, currentOpacity: opacity, isPalette: palette ? true : false });
+		if (undefined !== this.props.onArrayChange) {
+			this.props.onArrayChange(newColor, opacity);
 		} else {
-			this.props.onChange( newColor );
-			if ( undefined !== this.props.onOpacityChange ) {
-				setTimeout( () => {
-					this.props.onOpacityChange( opacity );
-				}, 50 );
+			this.props.onChange(newColor);
+			if (undefined !== this.props.onOpacityChange) {
+				setTimeout(() => {
+					this.props.onOpacityChange(opacity);
+				}, 50);
 			}
 		}
 	}
- }
- export default withSelect( ( select, ownProps ) => {
-	const disableCustomColors = ownProps.disableCustomColors === undefined ? ! useSetting( 'color.custom' ) : ownProps.disableCustomColors;
+}
+export default withSelect((select, ownProps) => {
+	const disableCustomColors =
+		ownProps.disableCustomColors === undefined ? !useSetting('color.custom') : ownProps.disableCustomColors;
 	return {
-		colors: useSetting( 'color.palette' ),
+		colors: useSetting('color.palette'),
 		disableCustomColors,
 	};
- } )( InlinePopColorControl );
- 
+})(InlinePopColorControl);

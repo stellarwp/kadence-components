@@ -10,28 +10,22 @@ import DynamicImageControl from '../../dynamic-image-control';
 /**
  * Import Css
  */
- import './editor.scss';
+import './editor.scss';
 /**
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
 import { Fragment, Component } from '@wordpress/element';
-import {
-	MediaUpload,
-} from '@wordpress/block-editor';
+import { MediaUpload } from '@wordpress/block-editor';
 import { Button } from '@wordpress/components';
-import {
-	image,
-	closeSmall,
-	plusCircleFilled,
-} from '@wordpress/icons';
-const ALLOWED_MEDIA_TYPES = [ 'image' ];
+import { image, closeSmall, plusCircleFilled } from '@wordpress/icons';
+const ALLOWED_MEDIA_TYPES = ['image'];
 /**
  * Basic Image Control.
  */
 class KadenceImageControl extends Component {
 	constructor() {
-		super( ...arguments );
+		super(...arguments);
 	}
 	render() {
 		const {
@@ -43,69 +37,81 @@ class KadenceImageControl extends Component {
 			imageURL,
 			imageID,
 			kadenceDynamic,
-			dynamicAttribute = '' } = this.props;
+			dynamicAttribute = '',
+		} = this.props;
 		return (
 			<div className="components-base-control kadence-image-media-control kadence-image-background-control">
-				{ ! hasImage && (
+				{!hasImage && (
 					<Fragment>
-						{ label && (
-							<div class="components-kadence-image-background__label">{ label }</div>
-						) }
+						{label && <div class="components-kadence-image-background__label">{label}</div>}
 						<KadenceMediaPlaceholder
-							labels={ '' }
-							selectIcon={ plusCircleFilled }
-							selectLabel={ __( 'Select Image', 'kadence-blocks' ) }
-							onSelect={ ( img ) => onSaveImage( img ) }
+							labels={''}
+							selectIcon={plusCircleFilled}
+							selectLabel={__('Select Image', 'kadence-blocks')}
+							onSelect={(img) => onSaveImage(img)}
 							accept="image/*"
-							className={ 'kadence-image-upload' }
-							allowedTypes={ ALLOWED_MEDIA_TYPES }
-							disableMediaButtons={ disableMediaButtons }
-							dynamicControl={ ( dynamicAttribute && kadence_blocks_params.dynamic_enabled ? <DynamicImageControl { ...this.props }/> : undefined ) }
+							className={'kadence-image-upload'}
+							allowedTypes={ALLOWED_MEDIA_TYPES}
+							disableMediaButtons={disableMediaButtons}
+							dynamicControl={
+								dynamicAttribute && kadence_blocks_params.dynamic_enabled ? (
+									<DynamicImageControl {...this.props} />
+								) : undefined
+							}
 						/>
 					</Fragment>
-				) }
-				{ hasImage && (
+				)}
+				{hasImage && (
 					<Fragment>
-						{ label && (
-							<div class="components-kadence-image-background__label">{ label }</div>
-						) }
-						{ dynamicAttribute && kadence_blocks_params.dynamic_enabled && kadenceDynamic && kadenceDynamic[ dynamicAttribute ] && kadenceDynamic[ dynamicAttribute ].enable ? (
+						{label && <div class="components-kadence-image-background__label">{label}</div>}
+						{dynamicAttribute &&
+						kadence_blocks_params.dynamic_enabled &&
+						kadenceDynamic &&
+						kadenceDynamic[dynamicAttribute] &&
+						kadenceDynamic[dynamicAttribute].enable ? (
 							<div className="kb-dynamic-background-sidebar-top">
-								<DynamicImageControl startOpen={ kadenceDynamic[ dynamicAttribute ].field ? false : true } { ...this.props }/>
+								<DynamicImageControl
+									startOpen={kadenceDynamic[dynamicAttribute].field ? false : true}
+									{...this.props}
+								/>
 							</div>
 						) : (
 							<Fragment>
 								<MediaUpload
-									onSelect={ ( img ) => onSaveImage( img ) }
+									onSelect={(img) => onSaveImage(img)}
 									type="image"
-									value={ ( imageID ? imageID : '' ) }
-									render={ ( { open } ) => (
+									value={imageID ? imageID : ''}
+									render={({ open }) => (
 										<Button
-											className={ 'components-button components-icon-button kt-cta-upload-btn kb-sidebar-image' }
-											style={ {
+											className={
+												'components-button components-icon-button kt-cta-upload-btn kb-sidebar-image'
+											}
+											style={{
 												backgroundImage: 'url("' + imageURL + '")',
 												backgroundSize: 'cover',
-											} }
-											onClick={ open }
-											icon={ image }
+											}}
+											onClick={open}
+											icon={image}
 										>
-											{ __( 'Edit Image', 'kadence-blocks' ) }
+											{__('Edit Image', 'kadence-blocks')}
 										</Button>
-									) }
+									)}
 								/>
 								<Button
-									icon={ closeSmall }
-									label={ __( 'Remove Image', 'kadence-blocks' ) }
-									className={ 'components-button components-icon-button kt-remove-img kt-cta-upload-btn' }
-									onClick={ () => onRemoveImage() }
+									icon={closeSmall}
+									label={__('Remove Image', 'kadence-blocks')}
+									className={
+										'components-button components-icon-button kt-remove-img kt-cta-upload-btn'
+									}
+									onClick={() => onRemoveImage()}
 								/>
-								{ dynamicAttribute && kadence_blocks_params.dynamic_enabled && (
-									<DynamicImageControl { ...this.props }/>
-								) }
+								{dynamicAttribute && kadence_blocks_params.dynamic_enabled && (
+									<DynamicImageControl {...this.props} />
+								)}
 							</Fragment>
-						) }
+						)}
 					</Fragment>
-				) }
+				)}
 			</div>
 		);
 	}

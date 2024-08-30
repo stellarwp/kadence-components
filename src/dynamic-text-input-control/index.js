@@ -17,20 +17,20 @@ import { applyFilters } from '@wordpress/hooks';
  */
 import './editor.scss';
 export default function DynamicTextInputControl({
-													value,
-													onChange,
-													label,
-													className,
-													reset,
-													defaultValue = '',
-													dynamicAttribute,
-													isSelected,
-													attributes,
-													setAttributes,
-													name,
-													clientId,
-													context,
-												}) {
+	value,
+	onChange,
+	label,
+	className,
+	reset,
+	defaultValue = '',
+	dynamicAttribute,
+	isSelected,
+	attributes,
+	setAttributes,
+	name,
+	clientId,
+	context,
+}) {
 	const instanceId = useInstanceId(DynamicTextInputControl);
 	const onReset = () => {
 		if (typeof reset === 'function') {

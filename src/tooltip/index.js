@@ -10,25 +10,14 @@ import {
 	useDismiss,
 	useRole,
 	useInteractions,
-	FloatingPortal
-} from "@floating-ui/react";
+	FloatingPortal,
+} from '@floating-ui/react';
 
 import './editor.scss';
 
-
-export default function Tooltip({
-									children,
-									text,
-									className,
-									TagName = "span",
-									placement = "top"
-								}) {
-	if ( ! text ) {
-		return (
-			<TagName className={`tooltip-ref-wrap${className ? ' ' + className : ''}`}>
-				{children}
-			</TagName>
-		);
+export default function Tooltip({ children, text, className, TagName = 'span', placement = 'top' }) {
+	if (!text) {
+		return <TagName className={`tooltip-ref-wrap${className ? ' ' + className : ''}`}>{children}</TagName>;
 	}
 	const [isOpen, setIsOpen] = useState(false);
 	let tooltipPlacement = placement;
@@ -52,10 +41,10 @@ export default function Tooltip({
 		middleware: [
 			offset(5),
 			flip({
-				fallbackAxisSideDirection: "start"
+				fallbackAxisSideDirection: 'start',
 			}),
-			shift()
-		]
+			shift(),
+		],
 	});
 
 	// Event listeners to change the open state
@@ -63,7 +52,7 @@ export default function Tooltip({
 	const focus = useFocus(context);
 	const dismiss = useDismiss(context);
 	// Role props for screen readers
-	const role = useRole(context, { role: "tooltip" });
+	const role = useRole(context, { role: 'tooltip' });
 	const strip_tags = (input, allowed) => {
 		allowed = (((allowed || '') + '').toLowerCase().match(/<[a-z][a-z0-9]*>/g) || []).join('');
 		const tags = /<\/?([a-z][a-z0-9]*)\b[^>]*>/gi,
@@ -74,15 +63,14 @@ export default function Tooltip({
 	};
 
 	// Merge all the interactions into prop getters
-	const { getReferenceProps, getFloatingProps } = useInteractions([
-		hover,
-		focus,
-		dismiss,
-		role
-	]);
+	const { getReferenceProps, getFloatingProps } = useInteractions([hover, focus, dismiss, role]);
 	return (
 		<>
-			<TagName className={`tooltip-ref-wrap tooltip-ref-has-tip${className ? ' ' + className : ''}`} ref={refs.setReference} {...getReferenceProps()}>
+			<TagName
+				className={`tooltip-ref-wrap tooltip-ref-has-tip${className ? ' ' + className : ''}`}
+				ref={refs.setReference}
+				{...getReferenceProps()}
+			>
 				{children}
 			</TagName>
 			<FloatingPortal>
@@ -94,7 +82,12 @@ export default function Tooltip({
 						{...getFloatingProps()}
 						data-placement={tooltipPlacement}
 					>
-						<span className="kb-tooltip-content" dangerouslySetInnerHTML={{ __html: strip_tags( text, '<br><b><i><u><p><ol><ul><li><strong><small>' ) }} />
+						<span
+							className="kb-tooltip-content"
+							dangerouslySetInnerHTML={{
+								__html: strip_tags(text, '<br><b><i><u><p><ol><ul><li><strong><small>'),
+							}}
+						/>
 						<span className="kb-tooltip-arrow" />
 					</div>
 				)}

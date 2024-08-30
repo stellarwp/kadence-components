@@ -1,63 +1,76 @@
-.edit-post-sidebar .typography-family-select-form-row input[type=text], .kt-block-defaults-modal .typography-family-select-form-row input[type=text], .components-popover.kt-popover-font-family .components-popover__content .typography-family-select-form-row input[type=text] {
-	box-shadow:none;
+.edit-post-sidebar .typography-family-select-form-row input[type="text"],
+.kt-block-defaults-modal .typography-family-select-form-row input[type="text"],
+.components-popover.kt-popover-font-family
+	.components-popover__content
+	.typography-family-select-form-row
+	input[type="text"] {
+	box-shadow: none;
 }
-.components-popover.kt-popover-font-family .components-popover__content .typography-family-select-form-row .kt-typography__control input {
-    min-height: 18px;
-    line-height: 1.6;
+.components-popover.kt-popover-font-family
+	.components-popover__content
+	.typography-family-select-form-row
+	.kt-typography__control
+	input {
+	min-height: 18px;
+	line-height: 1.6;
 }
 .components-popover.kt-popover-font-family .components-popover__content input.components-text-control__input {
-    min-height: 30px;
-    padding: 5px 4px;
+	min-height: 30px;
+	padding: 5px 4px;
 }
-.components-popover.kt-popover-font-family .components-popover__content  .components-select-control__input {
-    padding-right: 10px;
-    background-size: 10px 10px;
-    min-height: 28px;
-    line-height: 1.6;
-    padding-left: 8px;
+.components-popover.kt-popover-font-family .components-popover__content .components-select-control__input {
+	padding-right: 10px;
+	background-size: 10px 10px;
+	min-height: 28px;
+	line-height: 1.6;
+	padding-left: 8px;
 }
 .components-popover.kt-popover-font-family .components-popover__content .typography-family-select-form-row {
 	z-index: 200;
-    position: relative;
-    border-left: none;
-    box-shadow: none;
-    display: block;
-    overflow: visible;
-    transition: none;
-    width: 100%;
+	position: relative;
+	border-left: none;
+	box-shadow: none;
+	display: block;
+	overflow: visible;
+	transition: none;
+	width: 100%;
 }
 .components-popover.kt-popover-font-family .components-popover__content {
-    .components-input-control__label {
-        font-weight: 400 !important;
-        font-size: 10px;
-        color: #3c434a !important;
-    }
-    .components-flex.components-select-control {
-        gap:2px;
-    }
-    .components-toggle-control .components-flex.components-h-stack {
-        flex-direction: column-reverse;
-        gap: 0;
-    }
+	.components-input-control__label {
+		font-weight: 400 !important;
+		font-size: 10px;
+		color: #3c434a !important;
+	}
+	.components-flex.components-select-control {
+		gap: 2px;
+	}
+	.components-toggle-control .components-flex.components-h-stack {
+		flex-direction: column-reverse;
+		gap: 0;
+	}
 }
 .kt-font-family-icon svg path {
-    fill: currentColor;
+	fill: currentColor;
 }
 .components-popover.kt-popover-font-family .components-popover__content {
 	min-height: 240px;
-    overflow: visible;
-    max-height: 240px;
-    min-width: 260px;
+	overflow: visible;
+	max-height: 240px;
+	min-width: 260px;
 }
-.components-popover.kt-popover-font-family .components-popover__content .typography-row-settings .kadence-font-size-select-control-wrap .components-base-control {
-    flex:1;
+.components-popover.kt-popover-font-family
+	.components-popover__content
+	.typography-row-settings
+	.kadence-font-size-select-control-wrap
+	.components-base-control {
+	flex: 1;
 }
 .components-popover.kt-popover-font-family .components-popover__content {
-	padding:10px;
-    z-index: 1;
-    > div {
-        padding:0;
-    }
+	padding: 10px;
+	z-index: 1;
+	> div {
+		padding: 0;
+	}
 	.components-base-control > .kadence-component__header .components-button.is-small.has-icon.is-reset svg {
 		width: 14px;
 		height: 14px;
@@ -73,14 +86,15 @@
 		font-size: 10px;
 		margin-bottom: 4px;
 	}
-	.components-base-control .components-base-control__label, .components-base-control .components-toggle-control__label {
+	.components-base-control .components-base-control__label,
+	.components-base-control .components-toggle-control__label {
 		margin-bottom: 4px;
 		font-size: 10px;
 		line-height: 10px;
 		text-transform: uppercase;
 	}
 	.components-base-control .components-base-control__field {
-        margin-bottom: 0;
+		margin-bottom: 0;
 	}
 	.components-toggle-control .components-base-control__field .components-form-toggle {
 		display: block;
@@ -96,16 +110,16 @@
 		display: flex;
 		.components-base-control {
 			flex: 0 1 33.33%;
-			margin-right:5px;
+			margin-right: 5px;
 			margin-bottom: 0;
 		}
 		.components-base-control:last-child {
-			margin-right:0px;
+			margin-right: 0px;
 		}
 	}
 	.typography-family-select-form-row .kt-typography__control {
 		min-height: 28px;
-		border: 1px solid rgb(30,30,30);
+		border: 1px solid rgb(30, 30, 30);
 		border-radius: 2px;
 		box-shadow: 0 0 0 transparent;
 	}
@@ -117,7 +131,7 @@
 	}
 	p.kt-inline-size-title {
 		font-size: 10px;
-		margin:0;
+		margin: 0;
 		line-height: 15px;
 		text-transform: uppercase;
 	}
@@ -145,10 +159,11 @@
 		background: #f2f2f2;
 		box-shadow: none;
 	}
-	.kt-typography-size-type-options .components-button.kt-size-btn svg, .kt-typography-size-type-options .components-button.kt-size-btn span.dashicon {
+	.kt-typography-size-type-options .components-button.kt-size-btn svg,
+	.kt-typography-size-type-options .components-button.kt-size-btn span.dashicon {
 		width: 12px;
-        height: 12px;
-        font-size: 12px;
+		height: 12px;
+		font-size: 12px;
 	}
 	.kt-typography-size-type-options {
 		flex-grow: 2;
@@ -174,36 +189,58 @@
 		display: block;
 	}
 }
-.components-popover.kt-popover-font-family .components-popover__content .typography-row-settings .components-base-control:last-child .components-base-control__field .kt-typography-size-type {
-    width: 100%;
+.components-popover.kt-popover-font-family
+	.components-popover__content
+	.typography-row-settings
+	.components-base-control:last-child
+	.components-base-control__field
+	.kt-typography-size-type {
+	width: 100%;
 }
-.components-popover.kt-popover-font-family .components-popover__content .kt-type-size-input-wrap .components-base-control:last-child {
-    flex: 0 1 40%;
+.components-popover.kt-popover-font-family
+	.components-popover__content
+	.kt-type-size-input-wrap
+	.components-base-control:last-child {
+	flex: 0 1 40%;
 }
-.components-popover.kt-popover-font-family .components-popover__content .kt-type-size-input-wrap .kt-typography-number-input {
-    flex: 0 1 55%;
+.components-popover.kt-popover-font-family
+	.components-popover__content
+	.kt-type-size-input-wrap
+	.kt-typography-number-input {
+	flex: 0 1 55%;
 }
 .components-popover.kt-popover-font-family .components-popover__content .typography-row-settings .kt-type-input-wrap {
-    flex: 0 1 33.33%;
-    margin-right: 5px;
-    margin-bottom: 0;
+	flex: 0 1 33.33%;
+	margin-right: 5px;
+	margin-bottom: 0;
 }
 .components-popover.kt-popover-font-family .components-popover__content .typography-row-settings .kt-size-input-wrap {
-    flex: 0 1 50%;
-    margin-right: 15px;
-    margin-bottom: 0;
+	flex: 0 1 50%;
+	margin-right: 15px;
+	margin-bottom: 0;
 }
-.components-popover.kt-popover-font-family .components-popover__content .typography-row-settings .kt-size-input-wrap:last-child {
-    margin-right: 0px;
+.components-popover.kt-popover-font-family
+	.components-popover__content
+	.typography-row-settings
+	.kt-size-input-wrap:last-child {
+	margin-right: 0px;
 }
-.components-popover.kt-popover-font-family .components-popover__content .typography-row-settings .kt-type-input-wrap .components-base-control {
-    flex:none;
-    display:inline-block;
-    margin-right:0;
-    width: 70%;
+.components-popover.kt-popover-font-family
+	.components-popover__content
+	.typography-row-settings
+	.kt-type-input-wrap
+	.components-base-control {
+	flex: none;
+	display: inline-block;
+	margin-right: 0;
+	width: 70%;
 }
-.components-popover.kt-popover-font-family .components-popover__content .typography-row-settings .kt-type-input-wrap .kt-unit {
-    width: 30%;
-    display: inline-block;
-    text-align: center;
+.components-popover.kt-popover-font-family
+	.components-popover__content
+	.typography-row-settings
+	.kt-type-input-wrap
+	.kt-unit {
+	width: 30%;
+	display: inline-block;
+	text-align: center;
 }

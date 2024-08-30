@@ -10,22 +10,11 @@ import { useSelect, useDispatch } from '@wordpress/data';
 import { useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { map } from 'lodash';
-import { capitalizeFirstLetter } from '@kadence/helpers'
+import { capitalizeFirstLetter } from '@kadence/helpers';
 
-import {
-	arrowUp,
-	arrowLeft,
-	arrowRight,
-	arrowDown,
-} from '@wordpress/icons';
+import { arrowUp, arrowLeft, arrowRight, arrowDown } from '@wordpress/icons';
 
-import {
-	Dashicon,
-	Button,
-	ButtonGroup,
-	SVG,
-	Path,
-} from '@wordpress/components';
+import { Dashicon, Button, ButtonGroup, SVG, Path } from '@wordpress/components';
 import { AlignmentToolbar, JustifyToolbar, BlockVerticalAlignmentToolbar } from '@wordpress/blockEditor';
 import './editor.scss';
 const alignBottom = (
@@ -69,39 +58,39 @@ const verticalSpaceAround = (
 );
 const spaceAround = (
 	<SVG
-      xmlns="http://www.w3.org/2000/svg"
-      fillRule="evenodd"
-      strokeLinejoin="round"
-      strokeMiterlimit="2"
-      clipRule="evenodd"
-      viewBox="0 0 48 48"
-    >
-      <Path d="M8 40h3V8H8v32zM37 8v32h3V8h-3z"/>
-      <Path d="M12.605 18.089H20.605V30.089H12.605z"/>
-      <Path d="M27.275 18.007H35.275V30.007H27.275z"/>
-    </SVG>
+		xmlns="http://www.w3.org/2000/svg"
+		fillRule="evenodd"
+		strokeLinejoin="round"
+		strokeMiterlimit="2"
+		clipRule="evenodd"
+		viewBox="0 0 48 48"
+	>
+		<Path d="M8 40h3V8H8v32zM37 8v32h3V8h-3z" />
+		<Path d="M12.605 18.089H20.605V30.089H12.605z" />
+		<Path d="M27.275 18.007H35.275V30.007H27.275z" />
+	</SVG>
 );
 
 const spaceEvenly = (
 	<SVG
-      xmlns="http://www.w3.org/2000/svg"
-      fillRule="evenodd"
-      strokeLinejoin="round"
-      strokeMiterlimit="2"
-      clipRule="evenodd"
-      viewBox="0 0 48 48"
-    >
-		<Path d="M8 40h3V8H8v32zM37 8v32h3V8h-3z"/>
-		<Path d="M14.318 18.089H22.317999999999998V30.089H14.318z"/>
-		<Path d="M25.637 18.017H33.637V30.017H25.637z"/>
-    </SVG>
+		xmlns="http://www.w3.org/2000/svg"
+		fillRule="evenodd"
+		strokeLinejoin="round"
+		strokeMiterlimit="2"
+		clipRule="evenodd"
+		viewBox="0 0 48 48"
+	>
+		<Path d="M8 40h3V8H8v32zM37 8v32h3V8h-3z" />
+		<Path d="M14.318 18.089H22.317999999999998V30.089H14.318z" />
+		<Path d="M25.637 18.017H33.637V30.017H25.637z" />
+	</SVG>
 );
 
 /**
  * Build the Measure controls
  * @returns {object} Measure settings.
  */
-export default function ResponsiveAlignControls( {
+export default function ResponsiveAlignControls({
 	label,
 	onChange,
 	onChangeTablet,
@@ -111,73 +100,71 @@ export default function ResponsiveAlignControls( {
 	value,
 	isCollapsed = false,
 	type = 'textAlign',
-} ) {
-	const [ deviceType, setDeviceType ] = useState( 'Desktop' );
-	const theDevice = useSelect( ( select ) => {
-		return select( 'kadenceblocks/data' ).getPreviewDeviceType();
-	}, [] );
-	if ( theDevice !== deviceType ) {
-		setDeviceType( theDevice );
+}) {
+	const [deviceType, setDeviceType] = useState('Desktop');
+	const theDevice = useSelect((select) => {
+		return select('kadenceblocks/data').getPreviewDeviceType();
+	}, []);
+	if (theDevice !== deviceType) {
+		setDeviceType(theDevice);
 	}
-	const {
-		setPreviewDeviceType,
-	} = useDispatch( 'kadenceblocks/data' );
-	const customSetPreviewDeviceType = ( device ) => {
-		setPreviewDeviceType( capitalizeFirstLetter( device ) );
-		setDeviceType( capitalizeFirstLetter( device ) );
+	const { setPreviewDeviceType } = useDispatch('kadenceblocks/data');
+	const customSetPreviewDeviceType = (device) => {
+		setPreviewDeviceType(capitalizeFirstLetter(device));
+		setDeviceType(capitalizeFirstLetter(device));
 	};
 	let alignmentControls = '';
 	let UIComponent = AlignmentToolbar;
-	if ( type === 'justify' ) {
+	if (type === 'justify') {
 		UIComponent = JustifyToolbar;
-	} else if ( type === 'vertical' ) {
+	} else if (type === 'vertical') {
 		UIComponent = BlockVerticalAlignmentToolbar;
-	} else if ( type === 'orientation' ) {
+	} else if (type === 'orientation') {
 		alignmentControls = [
 			{
 				icon: arrowRight,
-				title: __( 'Horizontal Direction', 'kadence-blocks' ),
+				title: __('Horizontal Direction', 'kadence-blocks'),
 				align: 'row',
 			},
 			{
 				icon: arrowDown,
-				title: __( 'Vertical Direction', 'kadence-blocks' ),
+				title: __('Vertical Direction', 'kadence-blocks'),
 				align: 'column',
 			},
 			{
 				icon: arrowLeft,
-				title: __( 'Horizontal Reverse', 'kadence-blocks' ),
+				title: __('Horizontal Reverse', 'kadence-blocks'),
 				align: 'row-reverse',
 			},
 			{
 				icon: arrowUp,
-				title: __( 'Vertical Reverse', 'kadence-blocks' ),
+				title: __('Vertical Reverse', 'kadence-blocks'),
 				align: 'column-reverse',
 			},
-		]
-	} else if ( type === 'vertical-column' ) {
+		];
+	} else if (type === 'vertical-column') {
 		alignmentControls = [
 			{
 				icon: alignTop,
-				title: __( 'Top', 'kadence-blocks' ),
+				title: __('Top', 'kadence-blocks'),
 				align: 'top',
 			},
 			{
 				icon: alignCenter,
-				title: __( 'Middle', 'kadence-blocks' ),
+				title: __('Middle', 'kadence-blocks'),
 				align: 'middle',
 			},
 			{
 				icon: alignBottom,
-				title: __( 'Bottom', 'kadence-blocks' ),
+				title: __('Bottom', 'kadence-blocks'),
 				align: 'bottom',
 			},
 			{
 				icon: alignStretch,
-				title: __( 'Stretch', 'kadence-blocks' ),
+				title: __('Stretch', 'kadence-blocks'),
 				align: 'stretch',
 			},
-		]
+		];
 	}
 	const devices = [
 		{
@@ -200,51 +187,49 @@ export default function ResponsiveAlignControls( {
 	const output = {};
 	output.Mobile = (
 		<UIComponent
-			value={ ( mobileValue ? mobileValue : '' ) }
-			isCollapsed={ isCollapsed }
-			onChange={ ( align ) => onChangeMobile( align ) }
-			alignmentControls={ alignmentControls ? alignmentControls : undefined }
+			value={mobileValue ? mobileValue : ''}
+			isCollapsed={isCollapsed}
+			onChange={(align) => onChangeMobile(align)}
+			alignmentControls={alignmentControls ? alignmentControls : undefined}
 		/>
 	);
 	output.Tablet = (
 		<UIComponent
-			value={ ( tabletValue ? tabletValue : '' ) }
-			isCollapsed={ isCollapsed }
-			onChange={ ( align ) => onChangeTablet( align ) }
-			alignmentControls={ alignmentControls ? alignmentControls : undefined }
+			value={tabletValue ? tabletValue : ''}
+			isCollapsed={isCollapsed}
+			onChange={(align) => onChangeTablet(align)}
+			alignmentControls={alignmentControls ? alignmentControls : undefined}
 		/>
 	);
 	output.Desktop = (
 		<UIComponent
-			value={ ( value ? value : '' ) }
-			isCollapsed={ isCollapsed }
-			onChange={ ( align ) => onChange( align ) }
-			alignmentControls={ alignmentControls ? alignmentControls : undefined }
+			value={value ? value : ''}
+			isCollapsed={isCollapsed}
+			onChange={(align) => onChange(align)}
+			alignmentControls={alignmentControls ? alignmentControls : undefined}
 		/>
 	);
 	return [
 		onChange && onChangeTablet && onChangeMobile && (
-			<div className={ 'components-base-control kb-sidebar-alignment kb-responsive-align-control' }>
+			<div className={'components-base-control kb-sidebar-alignment kb-responsive-align-control'}>
 				<div className="kadence-title-bar">
-					{ label && (
-						<span className="kadence-control-title">{ label }</span>
-					) }
-					<ButtonGroup className="kb-measure-responsive-options" aria-label={ __( 'Device', 'kadence-blocks' ) }>
-						{ map( devices, ( { name, key, title, itemClass } ) => (
+					{label && <span className="kadence-control-title">{label}</span>}
+					<ButtonGroup className="kb-measure-responsive-options" aria-label={__('Device', 'kadence-blocks')}>
+						{map(devices, ({ name, key, title, itemClass }) => (
 							<Button
-								key={ key }
-								className={ `kb-responsive-btn ${ itemClass }${ name === deviceType ? ' is-active' : '' }` }
+								key={key}
+								className={`kb-responsive-btn ${itemClass}${name === deviceType ? ' is-active' : ''}`}
 								isSmall
-								aria-pressed={ deviceType === name }
-								onClick={ () => customSetPreviewDeviceType( name ) }
+								aria-pressed={deviceType === name}
+								onClick={() => customSetPreviewDeviceType(name)}
 							>
-								{ title }
+								{title}
 							</Button>
-						) ) }
+						))}
 					</ButtonGroup>
 				</div>
 				<div className="kb-responsive-align-control-inner">
-					{ ( output[ deviceType ] ? output[ deviceType ] : output.Desktop ) }
+					{output[deviceType] ? output[deviceType] : output.Desktop}
 				</div>
 			</div>
 		),

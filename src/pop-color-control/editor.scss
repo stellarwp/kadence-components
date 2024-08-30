@@ -4,7 +4,7 @@
  * CSS for just Backend enqueued after style.scss
  * which makes it higher in priority.
  */
- .kadence-pop-color-control {
+.kadence-pop-color-control {
 	.kadence-pop-color-container {
 		display: flex;
 		align-items: center;
@@ -42,17 +42,15 @@
 		height: auto;
 		position: relative;
 		transform: scale(1);
-		transition: transform .1s ease;
+		transition: transform 0.1s ease;
 		border-radius: 50%;
 		padding: 0;
 		&.kadence-has-alpha {
-			background-image: linear-gradient(
-		45deg, #ddd 25%, transparent 0),linear-gradient(
-		-45deg, #ddd 25%, transparent 0),linear-gradient(
-		45deg, transparent 75%, #ddd 0),linear-gradient(
-		-45deg, transparent 75%, #ddd 0);
+			background-image: linear-gradient(45deg, #ddd 25%, transparent 0),
+				linear-gradient(-45deg, #ddd 25%, transparent 0), linear-gradient(45deg, transparent 75%, #ddd 0),
+				linear-gradient(-45deg, transparent 75%, #ddd 0);
 			background-size: 10px 10px;
-			background-position: 0 0,0 5px,5px -5px,-5px 0;
+			background-position: 0 0, 0 5px, 5px -5px, -5px 0;
 		}
 		.kadence-pop-color-indicate {
 			width: 28px;
@@ -80,12 +78,10 @@
 			display: inline-block;
 			height: 28px;
 			width: 28px;
-			transition: transform .1s ease;
-			background-image: linear-gradient( 
-		45deg, #ddd 25%, transparent 0), linear-gradient( 
-		-45deg, #ddd 25%, transparent 0), linear-gradient( 
-		45deg, transparent 75%, #ddd 0), linear-gradient( 
-		-45deg, transparent 75%, #ddd 0);
+			transition: transform 0.1s ease;
+			background-image: linear-gradient(45deg, #ddd 25%, transparent 0),
+				linear-gradient(-45deg, #ddd 25%, transparent 0), linear-gradient(45deg, transparent 75%, #ddd 0),
+				linear-gradient(-45deg, transparent 75%, #ddd 0);
 			background-size: 10px 10px;
 			background-position: 0 0, 0 5px, 5px -5px, -5px 0;
 			border-radius: 50%;
@@ -101,7 +97,7 @@
 				border-radius: 50%;
 				background: transparent;
 				box-shadow: inset 0 0 0 14px;
-				transition: box-shadow .1s ease;
+				transition: box-shadow 0.1s ease;
 				cursor: pointer;
 				&.is-active {
 					box-shadow: inset 0 0 0 4px;
@@ -134,7 +130,7 @@
 					bottom: -1px;
 					right: -1px;
 					border-radius: 50%;
-					box-shadow: inset 0 0 0 1px rgba(0,0,0,.2);
+					box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.2);
 					border: 1px solid transparent;
 				}
 			}
@@ -143,10 +139,10 @@
 }
 span.color-indicator-icon {
 	position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
 	.dashicons-admin-site {
 		position: absolute;
 		left: 6px;

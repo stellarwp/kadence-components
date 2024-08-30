@@ -1,7 +1,7 @@
 /**
  * Import General Editor CSS
  */
- import './editor.scss';
+import './editor.scss';
 export { default as PopColorControl } from './pop-color-control';
 export { default as SinglePopColorControl } from './single-pop-color-control';
 export { default as ColorIcons } from './color-icons';
@@ -98,8 +98,8 @@ export { default as MeasurementControls } from './measurement/measurement-contro
 export { default as MeasurementSingleControl } from './measurement/single-input-control';
 
 /* Color */
-export { default as AdvancedColorControlPalette } from './color/advanced-color-control-palette'
-export { default as BorderColorControls } from './color/border-color-control'
+export { default as AdvancedColorControlPalette } from './color/advanced-color-control-palette';
+export { default as BorderColorControls } from './color/border-color-control';
 
 /* Block Defaults */
 export { default as KadenceBlockDefaults } from './block-defaults';

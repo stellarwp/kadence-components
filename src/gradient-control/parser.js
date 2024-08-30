@@ -1,516 +1,488 @@
 // Copyright (c) 2014 Rafael Caricio. All rights reserved.
 // Use of this source code is governed by (The MIT License).
 
-var GradientParser = (GradientParser || {});
+var GradientParser = GradientParser || {};
 
-GradientParser.stringify = (function() {
+GradientParser.stringify = (function () {
+	var visitor = {
+		'visit_linear-gradient': function (node) {
+			return visitor.visit_gradient(node);
+		},
 
-  var visitor = {
+		'visit_repeating-linear-gradient': function (node) {
+			return visitor.visit_gradient(node);
+		},
 
-    'visit_linear-gradient': function(node) {
-      return visitor.visit_gradient(node);
-    },
+		'visit_radial-gradient': function (node) {
+			return visitor.visit_gradient(node);
+		},
 
-    'visit_repeating-linear-gradient': function(node) {
-      return visitor.visit_gradient(node);
-    },
+		'visit_repeating-radial-gradient': function (node) {
+			return visitor.visit_gradient(node);
+		},
 
-    'visit_radial-gradient': function(node) {
-      return visitor.visit_gradient(node);
-    },
+		visit_gradient: function (node) {
+			var orientation = visitor.visit(node.orientation);
+			if (orientation) {
+				orientation += ', ';
+			}
 
-    'visit_repeating-radial-gradient': function(node) {
-      return visitor.visit_gradient(node);
-    },
+			return node.type + '(' + orientation + visitor.visit(node.colorStops) + ')';
+		},
 
-    'visit_gradient': function(node) {
-      var orientation = visitor.visit(node.orientation);
-      if (orientation) {
-        orientation += ', ';
-      }
+		visit_shape: function (node) {
+			var result = node.value,
+				at = visitor.visit(node.at),
+				style = visitor.visit(node.style);
 
-      return node.type + '(' + orientation + visitor.visit(node.colorStops) + ')';
-    },
+			if (style) {
+				result += ' ' + style;
+			}
 
-    'visit_shape': function(node) {
-      var result = node.value,
-          at = visitor.visit(node.at),
-          style = visitor.visit(node.style);
+			if (at) {
+				result += ' at ' + at;
+			}
 
-      if (style) {
-        result += ' ' + style;
-      }
+			return result;
+		},
 
-      if (at) {
-        result += ' at ' + at;
-      }
+		'visit_default-radial': function (node) {
+			var result = '',
+				at = visitor.visit(node.at);
 
-      return result;
-    },
+			if (at) {
+				result += at;
+			}
+			return result;
+		},
 
-    'visit_default-radial': function(node) {
-      var result = '',
-          at = visitor.visit(node.at);
+		'visit_extent-keyword': function (node) {
+			var result = node.value,
+				at = visitor.visit(node.at);
 
-      if (at) {
-        result += at;
-      }
-      return result;
-    },
+			if (at) {
+				result += ' at ' + at;
+			}
 
-    'visit_extent-keyword': function(node) {
-      var result = node.value,
-          at = visitor.visit(node.at);
+			return result;
+		},
 
-      if (at) {
-        result += ' at ' + at;
-      }
+		'visit_position-keyword': function (node) {
+			return node.value;
+		},
 
-      return result;
-    },
+		visit_position: function (node) {
+			return visitor.visit(node.value.x) + ' ' + visitor.visit(node.value.y);
+		},
 
-    'visit_position-keyword': function(node) {
-      return node.value;
-    },
+		'visit_%': function (node) {
+			return node.value + '%';
+		},
 
-    'visit_position': function(node) {
-      return visitor.visit(node.value.x) + ' ' + visitor.visit(node.value.y);
-    },
+		visit_em: function (node) {
+			return node.value + 'em';
+		},
 
-    'visit_%': function(node) {
-      return node.value + '%';
-    },
+		visit_px: function (node) {
+			return node.value + 'px';
+		},
 
-    'visit_em': function(node) {
-      return node.value + 'em';
-    },
+		visit_literal: function (node) {
+			return visitor.visit_color(node.value, node);
+		},
 
-    'visit_px': function(node) {
-      return node.value + 'px';
-    },
+		visit_hex: function (node) {
+			return visitor.visit_color('#' + node.value, node);
+		},
 
-    'visit_literal': function(node) {
-      return visitor.visit_color(node.value, node);
-    },
+		visit_rgb: function (node) {
+			return visitor.visit_color('rgb(' + node.value.join(', ') + ')', node);
+		},
 
-    'visit_hex': function(node) {
-      return visitor.visit_color('#' + node.value, node);
-    },
+		visit_rgba: function (node) {
+			return visitor.visit_color('rgba(' + node.value.join(', ') + ')', node);
+		},
 
-    'visit_rgb': function(node) {
-      return visitor.visit_color('rgb(' + node.value.join(', ') + ')', node);
-    },
+		visit_color: function (resultColor, node) {
+			var result = resultColor,
+				length = visitor.visit(node.length);
 
-    'visit_rgba': function(node) {
-      return visitor.visit_color('rgba(' + node.value.join(', ') + ')', node);
-    },
+			if (length) {
+				result += ' ' + length;
+			}
+			return result;
+		},
 
-    'visit_color': function(resultColor, node) {
-      var result = resultColor,
-          length = visitor.visit(node.length);
+		visit_angular: function (node) {
+			return node.value + 'deg';
+		},
 
-      if (length) {
-        result += ' ' + length;
-      }
-      return result;
-    },
+		visit_directional: function (node) {
+			return 'to ' + node.value;
+		},
 
-    'visit_angular': function(node) {
-      return node.value + 'deg';
-    },
+		visit_array: function (elements) {
+			var result = '',
+				size = elements.length;
 
-    'visit_directional': function(node) {
-      return 'to ' + node.value;
-    },
+			elements.forEach(function (element, i) {
+				result += visitor.visit(element);
+				if (i < size - 1) {
+					result += ', ';
+				}
+			});
 
-    'visit_array': function(elements) {
-      var result = '',
-          size = elements.length;
+			return result;
+		},
 
-      elements.forEach(function(element, i) {
-        result += visitor.visit(element);
-        if (i < size - 1) {
-          result += ', ';
-        }
-      });
+		visit: function (element) {
+			if (!element) {
+				return '';
+			}
+			var result = '';
 
-      return result;
-    },
+			if (element instanceof Array) {
+				return visitor.visit_array(element, result);
+			} else if (element.type) {
+				var nodeVisitor = visitor['visit_' + element.type];
+				if (nodeVisitor) {
+					return nodeVisitor(element);
+				} else {
+					throw Error('Missing visitor visit_' + element.type);
+				}
+			} else {
+				throw Error('Invalid node.');
+			}
+		},
+	};
 
-    'visit': function(element) {
-      if (!element) {
-        return '';
-      }
-      var result = '';
-
-      if (element instanceof Array) {
-        return visitor.visit_array(element, result);
-      } else if (element.type) {
-        var nodeVisitor = visitor['visit_' + element.type];
-        if (nodeVisitor) {
-          return nodeVisitor(element);
-        } else {
-          throw Error('Missing visitor visit_' + element.type);
-        }
-      } else {
-        throw Error('Invalid node.');
-      }
-    }
-
-  };
-
-  return function(root) {
-    return visitor.visit(root);
-  };
+	return function (root) {
+		return visitor.visit(root);
+	};
 })();
 
 // Copyright (c) 2014 Rafael Caricio. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-var GradientParser = (GradientParser || {});
+var GradientParser = GradientParser || {};
 
-GradientParser.parse = (function() {
+GradientParser.parse = (function () {
+	var tokens = {
+		linearGradient: /^(\-(webkit|o|ms|moz)\-)?(linear\-gradient)/i,
+		repeatingLinearGradient: /^(\-(webkit|o|ms|moz)\-)?(repeating\-linear\-gradient)/i,
+		radialGradient: /^(\-(webkit|o|ms|moz)\-)?(radial\-gradient)/i,
+		repeatingRadialGradient: /^(\-(webkit|o|ms|moz)\-)?(repeating\-radial\-gradient)/i,
+		sideOrCorner: /^to (left (top|bottom)|right (top|bottom)|left|right|top|bottom)/i,
+		extentKeywords: /^(closest\-side|closest\-corner|farthest\-side|farthest\-corner|contain|cover)/,
+		positionKeywords: /^(left|center|right|top|bottom)/i,
+		pixelValue: /^(-?(([0-9]*\.[0-9]+)|([0-9]+\.?)))px/,
+		percentageValue: /^(-?(([0-9]*\.[0-9]+)|([0-9]+\.?)))\%/,
+		emValue: /^(-?(([0-9]*\.[0-9]+)|([0-9]+\.?)))em/,
+		angleValue: /^(-?(([0-9]*\.[0-9]+)|([0-9]+\.?)))deg/,
+		startCall: /^\(/,
+		endCall: /^\)/,
+		comma: /^,/,
+		hexColor: /^\#([0-9a-fA-F]+)/,
+		literalColor: /^([a-zA-Z]+)/,
+		rgbColor: /^rgb/i,
+		rgbaColor: /^rgba/i,
+		varColor: /^var/i,
+		number: /^(([0-9]*\.[0-9]+)|([0-9]+\.?))/,
+		variable: /var\(([a-zA-Z-0-9_#,\s]+)\)/,
+	};
 
-  var tokens = {
-    linearGradient: /^(\-(webkit|o|ms|moz)\-)?(linear\-gradient)/i,
-    repeatingLinearGradient: /^(\-(webkit|o|ms|moz)\-)?(repeating\-linear\-gradient)/i,
-    radialGradient: /^(\-(webkit|o|ms|moz)\-)?(radial\-gradient)/i,
-    repeatingRadialGradient: /^(\-(webkit|o|ms|moz)\-)?(repeating\-radial\-gradient)/i,
-    sideOrCorner: /^to (left (top|bottom)|right (top|bottom)|left|right|top|bottom)/i,
-    extentKeywords: /^(closest\-side|closest\-corner|farthest\-side|farthest\-corner|contain|cover)/,
-    positionKeywords: /^(left|center|right|top|bottom)/i,
-    pixelValue: /^(-?(([0-9]*\.[0-9]+)|([0-9]+\.?)))px/,
-    percentageValue: /^(-?(([0-9]*\.[0-9]+)|([0-9]+\.?)))\%/,
-    emValue: /^(-?(([0-9]*\.[0-9]+)|([0-9]+\.?)))em/,
-    angleValue: /^(-?(([0-9]*\.[0-9]+)|([0-9]+\.?)))deg/,
-    startCall: /^\(/,
-    endCall: /^\)/,
-    comma: /^,/,
-    hexColor: /^\#([0-9a-fA-F]+)/,
-    literalColor: /^([a-zA-Z]+)/,
-    rgbColor: /^rgb/i,
-    rgbaColor: /^rgba/i,
-	varColor: /^var/i,
-    number: /^(([0-9]*\.[0-9]+)|([0-9]+\.?))/,
-	variable: /var\(([a-zA-Z-0-9_#,\s]+)\)/
-  };
+	var input = '';
 
-  var input = '';
+	function error(msg) {
+		var err = new Error(input + ': ' + msg);
+		err.source = input;
+		throw err;
+	}
 
-  function error(msg) {
-    var err = new Error(input + ': ' + msg);
-    err.source = input;
-    throw err;
-  }
+	function getAST() {
+		var ast = matchListDefinitions();
 
-  function getAST() {
-    var ast = matchListDefinitions();
+		if (input.length > 0) {
+			error('Invalid input not EOF');
+		}
 
-    if (input.length > 0) {
-      error('Invalid input not EOF');
-    }
+		return ast;
+	}
 
-    return ast;
-  }
+	function matchListDefinitions() {
+		return matchListing(matchDefinition);
+	}
 
-  function matchListDefinitions() {
-    return matchListing(matchDefinition);
-  }
+	function matchDefinition() {
+		return (
+			matchGradient('linear-gradient', tokens.linearGradient, matchLinearOrientation) ||
+			matchGradient('repeating-linear-gradient', tokens.repeatingLinearGradient, matchLinearOrientation) ||
+			matchGradient('radial-gradient', tokens.radialGradient, matchListRadialOrientations) ||
+			matchGradient('repeating-radial-gradient', tokens.repeatingRadialGradient, matchListRadialOrientations)
+		);
+	}
 
-  function matchDefinition() {
-    return matchGradient(
-            'linear-gradient',
-            tokens.linearGradient,
-            matchLinearOrientation) ||
+	function matchGradient(gradientType, pattern, orientationMatcher) {
+		return matchCall(pattern, function (captures) {
+			var orientation = orientationMatcher();
+			if (orientation) {
+				if (!scan(tokens.comma)) {
+					error('Missing comma before color stops');
+				}
+			}
 
-          matchGradient(
-            'repeating-linear-gradient',
-            tokens.repeatingLinearGradient,
-            matchLinearOrientation) ||
+			return {
+				type: gradientType,
+				orientation: orientation,
+				colorStops: matchListing(matchColorStop),
+			};
+		});
+	}
 
-          matchGradient(
-            'radial-gradient',
-            tokens.radialGradient,
-            matchListRadialOrientations) ||
+	function matchCall(pattern, callback) {
+		var captures = scan(pattern);
 
-          matchGradient(
-            'repeating-radial-gradient',
-            tokens.repeatingRadialGradient,
-            matchListRadialOrientations);
-  }
+		if (captures) {
+			if (!scan(tokens.startCall)) {
+				error('Missing (');
+			}
 
-  function matchGradient(gradientType, pattern, orientationMatcher) {
-    return matchCall(pattern, function(captures) {
+			var result = callback(captures);
+			if (!scan(tokens.endCall)) {
+				error('Missing )');
+			}
+			return result;
+		}
+	}
 
-      var orientation = orientationMatcher();
-      if (orientation) {
-        if (!scan(tokens.comma)) {
-          error('Missing comma before color stops');
-        }
-      }
+	function matchLinearOrientation() {
+		return matchSideOrCorner() || matchAngle();
+	}
 
-      return {
-        type: gradientType,
-        orientation: orientation,
-        colorStops: matchListing(matchColorStop)
-      };
-    });
-  }
+	function matchSideOrCorner() {
+		return match('directional', tokens.sideOrCorner, 1);
+	}
 
-  function matchCall(pattern, callback) {
-    var captures = scan(pattern);
+	function matchAngle() {
+		return match('angular', tokens.angleValue, 1);
+	}
 
-    if (captures) {
-      if (!scan(tokens.startCall)) {
-        error('Missing (');
-      }
+	function matchListRadialOrientations() {
+		var radialOrientations,
+			radialOrientation = matchRadialOrientation(),
+			lookaheadCache;
+		if (radialOrientation) {
+			radialOrientations = [];
+			radialOrientations.push(radialOrientation);
 
-      var result = callback(captures);
-      if (!scan(tokens.endCall)) {
-        error('Missing )');
-      }
-      return result;
-    }
-  }
+			lookaheadCache = input;
+			if (scan(tokens.comma)) {
+				radialOrientation = matchRadialOrientation();
+				if (radialOrientation) {
+					radialOrientations.push(radialOrientation);
+				} else {
+					input = lookaheadCache;
+				}
+			}
+		}
 
-  function matchLinearOrientation() {
-    return matchSideOrCorner() ||
-      matchAngle();
-  }
+		return radialOrientations;
+	}
 
-  function matchSideOrCorner() {
-    return match('directional', tokens.sideOrCorner, 1);
-  }
+	function matchRadialOrientation() {
+		var radialType = matchCircle() || matchEllipse();
 
-  function matchAngle() {
-    return match('angular', tokens.angleValue, 1);
-  }
+		if (radialType) {
+			radialType.at = matchAtPosition();
+		} else {
+			var extent = matchExtentKeyword();
+			if (extent) {
+				radialType = extent;
+				var positionAt = matchAtPosition();
+				if (positionAt) {
+					radialType.at = positionAt;
+				}
+			} else {
+				var defaultPosition = matchPositioning();
+				if (defaultPosition) {
+					radialType = {
+						type: 'default-radial',
+						at: defaultPosition,
+					};
+				}
+			}
+		}
 
-  function matchListRadialOrientations() {
-    var radialOrientations,
-        radialOrientation = matchRadialOrientation(),
-        lookaheadCache;
-    if (radialOrientation) {
-      radialOrientations = [];
-      radialOrientations.push(radialOrientation);
+		return radialType;
+	}
 
-      lookaheadCache = input;
-      if (scan(tokens.comma)) {
-        radialOrientation = matchRadialOrientation();
-        if (radialOrientation) {
-          radialOrientations.push(radialOrientation);
-        } else {
-          input = lookaheadCache;
-        }
-      }
-    }
+	function matchCircle() {
+		var circle = match('shape', /^(circle)/i, 0);
 
-    return radialOrientations;
-  }
+		if (circle) {
+			circle.style = matchLength() || matchExtentKeyword();
+		}
 
-  function matchRadialOrientation() {
-    var radialType = matchCircle() ||
-      matchEllipse();
+		return circle;
+	}
 
-    if (radialType) {
-      radialType.at = matchAtPosition();
-    } else {
-      var extent = matchExtentKeyword();
-      if (extent) {
-        radialType = extent;
-        var positionAt = matchAtPosition();
-        if (positionAt) {
-          radialType.at = positionAt;
-        }
-      } else {
-        var defaultPosition = matchPositioning();
-        if (defaultPosition) {
-          radialType = {
-            type: 'default-radial',
-            at: defaultPosition
-          };
-        }
-      }
-    }
+	function matchEllipse() {
+		var ellipse = match('shape', /^(ellipse)/i, 0);
 
-    return radialType;
-  }
+		if (ellipse) {
+			ellipse.style = matchDistance() || matchExtentKeyword();
+		}
 
-  function matchCircle() {
-    var circle = match('shape', /^(circle)/i, 0);
+		return ellipse;
+	}
 
-    if (circle) {
-      circle.style = matchLength() || matchExtentKeyword();
-    }
+	function matchExtentKeyword() {
+		return match('extent-keyword', tokens.extentKeywords, 1);
+	}
 
-    return circle;
-  }
+	function matchAtPosition() {
+		if (match('position', /^at/, 0)) {
+			var positioning = matchPositioning();
 
-  function matchEllipse() {
-    var ellipse = match('shape', /^(ellipse)/i, 0);
+			if (!positioning) {
+				error('Missing positioning value');
+			}
 
-    if (ellipse) {
-      ellipse.style =  matchDistance() || matchExtentKeyword();
-    }
+			return positioning;
+		}
+	}
 
-    return ellipse;
-  }
+	function matchPositioning() {
+		var location = matchCoordinates();
 
-  function matchExtentKeyword() {
-    return match('extent-keyword', tokens.extentKeywords, 1);
-  }
+		if (location.x || location.y) {
+			return {
+				type: 'position',
+				value: location,
+			};
+		}
+	}
 
-  function matchAtPosition() {
-    if (match('position', /^at/, 0)) {
-      var positioning = matchPositioning();
+	function matchCoordinates() {
+		return {
+			x: matchDistance(),
+			y: matchDistance(),
+		};
+	}
 
-      if (!positioning) {
-        error('Missing positioning value');
-      }
+	function matchListing(matcher) {
+		var captures = matcher(),
+			result = [];
 
-      return positioning;
-    }
-  }
+		if (captures) {
+			result.push(captures);
+			while (scan(tokens.comma)) {
+				captures = matcher();
+				if (captures) {
+					result.push(captures);
+				} else {
+					error('One extra comma');
+				}
+			}
+		}
 
-  function matchPositioning() {
-    var location = matchCoordinates();
+		return result;
+	}
 
-    if (location.x || location.y) {
-      return {
-        type: 'position',
-        value: location
-      };
-    }
-  }
+	function matchColorStop() {
+		var color = matchColor();
 
-  function matchCoordinates() {
-    return {
-      x: matchDistance(),
-      y: matchDistance()
-    };
-  }
+		if (!color) {
+			error('Expected color definition');
+		}
 
-  function matchListing(matcher) {
-    var captures = matcher(),
-      result = [];
+		color.length = matchDistance();
+		return color;
+	}
 
-    if (captures) {
-      result.push(captures);
-      while (scan(tokens.comma)) {
-        captures = matcher();
-        if (captures) {
-          result.push(captures);
-        } else {
-          error('One extra comma');
-        }
-      }
-    }
+	function matchColor() {
+		return matchHexColor() || matchRGBAColor() || matchRGBColor() || matchVARColor() || matchLiteralColor();
+	}
 
-    return result;
-  }
+	function matchLiteralColor() {
+		return match('literal', tokens.literalColor, 0);
+	}
 
-  function matchColorStop() {
-    var color = matchColor();
+	function matchVARColor() {
+		return match('literal', tokens.variable, 0);
+	}
 
-    if (!color) {
-      error('Expected color definition');
-    }
+	function matchHexColor() {
+		return match('hex', tokens.hexColor, 1);
+	}
 
-    color.length = matchDistance();
-    return color;
-  }
+	function matchRGBColor() {
+		return matchCall(tokens.rgbColor, function () {
+			return {
+				type: 'rgb',
+				value: matchListing(matchNumber),
+			};
+		});
+	}
 
-  function matchColor() {
-    return matchHexColor() ||
-      matchRGBAColor() ||
-      matchRGBColor() ||
-	  matchVARColor() ||
-      matchLiteralColor();
-  }
+	function matchRGBAColor() {
+		return matchCall(tokens.rgbaColor, function () {
+			return {
+				type: 'rgba',
+				value: matchListing(matchNumber),
+			};
+		});
+	}
+	function matchNumber() {
+		return scan(tokens.number)[1];
+	}
 
-  function matchLiteralColor() {
-    return match('literal', tokens.literalColor, 0);
-  }
+	function matchDistance() {
+		return match('%', tokens.percentageValue, 1) || matchPositionKeyword() || matchLength();
+	}
 
-  function matchVARColor() {
-    return match('literal', tokens.variable, 0);
-  }
+	function matchPositionKeyword() {
+		return match('position-keyword', tokens.positionKeywords, 1);
+	}
 
-  function matchHexColor() {
-    return match('hex', tokens.hexColor, 1);
-  }
+	function matchLength() {
+		return match('px', tokens.pixelValue, 1) || match('em', tokens.emValue, 1);
+	}
 
-  function matchRGBColor() {
-    return matchCall(tokens.rgbColor, function() {
-      return  {
-        type: 'rgb',
-        value: matchListing(matchNumber)
-      };
-    });
-  }
+	function match(type, pattern, captureIndex) {
+		var captures = scan(pattern);
+		if (captures) {
+			return {
+				type: type,
+				value: captures[captureIndex],
+			};
+		}
+	}
 
-  function matchRGBAColor() {
-    return matchCall(tokens.rgbaColor, function() {
-      return  {
-        type: 'rgba',
-        value: matchListing(matchNumber)
-      };
-    });
-  }
-  function matchNumber() {
-    return scan(tokens.number)[1];
-  }
+	function scan(regexp) {
+		var captures, blankCaptures;
 
-  function matchDistance() {
-    return match('%', tokens.percentageValue, 1) ||
-      matchPositionKeyword() ||
-      matchLength();
-  }
+		blankCaptures = /^[\n\r\t\s]+/.exec(input);
+		if (blankCaptures) {
+			consume(blankCaptures[0].length);
+		}
+		captures = regexp.exec(input);
+		if (captures) {
+			consume(captures[0].length);
+		}
 
-  function matchPositionKeyword() {
-    return match('position-keyword', tokens.positionKeywords, 1);
-  }
+		return captures;
+	}
 
-  function matchLength() {
-    return match('px', tokens.pixelValue, 1) ||
-      match('em', tokens.emValue, 1);
-  }
+	function consume(size) {
+		input = input.substr(size);
+	}
 
-  function match(type, pattern, captureIndex) {
-    var captures = scan(pattern);
-    if (captures) {
-      return {
-        type: type,
-        value: captures[captureIndex]
-      };
-    }
-  }
-
-  function scan(regexp) {
-    var captures,
-        blankCaptures;
-
-    blankCaptures = /^[\n\r\t\s]+/.exec(input);
-    if (blankCaptures) {
-        consume(blankCaptures[0].length);
-    }
-    captures = regexp.exec(input);
-    if (captures) {
-        consume(captures[0].length);
-    }
-
-    return captures;
-  }
-
-  function consume(size) {
-    input = input.substr(size);
-  }
-
-  return function(code) {
-    input = code.toString();
-    return getAST();
-  };
+	return function (code) {
+		input = code.toString();
+		return getAST();
+	};
 })();
 
 exports.parse = GradientParser.parse;

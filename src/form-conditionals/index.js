@@ -14,13 +14,10 @@ import { createRef, Component } from '@wordpress/element';
  * Internal Dependencies
  */
 
-
 /**
  * Build the Dynamic Image controls
  */
-function KadenceFormConditionals ( props ) {
-	return (
-		<></>
-	);
+function KadenceFormConditionals(props) {
+	return <></>;
 }
-export default withFilters( 'kadence.FormConditionals' )( KadenceFormConditionals );
+export default withFilters('kadence.FormConditionals')(KadenceFormConditionals);

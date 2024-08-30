@@ -28,8 +28,8 @@ import { MINIMUM_DISTANCE_BETWEEN_POINTS } from './constants';
  *
  * @return {number} Value clamped between 0 and 100.
  */
-export function clampPercent( value ) {
-	return Math.max( 0, Math.min( 100, value ) );
+export function clampPercent(value) {
+	return Math.max(0, Math.min(100, value));
 }
 
 /**
@@ -42,23 +42,17 @@ export function clampPercent( value ) {
  *
  * @return {boolean} True if the point is overlapping.
  */
-export function isOverlapping(
-	value,
-	initialIndex,
-	newPosition,
-	minDistance = MINIMUM_DISTANCE_BETWEEN_POINTS
-) {
-	const initialPosition = value[ initialIndex ].position;
-	const minPosition = Math.min( initialPosition, newPosition );
-	const maxPosition = Math.max( initialPosition, newPosition );
+export function isOverlapping(value, initialIndex, newPosition, minDistance = MINIMUM_DISTANCE_BETWEEN_POINTS) {
+	const initialPosition = value[initialIndex].position;
+	const minPosition = Math.min(initialPosition, newPosition);
+	const maxPosition = Math.max(initialPosition, newPosition);
 
-	return value.some( ( { position }, index ) => {
+	return value.some(({ position }, index) => {
 		return (
 			index !== initialIndex &&
-			( Math.abs( position - newPosition ) < minDistance ||
-				( minPosition < position && position < maxPosition ) )
+			(Math.abs(position - newPosition) < minDistance || (minPosition < position && position < maxPosition))
 		);
-	} );
+	});
 }
 
 /**
@@ -70,13 +64,11 @@ export function isOverlapping(
  *
  * @return {ControlPoint[]} New array of control points.
  */
-export function addControlPoint( points, position, color ) {
-	const nextIndex = points.findIndex(
-		( point ) => point.position > position
-	);
+export function addControlPoint(points, position, color) {
+	const nextIndex = points.findIndex((point) => point.position > position);
 	const newPoint = { color, position };
 	const newPoints = points.slice();
-	newPoints.splice( nextIndex - 1, 0, newPoint );
+	newPoints.splice(nextIndex - 1, 0, newPoint);
 	return newPoints;
 }
 
@@ -88,10 +80,10 @@ export function addControlPoint( points, position, color ) {
  *
  * @return {ControlPoint[]} New array of control points.
  */
-export function removeControlPoint( points, index ) {
-	return points.filter( ( point, pointIndex ) => {
+export function removeControlPoint(points, index) {
+	return points.filter((point, pointIndex) => {
 		return pointIndex !== index;
-	} );
+	});
 }
 
 /**
@@ -103,9 +95,9 @@ export function removeControlPoint( points, index ) {
  *
  * @return {ControlPoint[]} New array of control points.
  */
-export function updateControlPoint( points, index, newPoint ) {
+export function updateControlPoint(points, index, newPoint) {
 	const newValue = points.slice();
-	newValue[ index ] = newPoint;
+	newValue[index] = newPoint;
 	return newValue;
 }
 
@@ -118,15 +110,15 @@ export function updateControlPoint( points, index, newPoint ) {
  *
  * @return {ControlPoint[]} New array of control points.
  */
-export function updateControlPointPosition( points, index, newPosition ) {
-	if ( isOverlapping( points, index, newPosition ) ) {
+export function updateControlPointPosition(points, index, newPosition) {
+	if (isOverlapping(points, index, newPosition)) {
 		return points;
 	}
 	const newPoint = {
-		...points[ index ],
+		...points[index],
 		position: newPosition,
 	};
-	return updateControlPoint( points, index, newPoint );
+	return updateControlPoint(points, index, newPoint);
 }
 
 /**
@@ -138,12 +130,12 @@ export function updateControlPointPosition( points, index, newPosition ) {
  *
  * @return {ControlPoint[]} New array of control points.
  */
-export function updateControlPointColor( points, index, newColor ) {
+export function updateControlPointColor(points, index, newColor) {
 	const newPoint = {
-		...points[ index ],
+		...points[index],
 		color: newColor,
 	};
-	return updateControlPoint( points, index, newPoint );
+	return updateControlPoint(points, index, newPoint);
 }
 
 /**
@@ -155,13 +147,9 @@ export function updateControlPointColor( points, index, newColor ) {
  *
  * @return {ControlPoint[]} New array of control points.
  */
-export function updateControlPointColorByPosition(
-	points,
-	position,
-	newColor
-) {
-	const index = points.findIndex( ( point ) => point.position === position );
-	return updateControlPointColor( points, index, newColor );
+export function updateControlPointColorByPosition(points, position, newColor) {
+	const index = points.findIndex((point) => point.position === position);
+	return updateControlPointColor(points, index, newColor);
 }
 
 /**
@@ -172,16 +160,11 @@ export function updateControlPointColorByPosition(
  *
  * @return {number} Whole number percentage from the left.
  */
-export function getHorizontalRelativeGradientPosition(
-	mouseXCoordinate,
-	containerElement
-) {
-	if ( ! containerElement ) {
+export function getHorizontalRelativeGradientPosition(mouseXCoordinate, containerElement) {
+	if (!containerElement) {
 		return;
 	}
 	const { x, width } = containerElement.getBoundingClientRect();
 	const absolutePositionValue = mouseXCoordinate - x;
-	return Math.round(
-		clampPercent( ( absolutePositionValue * 100 ) / width )
-	);
+	return Math.round(clampPercent((absolutePositionValue * 100) / width));
 }
