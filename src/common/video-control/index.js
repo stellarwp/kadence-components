@@ -36,7 +36,7 @@ class KadenceVideoControl extends Component {
 			<div className="components-base-control kadence-image-media-control kadence-image-background-control kadence-video-background-control">
 				{!hasVideo && (
 					<Fragment>
-						{label && <div class="components-kadence-video-background__label">{label}</div>}
+						{label && <div className="components-kadence-video-background__label">{label}</div>}
 						<KadenceMediaPlaceholder
 							labels={''}
 							selectIcon={plusCircleFilled}
@@ -51,7 +51,7 @@ class KadenceVideoControl extends Component {
 				)}
 				{hasVideo && (
 					<Fragment>
-						{label && <div class="components-kadence-video-background__label">{label}</div>}
+						{label && <div className="components-kadence-video-background__label">{label}</div>}
 						<div className="components-kadence-video-btns">
 							<MediaUpload
 								onSelect={(video) => onSaveVideo(video)}

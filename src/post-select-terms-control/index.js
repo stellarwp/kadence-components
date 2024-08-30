@@ -9,20 +9,12 @@ import { Spinner } from '@wordpress/components';
 import { addQueryArgs } from '@wordpress/url';
 import apiFetch from '@wordpress/api-fetch';
 
-export default function KadencePostSelectTerms({ value, onChange, source, isMulti = false, termOnly = false }) {
+export default function KadencePostSelectTerms({ value, onChange, source, isMulti = false }) {
 	const [isLoading, setIsLoading] = useState(true);
 	const [terms, setTerms] = useState([]);
 	const [page, setPage] = useState(1);
 	const [hasMore, setHasMore] = useState(false);
 	const theValue = value;
-	const termOnlyValue =
-		'array' == typeof value || 'object' == typeof value
-			? value.map((option) => {
-					const optValWithSource = source + '|' + option.value;
-					return { value: optValWithSource, label: option.label };
-			  })
-			: value;
-
 	useEffect(() => {
 		if (
 			source &&
@@ -73,38 +65,20 @@ export default function KadencePostSelectTerms({ value, onChange, source, isMult
 				options={terms}
 				className="kb-dynamic-select"
 				classNamePrefix="kbp"
-				value={
-					isMulti
-						? termOnly
-							? termOnlyValue
-							: value
-						: '' !== value
-						? terms.filter(({ value }) => value === theValue)
-						: ''
-				}
+				value={isMulti ? value : '' !== value ? terms.filter(({ value }) => value === theValue) : ''}
 				isMulti={isMulti}
 				isSearchable={true}
 				isClearable={true}
 				menuPortalTarget={document.body}
 				styles={customStyles}
 				maxMenuHeight={200}
-				placeholder={__('Select Term', 'kadence-blocks-pro')}
+				placeholder={__('Select Term', 'kadence-blocks')}
 				onChange={(val) => {
 					if (!val) {
 						onChange('');
 					} else if (isMulti) {
-						var toReturn = val;
-						if (termOnly) {
-							toReturn = val.map((option) => {
-								const optValTermOnly = option.value.split('|')?.[1];
-								return { value: optValTermOnly, label: option.label };
-							});
-						}
-						onChange(toReturn);
+						onChange(val);
 					} else {
-						if (termOnly) {
-							onChange(val.value.split('|')?.[1]);
-						}
 						onChange(val.value);
 					}
 				}}

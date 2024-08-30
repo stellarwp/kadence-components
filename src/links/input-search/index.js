@@ -304,7 +304,7 @@ class InputSearch extends Component {
 					)}
 					{(!url || isEditing) && (
 						<BaseControl {...controlProps}>
-							<div class="kb-search-url-input">
+							<div className="kb-search-url-input">
 								<input {...inputProps} />
 							</div>
 							{loading && <Spinner />}

@@ -25,6 +25,10 @@ import {
 import { settings, link, linkOff } from '@wordpress/icons';
 import { flow } from 'lodash';
 /**
+ * WordPress dependencies
+ */
+import { useInstanceId } from '@wordpress/compose';
+/**
  * Import Externals
  */
 import PopColorControl from '../../pop-color-control';
@@ -58,6 +62,7 @@ export default function SingleBorderControl({
 	styles = ['solid', 'dashed', 'dotted', 'double'],
 	defaultLinked = true,
 }) {
+	const instanceId = useInstanceId(SingleBorderControl);
 	const onChangeStyle = (style) => {
 		const newVal = value;
 		newVal[1] = style;
@@ -78,6 +83,7 @@ export default function SingleBorderControl({
 		newVal[2] = nextValue;
 		onChange(newVal);
 	};
+
 	const styleIcons = {
 		solid: (
 			<svg
@@ -151,7 +157,11 @@ export default function SingleBorderControl({
 	}));
 	return [
 		onChange && (
-			<div className={`components-base-control kadence-single-border-control${className ? ' ' + className : ''}`}>
+			<div
+				className={`components-base-control kadence-single-border-control kadence-single-border-control${instanceId}${
+					className ? ' ' + className : ''
+				}`}
+			>
 				{label && (
 					<Flex justify="space-between" className={'kadence-border-control__header'}>
 						<FlexItem>
@@ -172,7 +182,7 @@ export default function SingleBorderControl({
 						label={__('Border Style', 'kadence-blocks')}
 						popoverProps={{
 							className: 'border-control-style-select__popover',
-							position: 'bottom left',
+							placement: 'bottom',
 						}}
 					>
 						{({ onClose }) => (

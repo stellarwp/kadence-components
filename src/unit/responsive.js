@@ -110,6 +110,7 @@ export default function ResponsiveUnitControl({
 			max={max}
 			min={min}
 			unit={unit}
+			preventUnitSelection={true}
 		/>
 	);
 	output.Tablet = (
@@ -123,6 +124,7 @@ export default function ResponsiveUnitControl({
 			max={max}
 			min={min}
 			unit={unit}
+			preventUnitSelection={true}
 		/>
 	);
 	output.Desktop = (

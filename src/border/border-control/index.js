@@ -6,11 +6,15 @@
 /**
  * Internal block libraries
  */
-import { useState, useEffect } from '@wordpress/element';
+import { useState, useRef } from '@wordpress/element';
 import { map, isEqual } from 'lodash';
 import { __ } from '@wordpress/i18n';
 import { UnitControl, DropdownMenu, Flex, FlexItem, Button } from '@wordpress/components';
 import { KadenceColorOutput } from '@kadence/helpers';
+/**
+ * WordPress dependencies
+ */
+import { useInstanceId } from '@wordpress/compose';
 /**
  * Import Css
  */
@@ -36,7 +40,7 @@ import {
 	radiusIndividualIcon,
 } from '@kadence/icons';
 import { settings, link, linkOff } from '@wordpress/icons';
-import SingleBorderControl from './single-control';
+import SingleBorderControl from '../single-border-control';
 /**
  * Build the Border controls
  * @returns {object} Border Control.
@@ -82,6 +86,7 @@ export default function BorderControl({
 	styles = ['solid', 'dashed', 'dotted', 'double'],
 	reset,
 }) {
+	const instanceId = useInstanceId(BorderControl);
 	const [theControl, setTheControl] = useState(control);
 	const realControl = onControl ? control : theControl;
 	const realSetOnControl = onControl ? onControl : setTheControl;
@@ -93,6 +98,7 @@ export default function BorderControl({
 		link: linkIcon,
 		unlink: unlinkIcon,
 	};
+	const containerRef = useRef();
 	const currentObject = value?.[0] || defaultValue;
 	const step = currentObject.unit !== 'px' ? 0.1 : 1;
 	const max = currentObject.unit !== 'px' && currentObject.unit !== '' ? 12 : 200;
@@ -124,7 +130,12 @@ export default function BorderControl({
 	};
 	return [
 		onChange && (
-			<div className={`components-base-control kadence-border-control${className ? ' ' + className : ''}`}>
+			<div
+				ref={containerRef}
+				className={`components-base-control kadence-border-control kadence-border-control${instanceId}${
+					className ? ' ' + className : ''
+				}`}
+			>
 				{label && (
 					<div className={'kadence-border-control__header'}>
 						{label && (

@@ -91,11 +91,10 @@ export default function BackgroundSizeControl({
 						{options.map((option, index) => (
 							<Button
 								key={`${option.label}-${option.value}-${index}`}
-								isTertiary={value !== option.value}
 								className={'kadence-radio-item radio-' + option.value}
-								isPrimary={value === option.value}
 								icon={undefined !== option.icon ? option.icon : undefined}
 								aria-pressed={value === option.value}
+								variant={value === option.value ? 'primary' : 'tertiary'}
 								onClick={() => {
 									onChange(option.value);
 								}}
@@ -110,7 +109,7 @@ export default function BackgroundSizeControl({
 								icon={settings}
 								onClick={() => setIsCustom(true)}
 								isPressed={false}
-								isTertiary={true}
+								variant={'tertiary'}
 							/>
 						)}
 					</ButtonGroup>
@@ -129,6 +128,7 @@ export default function BackgroundSizeControl({
 						]}
 						value={width}
 						onChange={onWidthChange}
+						className="kb-background-size-custom-input"
 						placeholder={'auto'}
 					/>
 					<UnitControl
@@ -142,6 +142,7 @@ export default function BackgroundSizeControl({
 							{ value: 'px', label: 'px' },
 						]}
 						onChange={onHeightChange}
+						className="kb-background-size-custom-input"
 						placeholder={'auto'}
 					/>
 					{allowCustom && (
@@ -150,9 +151,9 @@ export default function BackgroundSizeControl({
 								className={'kadence-radio-item radio-custom only-icon'}
 								label={__('Use size preset', 'kadence-blocks')}
 								icon={settings}
-								isPrimary={true}
 								onClick={() => setIsCustom(false)}
 								isPressed={true}
+								variant={'primary'}
 							/>
 						</ButtonGroup>
 					)}

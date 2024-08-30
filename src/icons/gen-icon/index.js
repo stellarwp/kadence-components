@@ -43,23 +43,23 @@ export const GenIcon = (props) => {
 	return (
 		<HtmlTagOut
 			style={{ display: 'inline-flex', justifyContent: 'center', alignItems: 'center', ...style }}
-			className={className}
+			className={`${className} ${props.size === 0 ? 'kb-icon-transparent' : ''}`}
 		>
 			<svg
 				style={{ display: 'inline-block', verticalAlign: 'middle' }}
 				viewBox={!props.icon ? '0 0 24 24' : props.icon.vB}
-				height={props.size}
-				width={props.size}
+				height={props.size === 0 ? '24' : props.size}
+				width={props.size === 0 ? '24' : props.size}
 				fill={fill}
 				stroke={stroke}
 				xmlns={props.xmlns}
 				preserveAspectRatio={
 					typeL &&
 					'fas' !== typeL &&
+					'fe_' !== typeL &&
+					'ic_' !== typeL &&
 					viewB &&
-					undefined !== viewB[2] &&
-					undefined !== viewB[3] &&
-					viewB[2] !== viewB[3]
+					((undefined !== viewB[0] && viewB[0] !== 0) || (undefined !== viewB[1] && viewB[1] !== 0))
 						? 'xMinYMin meet'
 						: undefined
 				}
@@ -83,7 +83,7 @@ GenIcon.defaultProps = {
 };
 
 GenIcon.propTypes = {
-	icon: PropTypes.string.isRequired,
+	icon: PropTypes.object.isRequired,
 	size: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
 	style: PropTypes.object,
 	className: PropTypes.string,

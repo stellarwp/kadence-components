@@ -84,10 +84,7 @@ export default function SvgAddModal({ isOpen, setIsOpen, callback }) {
 									'kadence-blocks'
 								)}
 								&nbsp;
-								<a
-									href={'https://www.kadencewp.com/help-center/?post_type=docs&p=8510'}
-									target={'_blank'}
-								>
+								<a href={'https://www.kadencewp.com/help-center/?post_type=docs&p=8510'}>
 									{__(
 										'Learn more about SVG security and supported SVG formatting.',
 										'kadence-blocks'

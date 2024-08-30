@@ -40,10 +40,10 @@ class KadenceImageControl extends Component {
 			dynamicAttribute = '',
 		} = this.props;
 		return (
-			<div className="components-base-control kadence-image-media-control kadence-image-background-control">
+			<div className="kadence-image-media-control kadence-image-background-control">
 				{!hasImage && (
 					<Fragment>
-						{label && <div class="components-kadence-image-background__label">{label}</div>}
+						{label && <div className="components-kadence-image-background__label">{label}</div>}
 						<KadenceMediaPlaceholder
 							labels={''}
 							selectIcon={plusCircleFilled}
@@ -63,7 +63,7 @@ class KadenceImageControl extends Component {
 				)}
 				{hasImage && (
 					<Fragment>
-						{label && <div class="components-kadence-image-background__label">{label}</div>}
+						{label && <div className="components-kadence-image-background__label">{label}</div>}
 						{dynamicAttribute &&
 						kadence_blocks_params.dynamic_enabled &&
 						kadenceDynamic &&

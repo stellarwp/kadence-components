@@ -6,7 +6,9 @@
 /**
  * Internal block libraries
  */
-import { RangeControl as CoreRangeControl } from '@wordpress/components';
+import { RangeControl as CoreRangeControl, Button } from '@wordpress/components';
+import { undo } from '@wordpress/icons';
+import { isEqual } from 'lodash';
 
 /**
  * Build the Measure controls
@@ -25,12 +27,26 @@ export default function RangeControl({
 	unit = '',
 	onUnit,
 	showUnit = false,
+	lockUnits = false,
 	units = ['px', 'em', 'rem'],
+	reset,
+	initialPosition = undefined,
 }) {
 	return [
 		onChange && (
 			<div className={`components-base-control kadence-range-control${className ? ' ' + className : ''}`}>
-				{label && <label className="components-base-control__label">{label}</label>}
+				<div className="kadence-title-bar">
+					{reset && (
+						<Button
+							className="is-reset is-single"
+							isSmall
+							disabled={isEqual('', value) ? true : false}
+							icon={undo}
+							onClick={() => reset()}
+						></Button>
+					)}
+					{label && <span className="kadence-control-title">{label}</span>}
+				</div>
 				<div className={'kadence-controls-content'}>
 					<div className={'kadence-range-control-inner'}>
 						<CoreRangeControl
@@ -43,6 +59,7 @@ export default function RangeControl({
 							step={step}
 							help={help}
 							allowReset={true}
+							initialPosition={initialPosition}
 						/>
 					</div>
 					{(onUnit || showUnit) && (
@@ -55,10 +72,10 @@ export default function RangeControl({
 									}
 								}}
 								value={unit}
-								disabled={units.length === 1}
+								disabled={units.length === 1 || lockUnits}
 							>
-								{units.map((option) => (
-									<option value={option} selected={unit === option ? true : undefined} key={option}>
+								{units.map((option, index) => (
+									<option value={option} key={index}>
 										{option}
 									</option>
 								))}

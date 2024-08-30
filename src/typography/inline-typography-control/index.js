@@ -3,8 +3,6 @@
  *
  */
 
-/* global kadence_blocks_params */
-
 /**
  * Import External
  */
@@ -138,7 +136,7 @@ class InlineTypographyControls extends Component {
 			const custom_fonts = [
 				{
 					type: 'group',
-					label: __('Custom Fonts', 'kadence-custom-fonts'),
+					label: __('Custom Fonts', 'kadence-blocks'),
 					options: newOptions,
 				},
 			];
@@ -595,11 +593,11 @@ class InlineTypographyControls extends Component {
 			{ value: 'uppercase', label: 'Uppercase' },
 			{ value: 'lowercase', label: 'Lowercase' },
 		];
-		const fontMin = fontSizeType !== 'px' ? 0.2 : 5;
-		const fontMax = fontSizeType !== 'px' ? 12 : 200;
+		const fontMin = fontSizeType !== 'px' ? 0 : 0;
+		const fontMax = fontSizeType !== 'px' ? 120 : 3000;
 		const fontStep = fontSizeType !== 'px' ? 0.1 : 1;
 		const lineMin = lineHeightType !== 'px' ? 0.2 : 5;
-		const lineMax = lineHeightType !== 'px' ? 12 : 200;
+		const lineMax = lineHeightType !== 'px' ? 120 : 3000;
 		const lineStep = lineHeightType !== 'px' ? 0.1 : 1;
 		const usingReg = typographyWeights.some(function (el) {
 			return el.value === 'regular';
@@ -631,7 +629,7 @@ class InlineTypographyControls extends Component {
 				<Dropdown
 					className="kt-popover-font-family-container components-dropdown-menu components-toolbar"
 					contentClassName="kt-popover-font-family"
-					position="top center"
+					placement="top"
 					renderToggle={({ isOpen, onToggle }) => (
 						<Fragment>
 							<Button
@@ -750,7 +748,7 @@ class InlineTypographyControls extends Component {
 													onChangeMobile={(value) => onMobileSize(value)}
 													min={0}
 													max={fontSizeType !== 'px' ? 12 : 300}
-													step={fontSizeType !== 'px' ? 0.01 : 1}
+													step={fontSizeType !== 'px' ? 0.001 : 1}
 													unit={fontSizeType ? fontSizeType : 'px'}
 													onUnit={(value) => onFontSizeType(value)}
 													units={['px', 'em', 'rem', 'vw']}

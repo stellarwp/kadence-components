@@ -11,12 +11,6 @@ import { useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { map } from 'lodash';
 import { capitalizeFirstLetter } from '@kadence/helpers';
-
-import { arrowUp, arrowLeft, arrowRight, arrowDown } from '@wordpress/icons';
-
-import { Dashicon, Button, ButtonGroup, SVG, Path } from '@wordpress/components';
-import { AlignmentToolbar, JustifyToolbar, BlockVerticalAlignmentToolbar } from '@wordpress/blockEditor';
-import './editor.scss';
 const alignBottom = (
 	<SVG xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
 		<Path d="M15 4H9v11h6V4zM4 18.5V20h16v-1.5H4z" />
@@ -86,6 +80,20 @@ const spaceEvenly = (
 	</SVG>
 );
 
+import {
+	arrowUp,
+	arrowLeft,
+	arrowRight,
+	arrowDown,
+	justifyLeft,
+	justifyCenter,
+	justifyRight,
+	justifySpaceBetween,
+	justifyStretch,
+} from '@wordpress/icons';
+import { Dashicon, Button, ButtonGroup, Path, SVG } from '@wordpress/components';
+import { AlignmentToolbar, JustifyToolbar, BlockVerticalAlignmentToolbar } from '@wordpress/blockEditor';
+import './editor.scss';
 /**
  * Build the Measure controls
  * @returns {object} Measure settings.
@@ -100,6 +108,7 @@ export default function ResponsiveAlignControls({
 	value,
 	isCollapsed = false,
 	type = 'textAlign',
+	reverse = false,
 }) {
 	const [deviceType, setDeviceType] = useState('Desktop');
 	const theDevice = useSelect((select) => {
@@ -165,15 +174,225 @@ export default function ResponsiveAlignControls({
 				align: 'stretch',
 			},
 		];
+	} else if (type === 'orientation-column') {
+		alignmentControls = [
+			{
+				icon: arrowDown,
+				title: __('Vertical Direction', 'kadence-blocks'),
+				align: 'vertical',
+			},
+			{
+				icon: arrowRight,
+				title: __('Horizontal Direction', 'kadence-blocks'),
+				align: 'horizontal',
+			},
+			{
+				icon: arrowUp,
+				title: __('Vertical Reverse', 'kadence-blocks'),
+				align: 'vertical-reverse',
+			},
+			{
+				icon: arrowLeft,
+				title: __('Horizontal Reverse', 'kadence-blocks'),
+				align: 'horizontal-reverse',
+			},
+		];
+	} else if (type === 'justify-align') {
+		if (reverse) {
+			alignmentControls = [
+				{
+					icon: justifyRight,
+					title: __('Start', 'kadence-blocks'),
+					align: 'flex-start',
+				},
+				{
+					icon: justifyCenter,
+					title: __('Center', 'kadence-blocks'),
+					align: 'center',
+				},
+				{
+					icon: justifyLeft,
+					title: __('End', 'kadence-blocks'),
+					align: 'flex-end',
+				},
+				{
+					icon: justifyStretch,
+					title: __('Stretch', 'kadence-blocks'),
+					align: 'stretch',
+				},
+			];
+		} else {
+			alignmentControls = [
+				{
+					icon: justifyLeft,
+					title: __('Start', 'kadence-blocks'),
+					align: 'flex-start',
+				},
+				{
+					icon: justifyCenter,
+					title: __('Center', 'kadence-blocks'),
+					align: 'center',
+				},
+				{
+					icon: justifyRight,
+					title: __('End', 'kadence-blocks'),
+					align: 'flex-end',
+				},
+				{
+					icon: justifyStretch,
+					title: __('Stretch', 'kadence-blocks'),
+					align: 'stretch',
+				},
+			];
+		}
+	} else if (type === 'justify-column') {
+		if (reverse) {
+			alignmentControls = [
+				{
+					icon: justifyRight,
+					title: __('Start', 'kadence-blocks'),
+					align: 'flex-start',
+				},
+				{
+					icon: justifyCenter,
+					title: __('Center', 'kadence-blocks'),
+					align: 'center',
+				},
+				{
+					icon: justifyLeft,
+					title: __('End', 'kadence-blocks'),
+					align: 'flex-end',
+				},
+				{
+					icon: justifySpaceBetween,
+					title: __('Space Between', 'kadence-blocks'),
+					align: 'space-between',
+				},
+				{
+					icon: spaceAround,
+					title: __('Space Around', 'kadence-blocks'),
+					align: 'space-around',
+				},
+				{
+					icon: spaceEvenly,
+					title: __('Space Evenly', 'kadence-blocks'),
+					align: 'space-evenly',
+				},
+			];
+		} else {
+			alignmentControls = [
+				{
+					icon: justifyLeft,
+					title: __('Start', 'kadence-blocks'),
+					align: 'flex-start',
+				},
+				{
+					icon: justifyCenter,
+					title: __('Center', 'kadence-blocks'),
+					align: 'center',
+				},
+				{
+					icon: justifyRight,
+					title: __('End', 'kadence-blocks'),
+					align: 'flex-end',
+				},
+				{
+					icon: justifySpaceBetween,
+					title: __('Space Between', 'kadence-blocks'),
+					align: 'space-between',
+				},
+				{
+					icon: spaceAround,
+					title: __('Space Around', 'kadence-blocks'),
+					align: 'space-around',
+				},
+				{
+					icon: spaceEvenly,
+					title: __('Space Evenly', 'kadence-blocks'),
+					align: 'space-evenly',
+				},
+			];
+		}
+	} else if (type === 'justify-vertical') {
+		if (reverse) {
+			alignmentControls = [
+				{
+					icon: alignBottom,
+					title: __('Bottom', 'kadence-blocks'),
+					align: 'top',
+				},
+				{
+					icon: alignCenter,
+					title: __('Middle', 'kadence-blocks'),
+					align: 'middle',
+				},
+				{
+					icon: alignTop,
+					title: __('Top', 'kadence-blocks'),
+					align: 'bottom',
+				},
+				{
+					icon: verticalSpaceBetween,
+					title: __('Space Between', 'kadence-blocks'),
+					align: 'space-between',
+				},
+				{
+					icon: verticalSpaceAround,
+					title: __('Space Around', 'kadence-blocks'),
+					align: 'space-around',
+				},
+				{
+					icon: verticalSpaceEvenly,
+					title: __('Space Evenly', 'kadence-blocks'),
+					align: 'space-evenly',
+				},
+			];
+		} else {
+			alignmentControls = [
+				{
+					icon: alignTop,
+					title: __('Top', 'kadence-blocks'),
+					align: 'top',
+				},
+				{
+					icon: alignCenter,
+					title: __('Middle', 'kadence-blocks'),
+					align: 'middle',
+				},
+				{
+					icon: alignBottom,
+					title: __('Bottom', 'kadence-blocks'),
+					align: 'bottom',
+				},
+				{
+					icon: verticalSpaceBetween,
+					title: __('Space Between', 'kadence-blocks'),
+					align: 'space-between',
+				},
+				{
+					icon: verticalSpaceAround,
+					title: __('Space Around', 'kadence-blocks'),
+					align: 'space-around',
+				},
+				{
+					icon: verticalSpaceEvenly,
+					title: __('Space Evenly', 'kadence-blocks'),
+					align: 'space-evenly',
+				},
+			];
+		}
 	}
+
 	const devices = [
 		{
 			name: 'Desktop',
+			key: 'desktop',
 			title: <Dashicon icon="desktop" />,
 			itemClass: 'kb-desk-tab',
 		},
 		{
 			name: 'Tablet',
+			key: 'tablet',
 			title: <Dashicon icon="tablet" />,
 			itemClass: 'kb-tablet-tab',
 		},
@@ -211,7 +430,9 @@ export default function ResponsiveAlignControls({
 	);
 	return [
 		onChange && onChangeTablet && onChangeMobile && (
-			<div className={'components-base-control kb-sidebar-alignment kb-responsive-align-control'}>
+			<div
+				className={`components-base-control kb-sidebar-alignment kb-responsive-align-control kb-responsive-align-${type}`}
+			>
 				<div className="kadence-title-bar">
 					{label && <span className="kadence-control-title">{label}</span>}
 					<ButtonGroup className="kb-measure-responsive-options" aria-label={__('Device', 'kadence-blocks')}>

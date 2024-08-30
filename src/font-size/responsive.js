@@ -98,6 +98,7 @@ export default function ResponsiveFontSizeControl({
 			min={min}
 			unit={unit}
 			radio={radio}
+			preventUnitSelection={true}
 		/>
 	);
 	output.Tablet = (
@@ -113,6 +114,7 @@ export default function ResponsiveFontSizeControl({
 			min={min}
 			unit={unit}
 			radio={radio}
+			preventUnitSelection={true}
 		/>
 	);
 	output.Desktop = (

@@ -40,19 +40,16 @@
 	border: 1px solid var(--kb-border-color, #859cb6);
 	background: white;
 }
-.kadence-border-control .kadence-single-border-control-wrap .components-base-control {
+.kadence-single-border-control-wrap .components-base-control {
 	margin-bottom: 0;
 }
-.kadence-border-control
-	.kadence-single-border-control-wrap
-	> .kadence-single-unit-control
-	.components-unit-control-wrapper {
+.kadence-single-border-control-wrap > .kadence-single-unit-control .components-unit-control-wrapper {
 	width: 100%;
 }
-.kadence-border-control .kadence-single-border-control-wrap > .kadence-single-unit-control {
+.kadence-single-border-control-wrap > .kadence-single-unit-control {
 	flex-grow: 1;
 }
-.kadence-border-control .kadence-single-border-control-wrap {
+.kadence-single-border-control-wrap {
 	.kadence-pop-color-control {
 		padding: 0 2px;
 		.kadence-pop-color-icon-indicate .kadence-pop-color-indicate {

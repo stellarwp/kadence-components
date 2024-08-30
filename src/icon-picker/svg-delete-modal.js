@@ -21,8 +21,6 @@ export default function SvgDeleteModal({ isOpen, setIsOpen, id, callback }) {
 			method: 'DELETE',
 		})
 			.then((response) => {
-				console.log('response');
-				console.log(response);
 				if (get(response, 'id', false)) {
 					createSuccessNotice(__('SVG Deleted.', 'kadence-blocks'), {
 						type: 'snackbar',
