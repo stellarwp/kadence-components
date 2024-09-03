@@ -66,7 +66,6 @@ export { default as CopyPasteAttributes } from './copy-paste-attributes';
 export { default as DynamicTextInputControl } from './dynamic-text-input-control';
 export { default as KadencePanelButton } from './panel-button';
 export { default as SelectPostsModal } from './select-posts-modal';
-export { default as DynamicTextInputControl } from './dynamic-text-input-control';
 export { default as Tooltip } from './tooltip';
 
 /* Panels */
