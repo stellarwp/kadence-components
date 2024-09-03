@@ -90,27 +90,6 @@ export default function KadenceBlockDefaults({
 		});
 	};
 
-	const saveAll = () => {
-		const newConfig = calculate();
-
-		const config = kadence_blocks_params.configuration
-			? SafeParseJSON(kadence_blocks_params.configuration, true)
-			: {};
-		config[blockSlug] = newConfig;
-		apiFetch({
-			path: '/wp/v2/settings',
-			method: 'POST',
-			data: { kadence_blocks_config_blocks: JSON.stringify(config) },
-		}).then(() => {
-			createErrorNotice(__('Block default saved', 'kadence-blocks'), {
-				type: 'snackbar',
-			});
-			setIsOpenSaveConfirm(false);
-			kadence_blocks_params.configuration = JSON.stringify(config);
-			setTmpDefaults(newConfig);
-		});
-	};
-
 	const saveModified = () => {
 		const config = kadence_blocks_params.configuration
 			? SafeParseJSON(kadence_blocks_params.configuration, true)
