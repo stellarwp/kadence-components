@@ -10,20 +10,16 @@ import { useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { map, isEqual } from 'lodash';
 import { undo } from '@wordpress/icons';
-import { capitalizeFirstLetter } from '@kadence/helpers'
+import { capitalizeFirstLetter } from '@kadence/helpers';
 import RadioRangeControl from '../radio-range-control';
 import { settings } from '@wordpress/icons';
 import './editor.scss';
-import {
-	Dashicon,
-	Button,
-	ButtonGroup,
-} from '@wordpress/components';
+import { Dashicon, Button, ButtonGroup } from '@wordpress/components';
 /**
  * Build the Measure controls
  * @returns {object} Measure settings.
  */
-export default function ResponsiveRadioRangeControls( {
+export default function ResponsiveRadioRangeControls({
 	label,
 	onChange,
 	onChangeTablet,
@@ -41,25 +37,23 @@ export default function ResponsiveRadioRangeControls( {
 	defaultTablet = '',
 	defaultMobile = '',
 	showUnit = false,
-	units = [ 'px', 'em', 'rem' ],
+	units = ['px', 'em', 'rem'],
 	allowEmpty = true,
 	className = '',
 	disableCustomSizes = false,
 	reset,
-} ) {
-	const [ deviceType, setDeviceType ] = useState( 'Desktop' );
-	const theDevice = useSelect( ( select ) => {
-		return select( 'kadenceblocks/data' ).getPreviewDeviceType();
-	}, [] );
-	if ( theDevice !== deviceType ) {
-		setDeviceType( theDevice );
+}) {
+	const [deviceType, setDeviceType] = useState('Desktop');
+	const theDevice = useSelect((select) => {
+		return select('kadenceblocks/data').getPreviewDeviceType();
+	}, []);
+	if (theDevice !== deviceType) {
+		setDeviceType(theDevice);
 	}
-	const {
-		setPreviewDeviceType,
-	} = useDispatch( 'kadenceblocks/data' );
-	const customSetPreviewDeviceType = ( device ) => {
-		setPreviewDeviceType( capitalizeFirstLetter( device ) );
-		setDeviceType( capitalizeFirstLetter( device ) );
+	const { setPreviewDeviceType } = useDispatch('kadenceblocks/data');
+	const customSetPreviewDeviceType = (device) => {
+		setPreviewDeviceType(capitalizeFirstLetter(device));
+		setDeviceType(capitalizeFirstLetter(device));
 	};
 	const devices = [
 		{
@@ -84,83 +78,85 @@ export default function ResponsiveRadioRangeControls( {
 	const output = {};
 	output.Mobile = (
 		<RadioRangeControl
-			value={ ( undefined !== mobileValue ? mobileValue : '' ) }
-			onChange={ ( value, size ) => onChangeMobile( value, size ) }
-			options={ options }
-			defaultValue={ defaultMobile }
-			min={ min }
-			max={ max }
-			step={ step }
-			unit={ unit }
-			onUnit={ onUnit }
-			showUnit={ showUnit }
-			units={ units }
-			disableCustomSizes={ disableCustomSizes }
+			value={undefined !== mobileValue ? mobileValue : ''}
+			onChange={(value, size) => onChangeMobile(value, size)}
+			options={options}
+			defaultValue={defaultMobile}
+			min={min}
+			max={max}
+			step={step}
+			unit={unit}
+			onUnit={onUnit}
+			showUnit={showUnit}
+			units={units}
+			disableCustomSizes={disableCustomSizes}
 		/>
 	);
 	output.Tablet = (
 		<RadioRangeControl
-			value={ ( undefined !== tabletValue ? tabletValue : '' ) }
-			onChange={ ( value, size ) => onChangeTablet( value, size ) }
-			options={ options }
-			defaultValue ={ defaultTablet }
-			min={ min }
-			max={ max }
-			step={ step }
-			unit={ unit }
-			onUnit={ onUnit }
-			showUnit={ showUnit }
-			units={ units }
-			disableCustomSizes={ disableCustomSizes }
+			value={undefined !== tabletValue ? tabletValue : ''}
+			onChange={(value, size) => onChangeTablet(value, size)}
+			options={options}
+			defaultValue={defaultTablet}
+			min={min}
+			max={max}
+			step={step}
+			unit={unit}
+			onUnit={onUnit}
+			showUnit={showUnit}
+			units={units}
+			disableCustomSizes={disableCustomSizes}
 		/>
 	);
 	output.Desktop = (
 		<RadioRangeControl
-			value={ ( undefined !== value ? value : '' ) }
-			onChange={ ( value, size ) => onChange( value, size ) }
-			options={ options }
-			defaultValue={ defaultValue }
-			min={ min }
-			max={ max }
-			step={ step }
-			unit={ unit }
-			onUnit={ onUnit }
-			showUnit={ showUnit }
-			units={ units }
-			disableCustomSizes={ disableCustomSizes }
+			value={undefined !== value ? value : ''}
+			onChange={(value, size) => onChange(value, size)}
+			options={options}
+			defaultValue={defaultValue}
+			min={min}
+			max={max}
+			step={step}
+			unit={unit}
+			onUnit={onUnit}
+			showUnit={showUnit}
+			units={units}
+			disableCustomSizes={disableCustomSizes}
 		/>
 	);
 	return [
 		onChange && onChangeTablet && onChangeMobile && (
-			<div className={ `components-base-control kb-responsive-radio-range-control${ '' !== className ? ' ' + className : '' }` }>
+			<div
+				className={`components-base-control kb-responsive-radio-range-control${
+					'' !== className ? ' ' + className : ''
+				}`}
+			>
 				<div className="kadence-title-bar">
-					{ reset && (
+					{reset && (
 						<Button
 							className="is-reset is-single"
 							isSmall
-							disabled={ ( ( isEqual( '', value ) ) ? true : false ) }
-							icon={ undo }
-							onClick={ () => reset() }
+							disabled={isEqual('', value) ? true : false}
+							icon={undo}
+							onClick={() => reset()}
 						></Button>
-					) }
-					{ label && (
-						<span className="kadence-control-title">{ label }</span>
-					) }
-					<ButtonGroup className="kb-measure-responsive-options" aria-label={ __( 'Device', 'kadence-blocks' ) }>
-						{ map( devices, ( { name, key, title, itemClass } ) => (
+					)}
+					{label && <span className="kadence-control-title">{label}</span>}
+					<ButtonGroup className="kb-measure-responsive-options" aria-label={__('Device', 'kadence-blocks')}>
+						{map(devices, ({ name, key, title, itemClass }) => (
 							<Button
-								key={ key }
-								className={ `kb-responsive-btn ${ itemClass }${ name === deviceType ? ' is-active' : '' }` }
+								key={key}
+								className={`kb-responsive-btn ${itemClass}${name === deviceType ? ' is-active' : ''}`}
 								isSmall
-								aria-pressed={ deviceType === name }
-								onClick={ () => customSetPreviewDeviceType( name ) }
+								aria-pressed={deviceType === name}
+								onClick={() => customSetPreviewDeviceType(name)}
 							>
-								{ title }
+								{title}
 							</Button>
-						) ) }
+						))}
 					</ButtonGroup>
 				</div>
-				{ ( output[ deviceType ] ? output[ deviceType ] : output.Desktop ) }
+				{output[deviceType] ? output[deviceType] : output.Desktop}
 			</div>
 		),
 	];

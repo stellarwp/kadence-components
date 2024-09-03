@@ -20,17 +20,17 @@ import { createRef } from '@wordpress/element';
  */
 class DynamicTextControl extends Component {
 	constructor() {
-		super( ...arguments );
+		super(...arguments);
 
-		this.toggle = this.toggle.bind( this );
+		this.toggle = this.toggle.bind(this);
 		this.state = {
 			open: false,
 		};
 		this.popRef = createRef();
-		this.debouncedToggle = debounce( this.toggle.bind( this ), 100 );
+		this.debouncedToggle = debounce(this.toggle.bind(this), 100);
 	}
 	toggle() {
-		this.setState( { open: ! this.state.open } );
+		this.setState({ open: !this.state.open });
 	}
 	render() {
 		const { open } = this.state;
@@ -47,46 +47,46 @@ class DynamicTextControl extends Component {
 			<ToolbarGroup group="dynamic-text">
 				<ToolbarButton
 					className="kb-dynamic-menu"
-					icon={ icons.dynamic }
-					onClick={ () => this.debouncedToggle() }
-					isPressed={ false }
+					icon={icons.dynamic}
+					onClick={() => this.debouncedToggle()}
+					isPressed={false}
 					aria-haspopup="true"
-					aria-expanded={ open }
-					label={ __( 'Dynamic Content', 'kadence-blocks' ) }
-					showTooltip={ true }
+					aria-expanded={open}
+					label={__('Dynamic Content', 'kadence-blocks')}
+					showTooltip={true}
 				/>
-				{ open && (
+				{open && (
 					<Popover
 						className="kb-dynamic-popover"
 						position="bottom left"
-						onClick={ () => {} }
-						expandOnMobile={ true }
-						onClose={ () => this.debouncedToggle() }
-						ref={ this.popRef }
+						onClick={() => {}}
+						expandOnMobile={true}
+						onClose={() => this.debouncedToggle()}
+						ref={this.popRef}
 					>
 						<div className="kb-dynamic-popover-inner-wrap">
 							<div className="kb-pro-notice">
-								<h2>{ __( 'Dynamic Content', 'kadence-blocks-pro' ) } </h2>
+								<h2>{__('Dynamic Content', 'kadence-blocks-pro')} </h2>
 								<p>
-									{ __(
+									{__(
 										'Create dynamic sites by populating content from various sources.',
 										'kadence-blocks-pro'
-									) }{ ' ' }
+									)}{' '}
 								</p>
 								<ExternalLink
 									href={
 										'https://www.kadencewp.com/kadence-blocks/pro/?utm_source=in-app&utm_medium=kadence-blocks&utm_campaign=dynamic-content'
 									}
 								>
-									{ __( 'Upgrade to Pro', 'kadence-blocks-pro' ) }
+									{__('Upgrade to Pro', 'kadence-blocks-pro')}
 								</ExternalLink>
 							</div>
 						</div>
 					</Popover>
-				) }
+				)}
 			</ToolbarGroup>
 		);
 	}
 }
 
-export default withFilters( 'kadence.TextDynamicControl' )( DynamicTextControl );
+export default withFilters('kadence.TextDynamicControl')(DynamicTextControl);

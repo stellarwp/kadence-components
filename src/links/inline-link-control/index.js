@@ -1,30 +1,30 @@
 /**
  * External dependencies
  */
- import classnames from 'classnames';
- /**
-  * WordPress dependencies
-  */
+import classnames from 'classnames';
+/**
+ * WordPress dependencies
+ */
 import { __ } from '@wordpress/i18n';
 import { Fragment, Component } from '@wordpress/element';
 import { ToggleControl, Popover, TextControl, SelectControl } from '@wordpress/components';
 import { LEFT, RIGHT, UP, DOWN, BACKSPACE, ENTER } from '@wordpress/keycodes';
- /**
+/**
  * Import Css
  */
-  import './editor.scss';
- /**
-  * Internal dependencies
-  */
+import './editor.scss';
+/**
+ * Internal dependencies
+ */
 import InputSearch from '../input-search';
 
- /**
+/**
  * Build the typography controls
  * @returns {object} typography settings.
  */
 class URLInputInline extends Component {
 	constructor() {
-		super( ...arguments );
+		super(...arguments);
 		this.state = {
 			isEditingLink: false,
 			isSettingsExpanded: false,
@@ -32,7 +32,8 @@ class URLInputInline extends Component {
 		};
 	}
 	render() {
-		const { label,
+		const {
+			label,
 			onChangeUrl,
 			url,
 			additionalControls = true,
@@ -48,56 +49,57 @@ class URLInputInline extends Component {
 			onChangeTitle,
 			changeTargetType = false,
 			allowClear = false,
-			dynamicAttribute = '' } = this.props;
+			dynamicAttribute = '',
+		} = this.props;
 		const { urlInput, isEditingLink, isSettingsExpanded } = this.state;
-		const stopPropagation = ( event ) => {
+		const stopPropagation = (event) => {
 			event.stopPropagation();
 		};
 
-		const stopPropagationRelevantKeys = ( event ) => {
-			if ( [ LEFT, DOWN, RIGHT, UP, BACKSPACE, ENTER ].indexOf( event.keyCode ) > -1 ) {
+		const stopPropagationRelevantKeys = (event) => {
+			if ([LEFT, DOWN, RIGHT, UP, BACKSPACE, ENTER].indexOf(event.keyCode) > -1) {
 				// Stop the key event from propagating up to ObserveTyping.startTypingInTextField.
 				event.stopPropagation();
 			}
 		};
 
 		const stopEditLink = () => {
-			this.setState( { isEditingLink: false } );
+			this.setState({ isEditingLink: false });
 		};
-		const setUrlInput = ( value ) => {
-			this.setState( { urlInput: value } );
+		const setUrlInput = (value) => {
+			this.setState({ urlInput: value });
 		};
 		const toggleSettingsVisibility = () => {
-			this.setState( { isSettingsExpanded: ! isSettingsExpanded } );
+			this.setState({ isSettingsExpanded: !isSettingsExpanded });
 		};
 
-		const onSubmitLinkChange = ( url ) => {
-			onChangeUrl( url );
+		const onSubmitLinkChange = (url) => {
+			onChangeUrl(url);
 		};
-		const onSetNewTab = ( value ) => {
-			onChangeTarget( value );
-		};
-
-		const onSetLinkNoFollow = ( value ) => {
-			onChangeFollow( value );
+		const onSetNewTab = (value) => {
+			onChangeTarget(value);
 		};
 
-		const onSetLinkSponsored = ( value ) => {
-			onChangeSponsored( value );
+		const onSetLinkNoFollow = (value) => {
+			onChangeFollow(value);
 		};
 
-		const onSetLinkDownload = ( value ) => {
-			onChangeDownload( value );
+		const onSetLinkSponsored = (value) => {
+			onChangeSponsored(value);
 		};
-		const onSetLinkTitle = ( value ) => {
-			onChangeTitle( value );
+
+		const onSetLinkDownload = (value) => {
+			onChangeDownload(value);
+		};
+		const onSetLinkTitle = (value) => {
+			onChangeTitle(value);
 		};
 
 		const advancedOptions = (
 			<Fragment>
-				{ onChangeTarget && (
+				{onChangeTarget && (
 					<Fragment>
-						{ changeTargetType && (
+						{changeTargetType && (
 							<Fragment>
 								<SelectControl
 									label={ __( 'Link Target', 'kadence-blocks-pro' ) }
@@ -109,72 +111,78 @@ class URLInputInline extends Component {
 									] }
 									onChange={ onSetNewTab }
 								/>
-								{ opensInNewTab === 'video' && (
-									<p>{ __( 'NOTE: Video popup only works with youtube and vimeo links.', 'kadence-blocks-pro' ) }</p>
-								) }
+								{opensInNewTab === 'video' && (
+									<p>
+										{__(
+											'NOTE: Video popup only works with youtube and vimeo links.',
+											'kadence-blocks-pro'
+										)}
+									</p>
+								)}
 							</Fragment>
-						) }
-						{ ! changeTargetType && (
+						)}
+						{!changeTargetType && (
 							<ToggleControl
-								label={ __( 'Open in New Tab', 'kadence-blocks-pro' ) }
-								onChange={ onSetNewTab }
-								checked={ opensInNewTab }
+								label={__('Open in New Tab', 'kadence-blocks-pro')}
+								onChange={onSetNewTab}
+								checked={opensInNewTab}
 							/>
-						) }
+						)}
 					</Fragment>
-				) }
-				{ onChangeFollow && (
+				)}
+				{onChangeFollow && (
 					<ToggleControl
-						label={ __( 'No Follow', 'kadence-blocks-pro' ) }
-						onChange={ onSetLinkNoFollow }
-						checked={ linkNoFollow }
+						label={__('No Follow', 'kadence-blocks-pro')}
+						onChange={onSetLinkNoFollow}
+						checked={linkNoFollow}
 					/>
-				) }
-				{ onChangeSponsored && (
+				)}
+				{onChangeSponsored && (
 					<ToggleControl
-						label={ __( 'Sponsored', 'kadence-blocks-pro' ) }
-						onChange={ onSetLinkSponsored }
-						checked={ linkSponsored }
+						label={__('Sponsored', 'kadence-blocks-pro')}
+						onChange={onSetLinkSponsored}
+						checked={linkSponsored}
 					/>
-				) }
-				{ onChangeDownload && (
+				)}
+				{onChangeDownload && (
 					<ToggleControl
-						label={ __( 'Download', 'kadence-blocks-pro' ) }
-						onChange={ onSetLinkDownload }
-						checked={ linkDownload }
+						label={__('Download', 'kadence-blocks-pro')}
+						onChange={onSetLinkDownload}
+						checked={linkDownload}
 					/>
-				) }
-				{ onChangeTitle && (
+				)}
+				{onChangeTitle && (
 					<TextControl
-						label={ __( 'Title', 'kadence-blocks-pro' ) }
-						onChange={ onSetLinkTitle }
-						value={ linkTitle }
+						label={__('Title', 'kadence-blocks-pro')}
+						onChange={onSetLinkTitle}
+						value={linkTitle}
 					/>
-				) }
+				)}
 			</Fragment>
 		);
 		const linkEditorValue = urlInput !== null ? urlInput : url;
 		return (
-			<Popover
-				className='kb-popover-link-popover'
-				position="bottom center"
-			>
-				<div className={ `components-base-control kb-popover-link-control kb-side-link-control${ dynamicAttribute && kadence_blocks_params.dynamic_enabled ? ' has-dynamic-support' : '' }` }>
+			<Popover className="kb-popover-link-popover" position="bottom center">
+				<div
+					className={`components-base-control kb-popover-link-control kb-side-link-control${
+						dynamicAttribute && kadence_blocks_params.dynamic_enabled ? ' has-dynamic-support' : ''
+					}`}
+				>
 					<InputSearch
-						url={ linkEditorValue }
-						onChange={ ( url ) => onSubmitLinkChange( url ) }
-						attributes={ this.props.attributes }
-						dynamicAttribute={ dynamicAttribute }
-						additionalControls={ additionalControls }
-						advancedOptions={ advancedOptions }
-						isSettingsExpanded={ isSettingsExpanded }
-						onExpandSettings={ toggleSettingsVisibility }
-						allowClear={ allowClear }
-						{ ...this.props }
+						url={linkEditorValue}
+						onChange={(url) => onSubmitLinkChange(url)}
+						attributes={this.props.attributes}
+						dynamicAttribute={dynamicAttribute}
+						additionalControls={additionalControls}
+						advancedOptions={advancedOptions}
+						isSettingsExpanded={isSettingsExpanded}
+						onExpandSettings={toggleSettingsVisibility}
+						allowClear={allowClear}
+						{...this.props}
 					/>
 				</div>
 			</Popover>
 		);
 	}
- };
- export default URLInputInline;
+}
+export default URLInputInline;

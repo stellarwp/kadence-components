@@ -25,9 +25,9 @@ import { hoverToggle, click } from '@kadence/icons';
  * Build the Measure controls
  * @returns {object} Measure settings.
  */
-export default function HoverToggleControl( {
-	label = __( 'Hover Styles', 'kadence-blocks' ),
-	activeLabel = __( 'Active Styles', 'kadence-blocks' ),
+export default function HoverToggleControl({
+	label = __('Hover Styles', 'kadence-blocks'),
+	activeLabel = __('Active Styles', 'kadence-blocks'),
 	initial = 'normal',
 	hoverTab = __( 'Hover', 'kadence-blocks' ),
 	normalTab = __( 'Normal', 'kadence-blocks' ),
@@ -104,15 +104,15 @@ export default function HoverToggleControl( {
 								return <>{ normal }</>;
 							}
 						}
-					} }
+					}}
 				</TabPanel>
 			</div>,
 		];
 	}
 	return [
-		<div className={ `components-base-control kb-hover-toggle-control${ className ? ' ' + className : '' }` }>
-			<div className={ 'kb-hover-toggle-control-toggle' }>
-				{ hover && (
+		<div className={`components-base-control kb-hover-toggle-control${className ? ' ' + className : ''}`}>
+			<div className={'kb-hover-toggle-control-toggle'}>
+				{hover && (
 					<Button
 						className={ 'kb-hover-toggle-btn ' + ( isRTL ? 'is-rtl' : '' ) }
 						isPrimary={ isHover }

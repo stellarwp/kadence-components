@@ -10,38 +10,32 @@ import { useSelect, useDispatch } from '@wordpress/data';
 import { useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import { map } from 'lodash';
-import { capitalizeFirstLetter } from '@kadence/helpers'
-import {
-	Dashicon,
-	Button,
-	ButtonGroup,
-} from '@wordpress/components';
+import { capitalizeFirstLetter } from '@kadence/helpers';
+import { Dashicon, Button, ButtonGroup } from '@wordpress/components';
 import './editor.scss';
 
 /**
  * Build the Measure controls
  * @returns {object} Measure settings.
  */
-export default function SmallResponsiveControl( {
-		label,
-		desktopChildren,
-		tabletChildren,
-		mobileChildren,
-		hasPadding = false,
-	} ) {
-	const [ deviceType, setDeviceType ] = useState( 'Desktop' );
-	const theDevice = useSelect( ( select ) => {
-		return select( 'kadenceblocks/data' ).getPreviewDeviceType();
-	}, [] );
-	if ( theDevice !== deviceType ) {
-		setDeviceType( theDevice );
+export default function SmallResponsiveControl({
+	label,
+	desktopChildren,
+	tabletChildren,
+	mobileChildren,
+	hasPadding = false,
+}) {
+	const [deviceType, setDeviceType] = useState('Desktop');
+	const theDevice = useSelect((select) => {
+		return select('kadenceblocks/data').getPreviewDeviceType();
+	}, []);
+	if (theDevice !== deviceType) {
+		setDeviceType(theDevice);
 	}
-	const {
-		setPreviewDeviceType,
-	} = useDispatch( 'kadenceblocks/data' );
-	const customSetPreviewDeviceType = ( device ) => {
-		setPreviewDeviceType( capitalizeFirstLetter( device ) );
-		setDeviceType( capitalizeFirstLetter( device ) );
+	const { setPreviewDeviceType } = useDispatch('kadenceblocks/data');
+	const customSetPreviewDeviceType = (device) => {
+		setPreviewDeviceType(capitalizeFirstLetter(device));
+		setDeviceType(capitalizeFirstLetter(device));
 	};
 	const devices = [
 		{
@@ -62,37 +56,33 @@ export default function SmallResponsiveControl( {
 		},
 	];
 	const output = {};
-	output.Mobile = (
-		mobileChildren
-	);
-	output.Tablet = (
-		tabletChildren
-	);
-	output.Desktop = (
-		desktopChildren
-	);
+	output.Mobile = mobileChildren;
+	output.Tablet = tabletChildren;
+	output.Desktop = desktopChildren;
 	return (
-		<div className={ `components-base-control kb-small-responsive-control${ hasPadding ? ' responsive-title-area-spacing' : '' }` }>
+		<div
+			className={`components-base-control kb-small-responsive-control${
+				hasPadding ? ' responsive-title-area-spacing' : ''
+			}`}
+		>
 			<div className="kadence-title-bar">
-				{ label && (
-					<span className="kadence-control-title">{ label }</span>
-				) }
-				<ButtonGroup className="kb-small-responsive-options" aria-label={ __( 'Device', 'kadence-blocks' ) }>
-					{ map( devices, ( { name, key, title, itemClass } ) => (
+				{label && <span className="kadence-control-title">{label}</span>}
+				<ButtonGroup className="kb-small-responsive-options" aria-label={__('Device', 'kadence-blocks')}>
+					{map(devices, ({ name, key, title, itemClass }) => (
 						<Button
-							key={ key }
-							className={ `kb-responsive-btn ${ itemClass }${ name === deviceType ? ' is-active' : '' }` }
+							key={key}
+							className={`kb-responsive-btn ${itemClass}${name === deviceType ? ' is-active' : ''}`}
 							isSmall
-							aria-pressed={ deviceType === name }
-							onClick={ () => customSetPreviewDeviceType( name ) }
+							aria-pressed={deviceType === name}
+							onClick={() => customSetPreviewDeviceType(name)}
 						>
-							{ title }
+							{title}
 						</Button>
-					) ) }
+					))}
 				</ButtonGroup>
 			</div>
 			<div className="kb-small-measure-control-inner">
-				{ ( output[ deviceType ] ? output[ deviceType ] : output.Desktop ) }
+				{output[deviceType] ? output[deviceType] : output.Desktop}
 			</div>
 		</div>
 	);

@@ -21,12 +21,7 @@ import { undo } from '@wordpress/icons';
  */
 import { __ } from '@wordpress/i18n';
 import { useState, Fragment } from '@wordpress/element';
-import {
-	Button,
-	DropdownMenu,
-	ButtonGroup,
-	Tooltip,
-} from '@wordpress/components';
+import { Button, DropdownMenu, ButtonGroup, Tooltip } from '@wordpress/components';
 
 import {
 	outlineTopIcon,
@@ -46,7 +41,7 @@ import {
 	bottomRightIcon,
 	bottomLeftIcon,
 	radiusLinkedIcon,
-	radiusIndividualIcon
+	radiusIndividualIcon,
 } from '@kadence/icons';
 
 import { settings, link, linkOff } from '@wordpress/icons';
@@ -55,7 +50,7 @@ import { settings, link, linkOff } from '@wordpress/icons';
  * Build the Measure controls
  * @returns {object} Measure settings.
  */
-export default function MeasurementControls( {
+export default function MeasurementControls({
 	label,
 	measurement,
 	control = 'individual',
@@ -74,13 +69,13 @@ export default function MeasurementControls( {
 	unit = '',
 	onUnit,
 	showUnit = false,
-	units = [ 'px', 'em', 'rem' ],
+	units = ['px', 'em', 'rem'],
 	allowEmpty = false,
 	key,
 	className = '',
 	reset,
 	preset = '',
-} ) {
+}) {
 	const measureIcons = {
 		first: isBorderRadius ? topLeftIcon : firstIcon,
 		second: isBorderRadius ? topRightIcon : secondIcon,
@@ -88,142 +83,218 @@ export default function MeasurementControls( {
 		fourth: isBorderRadius ? bottomLeftIcon : fourthIcon,
 		link: isBorderRadius ? radiusLinkedIcon : linkIcon,
 		unlink: isBorderRadius ? radiusIndividualIcon : unlinkIcon,
-	}
-	const zero = ( allowEmpty ? '' : 0 );
-	const [ localControl, setLocalControl ] = useState( control );
+	};
+	const zero = allowEmpty ? '' : 0;
+	const [localControl, setLocalControl] = useState(control);
 	const realControl = onControl ? control : localControl;
 	const realSetOnControl = onControl ? onControl : setLocalControl;
 	const onReset = () => {
-		if ( typeof reset === 'function' ){
+		if (typeof reset === 'function') {
 			reset();
 		} else {
-			onChange( [ '', '', '', '' ] );
+			onChange(['', '', '', '']);
 		}
-	}
+	};
 	return (
 		<>
-			{ onChange && (
-				<div key={ key } className={ `components-base-control kb-measure-control ${ measureIcons.first !== outlineTopIcon ? 'kb-measure-corners-control' : 'kb-measure-sides-control' }${ '' !== className ? ' ' + className : '' }` }>
-					{ label && (
+			{onChange && (
+				<div
+					key={key}
+					className={`components-base-control kb-measure-control ${
+						measureIcons.first !== outlineTopIcon
+							? 'kb-measure-corners-control'
+							: 'kb-measure-sides-control'
+					}${'' !== className ? ' ' + className : ''}`}
+				>
+					{label && (
 						<div className="kadence-component__header kadence-title-bar">
-							{ label && (
+							{label && (
 								<div className="kadence-component__header__title kadence-measure-control__title">
-									<label className="components-base-control__label">{ label }</label>
-									{ reset && (
-										<div className='title-reset-wrap'>
+									<label className="components-base-control__label">{label}</label>
+									{reset && (
+										<div className="title-reset-wrap">
 											<Button
 												className="is-reset is-single"
-												label='reset'
+												label="reset"
 												isSmall
-												disabled={ ( ( isEqual( [ '', '', '', '' ], liveValue ) || isEqual( [ '', 'auto', '', 'auto' ], liveValue ) ) ? true : false ) }
-												icon={ undo }
-												onClick={ () => onReset() }
+												disabled={
+													isEqual(['', '', '', ''], liveValue) ||
+													isEqual(['', 'auto', '', 'auto'], liveValue)
+														? true
+														: false
+												}
+												icon={undo}
+												onClick={() => onReset()}
 											/>
 										</div>
-									) }
+									)}
 								</div>
-							) }
-							{ realSetOnControl && (
+							)}
+							{realSetOnControl && (
 								<Button
-									isSmall={ true }
-									className={'kadence-radio-item kadence-control-toggle radio-custom is-single only-icon'}
-									label={ realControl !== 'individual' ? __( 'Individual', 'kadence-blocks' ) : __( 'Linked', 'kadence-blocks' )  }
-									icon={ realControl !== 'individual' ? linkIcon : unlinkIcon }
-									onClick={ () => realSetOnControl( realControl !== 'individual' ? 'individual' : 'linked' ) }
-									isPressed={ realControl !== 'individual' ? true : false }
-									isTertiary={ realControl !== 'individual' ? false : true }
+									isSmall={true}
+									className={
+										'kadence-radio-item kadence-control-toggle radio-custom is-single only-icon'
+									}
+									label={
+										realControl !== 'individual'
+											? __('Individual', 'kadence-blocks')
+											: __('Linked', 'kadence-blocks')
+									}
+									icon={realControl !== 'individual' ? linkIcon : unlinkIcon}
+									onClick={() =>
+										realSetOnControl(realControl !== 'individual' ? 'individual' : 'linked')
+									}
+									isPressed={realControl !== 'individual' ? true : false}
+									isTertiary={realControl !== 'individual' ? false : true}
 								/>
-							) }
+							)}
 						</div>
-					) }
+					)}
 					<div className="kadence-controls-content">
-						{ realControl !== 'individual' && (
+						{realControl !== 'individual' && (
 							<RangeControl
-								value={ ( measurement ? measurement[ 0 ] : '' ) }
-								onChange={ ( value ) => onChange( [ value, value, value, value ] ) }
-								min={ min }
-								max={ max }
-								step={ step }
+								value={measurement ? measurement[0] : ''}
+								onChange={(value) => onChange([value, value, value, value])}
+								min={min}
+								max={max}
+								step={step}
 							/>
-						) }
-						{ realControl === 'individual' && (
+						)}
+						{realControl === 'individual' && (
 							<Fragment>
 								<MeasurementSingleControl
 									placement="top"
-									label={ __( 'Top', 'kadence-blocks' ) }
-									measurement={ ( measurement ? measurement[ 0 ] : '' ) }
-									onChange={ ( value ) => onChange( [ ( value ? Number( value ) : value ), ( measurement && undefined !== measurement[ 1 ] && '' !== measurement[ 1 ] ? measurement[ 1 ] : zero ), ( measurement && undefined !== measurement[ 2 ] && '' !== measurement[ 2 ] ? measurement[ 2 ] : zero ), ( measurement && undefined !== measurement[ 3 ] && '' !== measurement[ 3 ] ? measurement[ 3 ] : zero ) ] ) }
-									min={ min }
-									max={ max }
-									step={ step }
-									icon={ measureIcons.first }
-									unit={ unit }
-									allowEmpty={ allowEmpty }
-									preset={ preset }
+									label={__('Top', 'kadence-blocks')}
+									measurement={measurement ? measurement[0] : ''}
+									onChange={(value) =>
+										onChange([
+											value ? Number(value) : value,
+											measurement && undefined !== measurement[1] && '' !== measurement[1]
+												? measurement[1]
+												: zero,
+											measurement && undefined !== measurement[2] && '' !== measurement[2]
+												? measurement[2]
+												: zero,
+											measurement && undefined !== measurement[3] && '' !== measurement[3]
+												? measurement[3]
+												: zero,
+										])
+									}
+									min={min}
+									max={max}
+									step={step}
+									icon={measureIcons.first}
+									unit={unit}
+									allowEmpty={allowEmpty}
+									preset={preset}
 								/>
 								<MeasurementSingleControl
 									placement="right"
-									label={ __( 'Right', 'kadence-blocks' ) }
-									measurement={ ( measurement ? measurement[ 1 ] : '' ) }
-									onChange={ ( value ) => onChange( [ ( measurement && undefined !== measurement[ 0 ] && '' !== measurement[ 0 ] ? measurement[ 0 ] : zero ), ( value ? Number( value ) : value ), ( measurement && undefined !== measurement[ 2 ] && '' !== measurement[ 2 ] ? measurement[ 2 ] : zero ), ( measurement && undefined !== measurement[ 3 ] && '' !== measurement[ 3 ] ? measurement[ 3 ] : zero ) ] ) }
-									min={ min }
-									max={ max }
-									step={ step }
-									icon={ measureIcons.second }
-									unit={ unit }
-									allowEmpty={ allowEmpty }
-									preset={ preset }
+									label={__('Right', 'kadence-blocks')}
+									measurement={measurement ? measurement[1] : ''}
+									onChange={(value) =>
+										onChange([
+											measurement && undefined !== measurement[0] && '' !== measurement[0]
+												? measurement[0]
+												: zero,
+											value ? Number(value) : value,
+											measurement && undefined !== measurement[2] && '' !== measurement[2]
+												? measurement[2]
+												: zero,
+											measurement && undefined !== measurement[3] && '' !== measurement[3]
+												? measurement[3]
+												: zero,
+										])
+									}
+									min={min}
+									max={max}
+									step={step}
+									icon={measureIcons.second}
+									unit={unit}
+									allowEmpty={allowEmpty}
+									preset={preset}
 								/>
 								<MeasurementSingleControl
 									placement="bottom"
-									label={ __( 'Bottom', 'kadence-blocks' ) }
-									measurement={ ( measurement ? measurement[ 2 ] : '' ) }
-									onChange={ ( value ) => onChange( [ ( measurement && undefined !== measurement[ 0 ] && '' !== measurement[ 0 ] ? measurement[ 0 ] : zero ), ( measurement && undefined !== measurement[ 1 ] && '' !== measurement[ 1 ] ? measurement[ 1 ] : zero ), ( value ? Number( value ) : value ), ( measurement && undefined !== measurement[ 3 ] && '' !== measurement[ 3 ] ? measurement[ 3 ] : zero ) ] ) }
-									min={ min }
-									max={ max }
-									step={ step }
-									icon={ measureIcons.third }
-									unit={ unit }
-									allowEmpty={ allowEmpty }
-									preset={ preset }
+									label={__('Bottom', 'kadence-blocks')}
+									measurement={measurement ? measurement[2] : ''}
+									onChange={(value) =>
+										onChange([
+											measurement && undefined !== measurement[0] && '' !== measurement[0]
+												? measurement[0]
+												: zero,
+											measurement && undefined !== measurement[1] && '' !== measurement[1]
+												? measurement[1]
+												: zero,
+											value ? Number(value) : value,
+											measurement && undefined !== measurement[3] && '' !== measurement[3]
+												? measurement[3]
+												: zero,
+										])
+									}
+									min={min}
+									max={max}
+									step={step}
+									icon={measureIcons.third}
+									unit={unit}
+									allowEmpty={allowEmpty}
+									preset={preset}
 								/>
 								<MeasurementSingleControl
 									placement="left"
-									label={ __( 'Left', 'kadence-blocks' ) }
-									measurement={ ( measurement ? measurement[ 3 ] : '' ) }
-									onChange={ ( value ) => onChange( [ ( measurement && undefined !== measurement[ 0 ] && '' !== measurement[ 0 ] ? measurement[ 0 ] : zero ), ( measurement && undefined !== measurement[ 1 ] && '' !== measurement[ 1 ] ? measurement[ 1 ] : zero ), ( measurement && undefined !== measurement[ 2 ] && '' !== measurement[ 2 ] ? measurement[ 2 ] : zero ), ( value ? Number( value ) : value ) ] ) }
-									min={ min }
-									max={ max }
-									step={ step }
-									icon={ measureIcons.fourth }
-									unit={ unit }
-									allowEmpty={ allowEmpty }
-									preset={ preset }
+									label={__('Left', 'kadence-blocks')}
+									measurement={measurement ? measurement[3] : ''}
+									onChange={(value) =>
+										onChange([
+											measurement && undefined !== measurement[0] && '' !== measurement[0]
+												? measurement[0]
+												: zero,
+											measurement && undefined !== measurement[1] && '' !== measurement[1]
+												? measurement[1]
+												: zero,
+											measurement && undefined !== measurement[2] && '' !== measurement[2]
+												? measurement[2]
+												: zero,
+											value ? Number(value) : value,
+										])
+									}
+									min={min}
+									max={max}
+									step={step}
+									icon={measureIcons.fourth}
+									unit={unit}
+									allowEmpty={allowEmpty}
+									preset={preset}
 								/>
 							</Fragment>
-						) }
-						{ ( onUnit || showUnit ) && (
-							<div className={ 'kadence-measure-control-select-wrapper' }>
+						)}
+						{(onUnit || showUnit) && (
+							<div className={'kadence-measure-control-select-wrapper'}>
 								<select
-									className={ 'kadence-measure-control-select components-unit-control__select' }
-									onChange={ ( event ) => {
-										if ( onUnit ) {
-											onUnit( event.target.value );
+									className={'kadence-measure-control-select components-unit-control__select'}
+									onChange={(event) => {
+										if (onUnit) {
+											onUnit(event.target.value);
 										}
-									} }
-									value={ unit }
+									}}
+									value={unit}
 								>
-									{ units.map( ( option ) => (
-										<option value={ option } selected={ unit === option ? true : undefined } key={ option }>
-											{ option }
+									{units.map((option) => (
+										<option
+											value={option}
+											selected={unit === option ? true : undefined}
+											key={option}
+										>
+											{option}
 										</option>
-									) ) }
+									))}
 								</select>
 							</div>
-						) }
+						)}
 					</div>
 				</div>
-			) }
+			)}
 		</>
 	);
 }
