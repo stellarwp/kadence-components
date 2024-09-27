@@ -10,6 +10,8 @@ export default function ResponsiveSelectControl( {
 	mobileValue,
 	tabletValue,
 	options,
+	tabletOptions = options,
+	mobileOptions = tabletOptions,
 } ) {
 	return (
 		<SmallResponsiveControl
@@ -20,14 +22,14 @@ export default function ResponsiveSelectControl( {
 			tabletChildren={
 				<SelectControl
 					value={ tabletValue }
-					options={ options }
+					options={ tabletOptions }
 					onChange={ ( value ) => onChangeTablet( value ) }
 				/>
 			}
 			mobileChildren={
 				<SelectControl
 					value={ mobileValue }
-					options={ options }
+					options={ mobileOptions }
 					onChange={ ( value ) => onChangeMobile( value ) }
 				/>
 			}
