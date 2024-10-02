@@ -2,8 +2,7 @@
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useState, useRef, useEffect, useMemo } from '@wordpress/element';
-import { Panel, ToggleControl, Button } from '@wordpress/components';
+import { Button } from '@wordpress/components';
 import { useBlockDisplayInformation, store as blockEditorStore, BlockIcon } from '@wordpress/block-editor';
 import { useSelect, useDispatch } from '@wordpress/data';
 /**
@@ -31,11 +30,10 @@ export default function SelectParentBlock({ clientId, label = null, parentSlug =
 
 		if (parentSlug !== null) {
 			parents = getBlockParentsByBlockName(clientId, parentSlug);
-			parentClientId = parents[0];
 		} else {
 			parents = getBlockParents(clientId);
-			parentClientId = parents[parents.length - 1];
 		}
+		parentClientId = parents[parents.length - 1];
 
 		return {
 			firstParentClientId: parentClientId,
