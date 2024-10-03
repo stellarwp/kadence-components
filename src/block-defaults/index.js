@@ -32,9 +32,7 @@ export default function KadenceBlockDefaults({
 		return null;
 	}
 
-	const alwaysExclude = ['uniqueID', 'inQueryBlock', 'anchor'];
-
-	const { createErrorNotice } = useDispatch(noticesStore);
+	const {createErrorNotice, createSuccessNotice} = useDispatch(noticesStore);
 
 	const [isOpenResetConfirm, setIsOpenResetConfirm] = useState(false);
 	const [isOpenSaveConfirm, setIsOpenSaveConfirm] = useState(false);
@@ -60,35 +58,35 @@ export default function KadenceBlockDefaults({
 		apiFetch({
 			path: '/wp/v2/settings',
 			method: 'POST',
-			data: { kadence_blocks_config_blocks: JSON.stringify(config) },
-		}).then(() => {
-			createErrorNotice(__('Block default saved', 'kadence-blocks'), {
+			data: { kadence_blocks_config_blocks: JSON.stringify(config)},
+		} ).then( () => {
+			createSuccessNotice(__('Block default saved', 'kadence-blocks'), {
+                type: 'snackbar',
+            })
+            setIsOpenResetConfirm(false);
+            kadence_blocks_params.configuration = JSON.stringify(config);
+            setTmpDefaults({});
+		});
+
+    }
+
+    const saveAll = () => {
+
+        const newConfig = calculate();
+
+        const config = (kadence_blocks_params.configuration ? SafeParseJSON(kadence_blocks_params.configuration, true) : {});
+        config[blockSlug] = newConfig;
+		apiFetch( {
+			path: '/wp/v2/settings',
+			method: 'POST',
+			data: { kadence_blocks_config_blocks: JSON.stringify(config)},
+		} ).then( () => {
+			createSuccessNotice(__('Block default saved', 'kadence-blocks'), {
 				type: 'snackbar',
 			});
 			setIsOpenResetConfirm(false);
 			kadence_blocks_params.configuration = JSON.stringify(config);
 			setTmpDefaults({});
-		});
-	};
-
-	const saveAll = () => {
-		const newConfig = calculate();
-
-		const config = kadence_blocks_params.configuration
-			? SafeParseJSON(kadence_blocks_params.configuration, true)
-			: {};
-		config[blockSlug] = newConfig;
-		apiFetch({
-			path: '/wp/v2/settings',
-			method: 'POST',
-			data: { kadence_blocks_config_blocks: JSON.stringify(config) },
-		}).then(() => {
-			createErrorNotice(__('Block default saved', 'kadence-blocks'), {
-				type: 'snackbar',
-			});
-			setIsOpenSaveConfirm(false);
-			kadence_blocks_params.configuration = JSON.stringify(config);
-			setTmpDefaults(newConfig);
 		});
 	};
 
@@ -100,9 +98,9 @@ export default function KadenceBlockDefaults({
 		apiFetch({
 			path: '/wp/v2/settings',
 			method: 'POST',
-			data: { kadence_blocks_config_blocks: JSON.stringify(config) },
-		}).then(() => {
-			createErrorNotice(__('Block default saved', 'kadence-blocks'), {
+			data: { kadence_blocks_config_blocks: JSON.stringify(config)},
+		} ).then( () => {
+			createSuccessNotice(__('Block default saved', 'kadence-blocks'), {
 				type: 'snackbar',
 			});
 			kadence_blocks_params.configuration = JSON.stringify(config);

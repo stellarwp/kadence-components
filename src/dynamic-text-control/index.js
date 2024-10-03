@@ -44,7 +44,7 @@ class DynamicTextControl extends Component {
 		);
 
 		return (
-			<ToolbarGroup>
+			<ToolbarGroup group="dynamic-text">
 				<ToolbarButton
 					className="kb-dynamic-menu"
 					icon={icons.dynamic}

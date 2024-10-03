@@ -430,6 +430,37 @@ class TypographyControls extends Component {
 			subset: fontSubset,
 			loadGoogle: loadGoogleFont,
 		};
+		const headingOptions = range( tagLowLevel, tagHighLevel ).map( createhtmlTagControl );
+		if ( otherTags.p ) {
+			headingOptions.push( [
+				{
+					icon: <HeadingLevelIcon level={ 'p' } isPressed={ ( htmlTag && htmlTag === 'p' ? true : false ) } />,
+					title: __( 'Paragraph', 'kadence-blocks' ),
+					isActive: ( htmlTag && htmlTag === 'p' ? true : false ),
+					onClick: () => onTagLevelHTML( 2, 'p' ),
+				},
+			] );
+		}
+		if ( otherTags.span ) {
+			headingOptions.push( [
+				{
+					icon: <HeadingLevelIcon level={ 'span' } isPressed={ ( htmlTag && htmlTag === 'span' ? true : false ) } />,
+					title: __( 'Span', 'kadence-blocks' ),
+					isActive: ( htmlTag && htmlTag === 'span' ? true : false ),
+					onClick: () => onTagLevelHTML( 2, 'span' ),
+				},
+			] );
+		}
+		if ( otherTags.div ) {
+			headingOptions.push( [
+				{
+					icon: <HeadingLevelIcon level={ 'div' } isPressed={ ( htmlTag && htmlTag === 'div' ? true : false ) } />,
+					title: __( 'Div', 'kadence-blocks' ),
+					isActive: ( htmlTag && htmlTag === 'div' ? true : false ),
+					onClick: () => onTagLevelHTML( 2, 'div' ),
+				},
+			] );
+		}
 
 		const onTypoFontChange = (select) => {
 			if (select === null) {
@@ -469,7 +500,7 @@ class TypographyControls extends Component {
 				} else {
 					subset = '';
 					variant = '';
-					weight = 'inherit';
+					weight = undefined !== select.weights?.[0]?.value ? select.weights[0].value : 'inherit';
 				}
 				if (onFontArrayChange) {
 					onFontArrayChange({
@@ -578,19 +609,28 @@ class TypographyControls extends Component {
 			{ value: 'lowercase', label: __('ab', 'kadence-blocks'), tooltip: __('Lowercase', 'kadence-blocks') },
 			{ value: 'capitalize', label: __('Ab', 'kadence-blocks'), tooltip: __('Capitalize', 'kadence-blocks') },
 		];
-		const fontMin = fontSizeType !== 'px' ? 0.2 : 5;
-		const fontMax = fontSizeType !== 'px' ? 12 : 300;
-		const fontStep = fontSizeType !== 'px' ? 0.01 : 1;
-		const lineMin = lineHeightType !== 'px' ? 0.2 : 5;
-		const lineMax = lineHeightType !== 'px' ? 12 : 200;
-		const lineStep = lineHeightType !== 'px' ? 0.01 : 1;
-		const usingReg = typographyWeights.some(function (el) {
+		const fontMin = ( fontSizeType !== 'px' ? 0.2 : 5 );
+		const fontMax = ( fontSizeType !== 'px' ? 120 : 3000 );
+		const fontStep = ( fontSizeType !== 'px' ? 0.001 : 1 );
+		const lineMin = ( lineHeightType !== 'px' ? 0.2 : 5 );
+		const lineMax = ( lineHeightType !== 'px' ? 120 : 3000 );
+		const lineStep = ( lineHeightType !== 'px' ? 0.001 : 1 );
+		const usingReg = typographyWeights.some(function(el) {
 			return el.value === 'regular';
 		});
 
 		return (
 			<>
-				<div className={'components-base-control kb-typography-control'}>
+				<div className={ 'components-base-control kb-typography-control' }>
+					{ label && (
+						<div className='kadence-title-bar kadence-component__header'>
+							<label
+								className="kadence-heading-fontfamily-title components-typography-control__label kadence-component__header__title"
+							>
+								{ label }
+							</label>
+						</div>
+					) }
 					<div className="kadence-title-bar">
 						{label && (
 							<h2 className="kt-heading-fontfamily-title">{label}</h2>

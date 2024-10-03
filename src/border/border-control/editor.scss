@@ -40,19 +40,18 @@
 	border: 1px solid var(--kb-border-color, #859cb6);
 	background: white;
 }
-.kadence-border-control .kadence-single-border-control-wrap .components-base-control {
+.kadence-single-border-control-wrap .components-base-control {
 	margin-bottom: 0;
 }
-.kadence-border-control
-	.kadence-single-border-control-wrap
+.kadence-single-border-control-wrap
 	> .kadence-single-unit-control
 	.components-unit-control-wrapper {
 	width: 100%;
 }
-.kadence-border-control .kadence-single-border-control-wrap > .kadence-single-unit-control {
+.kadence-single-border-control-wrap > .kadence-single-unit-control {
 	flex-grow: 1;
 }
-.kadence-border-control .kadence-single-border-control-wrap {
+.kadence-single-border-control-wrap {
 	.kadence-pop-color-control {
 		padding: 0 2px;
 		.kadence-pop-color-icon-indicate .kadence-pop-color-indicate {
@@ -62,8 +61,7 @@
 	}
 }
 
-.kadence-border-control
-	.kadence-single-border-control-wrap
+.kadence-single-border-control-wrap
 	.kadence-measure-control-select.components-unit-control__select {
 	-webkit-appearance: none;
 	-moz-appearance: none;
@@ -94,7 +92,7 @@
 	}
 }
 
-.kadence-border-control .kadence-single-border-control-wrap .components-dropdown-menu__toggle {
+.kadence-single-border-control-wrap .components-dropdown-menu__toggle {
 	min-width: auto;
 	height: 30px;
 	border-radius: 0px;
@@ -114,24 +112,26 @@
 	cursor: pointer;
 }
 
-.kadence-border-control .kadence-single-border-control-wrap .border-control-style-select {
+.kadence-single-border-control-wrap .border-control-style-select {
 	display: block;
 }
 .kadence-border-control .components-base-control.kadence-single-border-control {
 	margin-bottom: 0;
 }
 
-.kadence-border-control .kadence-single-border-control-wrap .components-dropdown-menu__toggle svg {
+.kadence-single-border-control-wrap .components-dropdown-menu__toggle svg {
 	width: 12px;
 }
 .border-control-style-select__popover .components-menu-item__button .components-menu-item__item {
 	display: none;
 }
-.border-control-style-select__popover .components-menu-item__button .components-menu-items__item-icon.has-icon-right {
+.border-control-style-select__popover
+	.components-menu-item__button
+	.components-menu-items__item-icon.has-icon-right {
 	margin: 0;
 	display: block;
 }
-.kadence-border-control .kadence-single-border-control-wrap .kadence-single-unit-control {
+.kadence-single-border-control-wrap .kadence-single-unit-control {
 	border: 0;
 	border-radius: 0px;
 	.components-input-control__backdrop {

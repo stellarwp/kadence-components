@@ -104,7 +104,7 @@ export default class extends Component {
 								this.props.onClassChange ? (value) => this.props.onClassChange(value) : undefined
 							}
 							value={valueColor}
-							opacityValue={this.props.opacityValue ? this.props.opacityValue : undefined}
+							opacityValue={undefined !== this.props?.opacityValue && '' !== this.props?.opacityValue ? this.props.opacityValue : undefined}
 							opacityUnit={this.props.opacityUnit ? this.props.opacityUnit : undefined}
 							defaultValue={defaultColor ? defaultColor : ''}
 							reload={this.state.reload}
