@@ -7,8 +7,7 @@
 		"prettier": "prettier . --write"
 	},
 	"dependencies": {
-		"@floating-ui/react": "^0.26.16",
-		"react-container-dimensions": "^1.4.1"
+		"@floating-ui/react": "^0.26.16"
 	},
 	"devDependencies": {
 		"@wordpress/prettier-config": "^2.25.13",
