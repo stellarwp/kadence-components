@@ -156,9 +156,6 @@ class URLInputControl extends Component {
 						checked={linkDownload}
 					/>
 				)}
-				{onChangeTitle && (
-					<TextControl label={__('Title', 'kadence-blocks')} onChange={onSetLinkTitle} value={linkTitle} />
-				)}
 				{onChangeLinkClass && (
 					<TextControl
 						label={__('Link CSS Class', 'kadence-blocks')}
@@ -188,6 +185,15 @@ class URLInputControl extends Component {
 					allowClear={allowClear}
 					{...this.props}
 				/>
+				{ onChangeTitle && (
+					<TextControl
+						label={ __( 'Title', 'kadence-blocks' ) }
+						onChange={ onSetLinkTitle }
+						value={ linkTitle }
+						style={ url  && !linkTitle ? { backgroundColor: 'rgba(255, 255, 0, 0.5)' } : {} }
+						placeholder={ url  && !linkTitle ? __( 'Add a Title', 'kadence-blocks' ) : '' }
+					/>
+				) }
 			</div>
 		);
 	}
