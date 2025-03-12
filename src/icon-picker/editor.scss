@@ -27,7 +27,7 @@
 
 .kadence-icon-grid-wrap {
 	display: grid;
-	grid-template-columns: repeat(5, minmax(0, 1fr));
+	grid-template-columns: repeat(5, minmax(0, 1fr) );
 	gap: 2px;
 }
 
@@ -53,7 +53,7 @@
 
 	> * {
 		transform: scale(1);
-		transition: transform 0.25s;
+		transition: transform .25s;
 		transform-origin: center;
 	}
 
@@ -67,7 +67,7 @@
 	}
 
 	&.add-custom-svg {
-		background: #fff;
+		background: #FFF;
 		border: 2px dashed #f5f5f5;
 		color: #f5f5f5;
 	}
@@ -80,7 +80,7 @@
 	background: white;
 	width: 100%;
 	justify-content: flex-start;
-	border: 1px solid var(--kb-border-color, #859cb6);
+	border: 1px solid var(--kb-border-color, #859CB6);
 
 	.kadence-icon-picker-selection-value {
 		display: flex;
@@ -95,22 +95,21 @@
 		display: flex;
 		align-items: center;
 		width: 34px;
-		background: #f8f9fb;
+		background: #F8F9FB;
 		justify-content: center;
 		transform: scale(1) rotate(0) !important;
-		transition: background 0.25s;
-		border-left: 1px solid var(--kb-border-color, #859cb6);
+		transition: background .25s;
+		border-left: 1px solid var(--kb-border-color, #859CB6);
 	}
 
 	&:hover .kadence-icon-picker-selection-arrow {
-		background: #ebeff3;
+		background: #EBEFF3;
 	}
 }
 
-.kadence-icon-picker-link.kadence-icon-picker-selection-toggle
-	.kadence-icon-picker-selection-value.kadence-icon-picker-placeholder {
+.kadence-icon-picker-link.kadence-icon-picker-selection-toggle .kadence-icon-picker-selection-value.kadence-icon-picker-placeholder {
 	font-size: 14px;
-	color: #6280a1;
+	color: #6280A1;
 }
 
 .kadence-icon-picker-toggle-wrap {
@@ -126,11 +125,11 @@
 	transform: translate(0px, -50%);
 	border: 0;
 	padding: 0;
-	background: #ebeff3;
+	background: #EBEFF3;
 	display: flex;
 
 	&:hover {
-		background: #d2dae4;
+		background: #D2DAE4;
 		cursor: pointer;
 	}
 }
@@ -156,16 +155,11 @@
 	transform: scale(1) !important;
 }
 
-.kadence-icon-picker-theme-dividers
-	.kadence-icon-picker-link.kadence-icon-picker-selection-toggle
-	.kadence-icon-picker-selection-value {
+.kadence-icon-picker-theme-dividers .kadence-icon-picker-link.kadence-icon-picker-selection-toggle .kadence-icon-picker-selection-value {
 	flex-grow: 1;
 }
 
-.kadence-icon-picker-theme-dividers
-	.kadence-icon-picker-link.kadence-icon-picker-selection-toggle
-	.kadence-icon-picker-selection-value
-	svg {
+.kadence-icon-picker-theme-dividers .kadence-icon-picker-link.kadence-icon-picker-selection-toggle .kadence-icon-picker-selection-value svg {
 	max-width: calc(100% - 30px);
 	width: auto;
 	max-height: 30px;
@@ -182,13 +176,13 @@
 
 .upload-svg-modal {
 	.modal-body {
-		padding-left: 32px;
-		padding-right: 32px;
+		padding-left: 16px !important;
+		padding-right: 16px !important;
 	}
 
 	.security-notice {
-		border: 1px solid #ad9d08;
-		background-color: #fdf9d3;
+		border: 1px solid #AD9D08;
+		background-color: #FDF9D3;
 		color: #000;
 		padding: 10px 20px;
 		border-radius: 5px;
@@ -216,6 +210,7 @@
 	.paste-container {
 		text-align: center;
 		margin-bottom: 25px;
+
 	}
 
 	.footer {
@@ -225,13 +220,13 @@
 		padding: 10px 20px;
 	}
 
-	.components-modal__content {
+	.components-modal__content{
 		padding-bottom: 0;
 		padding-left: 0;
 		padding-right: 0;
 	}
 
-	.error-message {
+	.error-message{
 		text-align: center;
 		padding: 15px;
 		font-size: 15px;
@@ -254,7 +249,7 @@
 
 		svg {
 			display: none;
-			fill: #fff;
+			fill: #FFF;
 		}
 	}
 
@@ -268,7 +263,9 @@
 	}
 
 	.kadence-icon-picker-link {
+
 	}
+
 }
 
 .kb-custom-svg:hover {
@@ -280,3 +277,67 @@
 		display: block !important;
 	}
 }
+
+.components-modal__header {
+	padding-left: 16px;
+	padding-right: 16px;
+}
+.kb-icon-block__add-icon-modal-tabs .active-tab {
+	border-bottom: 2px solid #007cba;
+}
+.kb-icon-block__add-icon-modal-tabs .components-tab-panel__tabs {
+	border-bottom: 1px solid #ddd;
+	margin-bottom: 10px;
+}
+
+.svg-search-modal {
+	min-height: 300px;
+
+	.svg-search-modal__results {
+		display: grid;
+		grid-template-columns: repeat(5, 1fr);
+		grid-template-rows: repeat(4, auto);
+		gap: 10px;
+		list-style-type: none;
+		padding: 0;
+		margin: 0;
+
+		li {
+			justify-content: center;
+			align-items: center;
+			border-radius: 4px;
+			cursor: pointer;
+			display: inline-block;
+
+			img {
+				max-width: 100%;
+				height: auto;
+				padding: 25%;
+			}
+		}
+	}
+
+	.svg-search-modal__error {
+		color: red;
+	}
+
+	/* Center the spinner within the container */
+	.svg-search-modal__loading {
+		display: flex; /* Use Flexbox for centering */
+		justify-content: center; /* Horizontally center */
+		align-items: center; /* Vertically center */
+		height: 100px; /* Set height for the loading area */
+	}
+
+	/* Spinner animation to rotate */
+	@keyframes spin {
+		from {
+			transform: rotate(0deg);
+		}
+		to {
+			transform: rotate(360deg);
+		}
+	}
+
+}
+
