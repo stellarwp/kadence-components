@@ -8,7 +8,7 @@ import { plus } from '@wordpress/icons';
 import './editor.scss';
 import SvgAddModal from './svg-add-modal';
 import SvgDeleteModal from './svg-delete-modal';
-import { compareVersions } from '@kadence/helpers';
+import { compareVersions, getBlocksParams, getBlocksParam } from '@kadence/helpers';
 import { chevronDown, closeSmall } from '@wordpress/icons';
 import { default as IconRender } from '../icons/icon-render';
 export default function KadenceIconPicker({
@@ -34,7 +34,7 @@ export default function KadenceIconPicker({
 	const [customSvgTitles, setCustomSvgTitles] = useState([]);
 	const [isLoading, setIsLoading] = useState(false);
 	// Make sure user has pro and the appropriate version that has the rest endpoint to accept SVGs
-	const hasPro = kadence_blocks_params.pro && kadence_blocks_params.pro === 'true' ? true : false;
+	const hasPro = getBlocksParam('pro') === 'true';
 	const proVersion = window?.kbpData ? get(window.kbpData, ['pVersion'], '1.0.0') : '1.0.0';
 	const isSupportedProVersion = compareVersions(proVersion, '2.4.0') >= 0;
 	const toggleVisible = () => {
@@ -78,8 +78,8 @@ export default function KadenceIconPicker({
 		setDeleteId(null);
 	};
 
-	const addCallback = ( postId ) => {
-		onChange('kb-custom-' + postId.toString() );
+	const addCallback = (postId) => {
+		onChange('kb-custom-' + postId.toString());
 		getCustomSvgs(true);
 	};
 
@@ -99,7 +99,7 @@ export default function KadenceIconPicker({
 				return iconNames;
 			}
 		}
-		const svgs = applyFilters('kadence.icon_options_names', kadence_blocks_params.icon_names);
+		const svgs = applyFilters('kadence.icon_options_names', getBlocksParam('icon_names'));
 
 		if (customSvgs.length > 0) {
 			return { [translatedCustomSvgString]: customSvgs, ...svgs };
@@ -108,7 +108,7 @@ export default function KadenceIconPicker({
 		}
 
 		return svgs;
-	}, [kadence_blocks_params.icon_names, icons, customSvgs]);
+	}, [getBlocksParam('icon_names'), icons, customSvgs]);
 
 	const iconOptions = useMemo(() => {
 		return applyFilters('kadence.icon_options', {
@@ -122,7 +122,7 @@ export default function KadenceIconPicker({
 		});
 
 		return [{ value: 'all', label: __('Show All', 'kadence-blocks') }, ...options];
-	}, [kadence_blocks_params.icon_names, iconNames]);
+	}, [getBlocksParam('icon_names'), iconNames]);
 
 	const iconRenderFunc = useCallback(
 		(iconSlug) => {

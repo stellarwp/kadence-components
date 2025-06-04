@@ -7,6 +7,7 @@ import { BaseControl, Button, ExternalLink } from '@wordpress/components';
 import { safeDecodeURI, filterURLForDisplay } from '@wordpress/url';
 import { keyboardReturn, cancelCircleFilled, edit } from '@wordpress/icons';
 import { applyFilters } from '@wordpress/hooks';
+import { getBlocksParams, getBlocksParam } from '@kadence/helpers';
 
 /**
  * Internal dependencies
@@ -39,7 +40,7 @@ class URLExtenalInputControl extends Component {
 		return (
 			<div
 				className={`components-base-control kb-side-link-external kb-side-link-control${
-					dynamicAttribute && kadence_blocks_params.dynamic_enabled ? ' has-dynamic-support' : ''
+					dynamicAttribute && getBlocksParam('dynamic_enabled') ? ' has-dynamic-support' : ''
 				}`}
 			>
 				{label && <label className="components-base-control__label">{label}</label>}
@@ -117,9 +118,7 @@ class URLExtenalInputControl extends Component {
 							/>
 						</BaseControl>
 					)}
-					{dynamicAttribute && kadence_blocks_params.dynamic_enabled && (
-						<DynamicExternalLinkControl {...this.props} />
-					)}
+					{dynamicAttribute && dynamicEnabled && <DynamicExternalLinkControl {...this.props} />}
 				</div>
 			</div>
 		);

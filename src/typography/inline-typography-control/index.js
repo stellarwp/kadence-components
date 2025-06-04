@@ -3,7 +3,7 @@
  *
  */
 
-/* global kadence_blocks_params */
+import { getBlocksParams, getBlocksParam } from '@kadence/helpers';
 
 /**
  * Import External
@@ -44,8 +44,8 @@ class InlineTypographyControls extends Component {
 	}
 	componentDidMount() {
 		const fontsarray =
-			typeof kadence_blocks_params !== 'undefined' && kadence_blocks_params.g_font_names
-				? kadence_blocks_params.g_font_names.map((name) => {
+			typeof getBlocksParams() !== 'undefined' && getBlocksParam('g_font_names')
+				? getBlocksParam('g_font_names').map((name) => {
 						return { label: name, value: name, google: true };
 				  })
 				: {};
@@ -109,22 +109,22 @@ class InlineTypographyControls extends Component {
 				options: fontsarray,
 			},
 		];
-		if (typeof kadence_blocks_params !== 'undefined' && kadence_blocks_params.c_fonts) {
+		if (typeof getBlocksParams() !== 'undefined' && getBlocksParam('c_fonts')) {
 			const newOptions = [];
-			Object.keys(kadence_blocks_params.c_fonts).forEach(function (font) {
-				const name = kadence_blocks_params.c_fonts[font].name;
+			Object.keys(getBlocksParam('c_fonts')).forEach(function (font) {
+				const name = getBlocksParam('c_fonts')[font].name;
 				const weights = [];
-				Object.keys(kadence_blocks_params.c_fonts[font].weights).forEach(function (weight) {
+				Object.keys(getBlocksParam('c_fonts')[font].weights).forEach(function (weight) {
 					weights.push({
-						value: kadence_blocks_params.c_fonts[font].weights[weight],
-						label: kadence_blocks_params.c_fonts[font].weights[weight],
+						value: getBlocksParam('c_fonts')[font].weights[weight],
+						label: getBlocksParam('c_fonts')[font].weights[weight],
 					});
 				});
 				const styles = [];
-				Object.keys(kadence_blocks_params.c_fonts[font].styles).forEach(function (style) {
+				Object.keys(getBlocksParam('c_fonts')[font].styles).forEach(function (style) {
 					styles.push({
-						value: kadence_blocks_params.c_fonts[font].weights[style],
-						label: kadence_blocks_params.c_fonts[font].weights[style],
+						value: getBlocksParam('c_fonts')[font].weights[style],
+						label: getBlocksParam('c_fonts')[font].weights[style],
 					});
 				});
 				newOptions.push({
@@ -144,7 +144,7 @@ class InlineTypographyControls extends Component {
 			];
 			options = custom_fonts.concat(options);
 		}
-		if (typeof kadence_blocks_params !== 'undefined' && kadence_blocks_params?.isKadenceT) {
+		if (typeof getBlocksParams() !== 'undefined' && getBlocksParam('isKadenceT')) {
 			const themeOptions = [
 				{
 					label: 'Inherit Heading Font Family',
@@ -171,9 +171,7 @@ class InlineTypographyControls extends Component {
 			[],
 			typographyOptions.map((option) => option.options)
 		);
-		const blockConfigObject = kadence_blocks_params.configuration
-			? JSON.parse(kadence_blocks_params.configuration)
-			: [];
+		const blockConfigObject = getBlocksParam('configuration') ? JSON.parse(getBlocksParam('configuration')) : [];
 		if (
 			blockConfigObject['kadence/typography'] !== undefined &&
 			typeof blockConfigObject['kadence/typography'] === 'object'
@@ -217,19 +215,18 @@ class InlineTypographyControls extends Component {
 			{ value: 'normal', label: __('Normal', 'kadence-blocks') },
 			{ value: 'italic', label: __('Italic', 'kadence-blocks') },
 		];
-		const isKadenceT =
-			typeof kadence_blocks_params !== 'undefined' && kadence_blocks_params.isKadenceT ? true : false;
+		const isKadenceT = typeof getBlocksParams() !== 'undefined' && getBlocksParam('isKadenceT') ? true : false;
 		const headingWeights =
-			typeof kadence_blocks_params !== 'undefined' && kadence_blocks_params.headingWeights
-				? kadence_blocks_params.headingWeights
+			typeof getBlocksParams() !== 'undefined' && getBlocksParam('headingWeights')
+				? getBlocksParam('headingWeights')
 				: [];
 		const bodyWeights =
-			typeof kadence_blocks_params !== 'undefined' && kadence_blocks_params.bodyWeights
-				? kadence_blocks_params.bodyWeights
+			typeof getBlocksParams() !== 'undefined' && getBlocksParam('bodyWeights')
+				? getBlocksParam('bodyWeights')
 				: [];
 		const buttonWeights =
-			typeof kadence_blocks_params !== 'undefined' && kadence_blocks_params.buttonWeights
-				? kadence_blocks_params.buttonWeights
+			typeof getBlocksParams() !== 'undefined' && getBlocksParam('buttonWeights')
+				? getBlocksParam('buttonWeights')
 				: [];
 		if (
 			isKadenceT &&
@@ -284,19 +281,19 @@ class InlineTypographyControls extends Component {
 		} else if (
 			this.props.googleFont &&
 			this.props.fontFamily &&
-			typeof kadence_blocks_params !== 'undefined' &&
-			kadence_blocks_params.g_fonts &&
-			kadence_blocks_params.g_fonts[this.props.fontFamily]
+			typeof getBlocksParams() !== 'undefined' &&
+			getBlocksParam('g_fonts') &&
+			getBlocksParam('g_fonts')[this.props.fontFamily]
 		) {
-			fontStandardWeights = kadence_blocks_params.g_fonts[this.props.fontFamily].w.map((opt) => ({
+			fontStandardWeights = getBlocksParam('g_fonts')[this.props.fontFamily].w.map((opt) => ({
 				label: capitalizeFirstLetter(opt),
 				value: opt,
 			}));
-			fontStandardStyles = kadence_blocks_params.g_fonts[this.props.fontFamily].i.map((opt) => ({
+			fontStandardStyles = getBlocksParam('g_fonts')[this.props.fontFamily].i.map((opt) => ({
 				label: capitalizeFirstLetter(opt),
 				value: opt,
 			}));
-			typographySubsets = kadence_blocks_params.g_fonts[this.props.fontFamily].s.map((opt) => ({
+			typographySubsets = getBlocksParam('g_fonts')[this.props.fontFamily].s.map((opt) => ({
 				label: capitalizeFirstLetter(opt),
 				value: opt,
 			}));
@@ -471,27 +468,27 @@ class InlineTypographyControls extends Component {
 				let subset;
 				if (selected.google) {
 					if (
-						typeof kadence_blocks_params !== 'undefined' &&
-						kadence_blocks_params.g_fonts &&
-						!kadence_blocks_params.g_fonts[selected.value].v.includes('regular')
+						typeof getBlocksParams() !== 'undefined' &&
+						getBlocksParam('g_fonts') &&
+						!getBlocksParam('g_fonts')[selected.value].v.includes('regular')
 					) {
-						variant = kadence_blocks_params.g_fonts[selected.value].v[0];
+						variant = getBlocksParam('g_fonts')[selected.value].v[0];
 					} else {
 						variant = 'regular';
 					}
 					if (
-						typeof kadence_blocks_params !== 'undefined' &&
-						kadence_blocks_params.g_fonts &&
-						!kadence_blocks_params.g_fonts[selected.value].w.includes('regular')
+						typeof getBlocksParams() !== 'undefined' &&
+						getBlocksParam('g_fonts') &&
+						!getBlocksParam('g_fonts')[selected.value].w.includes('regular')
 					) {
-						weight = kadence_blocks_params.g_fonts[selected.value].w[0];
+						weight = getBlocksParam('g_fonts')[selected.value].w[0];
 					} else {
 						weight = '400';
 					}
 					if (
-						typeof kadence_blocks_params !== 'undefined' &&
-						kadence_blocks_params.g_fonts &&
-						kadence_blocks_params.g_fonts[selected.value].s.length > 1
+						typeof getBlocksParams() !== 'undefined' &&
+						getBlocksParam('g_fonts') &&
+						getBlocksParam('g_fonts')[selected.value].s.length > 1
 					) {
 						subset = 'latin';
 					} else {

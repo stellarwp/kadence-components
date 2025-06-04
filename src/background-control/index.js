@@ -7,6 +7,7 @@
  */
 import { get, map } from 'lodash';
 import classnames from 'classnames';
+import { getBlocksParam } from '@kadence/helpers';
 
 /**
  * Import Css
@@ -87,7 +88,7 @@ class BackgroundControl extends Component {
 							allowedTypes={ALLOWED_MEDIA_TYPES}
 							disableMediaButtons={disableMediaButtons}
 							dynamicControl={
-								dynamicAttribute && kadence_blocks_params.dynamic_enabled ? (
+								dynamicAttribute && getBlocksParam('dynamic_enabled') ? (
 									<DynamicBackgroundControl {...this.props} />
 								) : undefined
 							}
@@ -98,7 +99,7 @@ class BackgroundControl extends Component {
 					<Fragment>
 						{label && <div class="components-kadence-image-background__label">{label}</div>}
 						{dynamicAttribute &&
-						kadence_blocks_params.dynamic_enabled &&
+						getBlocksParam('dynamic_enabled') &&
 						attributes.kadenceDynamic &&
 						attributes.kadenceDynamic[dynamicAttribute] &&
 						attributes.kadenceDynamic[dynamicAttribute].enable ? (
@@ -132,7 +133,7 @@ class BackgroundControl extends Component {
 									}
 									onClick={() => onRemoveImage()}
 								/>
-								{dynamicAttribute && kadence_blocks_params.dynamic_enabled && (
+								{dynamicAttribute && getBlocksParam('dynamic_enabled') && (
 									<DynamicBackgroundControl {...this.props} />
 								)}
 							</Fragment>

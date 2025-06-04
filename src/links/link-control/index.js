@@ -9,6 +9,7 @@ import { __ } from '@wordpress/i18n';
 import { Fragment, Component } from '@wordpress/element';
 import { ToggleControl, TextControl, SelectControl } from '@wordpress/components';
 import { LEFT, RIGHT, UP, DOWN, BACKSPACE, ENTER } from '@wordpress/keycodes';
+import { getBlocksParams, getBlocksParam } from '@kadence/helpers';
 /**
  * Import Css
  */
@@ -169,7 +170,7 @@ class URLInputControl extends Component {
 		return (
 			<div
 				className={`components-base-control kb-side-link-control${
-					dynamicAttribute && kadence_blocks_params.dynamic_enabled ? ' has-dynamic-support' : ''
+					dynamicAttribute && getBlocksParam('dynamic_enabled') ? ' has-dynamic-support' : ''
 				}`}
 			>
 				{label && <label className="components-base-control__label">{label}</label>}
@@ -185,15 +186,15 @@ class URLInputControl extends Component {
 					allowClear={allowClear}
 					{...this.props}
 				/>
-				{ onChangeTitle && (
+				{onChangeTitle && (
 					<TextControl
-						label={ __( 'Title', 'kadence-blocks' ) }
-						onChange={ onSetLinkTitle }
-						value={ linkTitle }
-						style={ url  && !linkTitle ? { backgroundColor: 'rgba(255, 255, 0, 0.5)' } : {} }
-						placeholder={ url  && !linkTitle ? __( 'Add a Title', 'kadence-blocks' ) : '' }
+						label={__('Title', 'kadence-blocks')}
+						onChange={onSetLinkTitle}
+						value={linkTitle}
+						style={url && !linkTitle ? { backgroundColor: 'rgba(255, 255, 0, 0.5)' } : {}}
+						placeholder={url && !linkTitle ? __('Add a Title', 'kadence-blocks') : ''}
 					/>
-				) }
+				)}
 			</div>
 		);
 	}

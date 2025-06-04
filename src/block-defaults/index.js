@@ -7,7 +7,7 @@ import { useDispatch } from '@wordpress/data';
 import { store as noticesStore } from '@wordpress/notices';
 import { Button, Modal, __experimentalConfirmDialog as ConfirmDialog } from '@wordpress/components';
 import apiFetch from '@wordpress/api-fetch';
-import { SafeParseJSON, getTransferableAttributes } from '@kadence/helpers';
+import { SafeParseJSON, getTransferableAttributes, getBlocksParam } from '@kadence/helpers';
 /**
  * Display Kadence Block Default settings -- intended for use in Inspector Controls.
  *
@@ -27,18 +27,18 @@ export default function KadenceBlockDefaults({
 	excludedAttrs = [],
 	preventMultiple = [],
 }) {
-	const [user, setUser] = useState(kadence_blocks_params.userrole ? kadence_blocks_params.userrole : 'admin');
+	const [user, setUser] = useState(getBlocksParam('userrole', 'admin'));
 	if (user !== 'admin') {
 		return null;
 	}
 
-	const {createErrorNotice, createSuccessNotice} = useDispatch(noticesStore);
+	const { createErrorNotice, createSuccessNotice } = useDispatch(noticesStore);
 
 	const [isOpenResetConfirm, setIsOpenResetConfirm] = useState(false);
 	const [isOpenSaveConfirm, setIsOpenSaveConfirm] = useState(false);
 	const [isOpenModify, setIsOpenModify] = useState(false);
 
-	const currentDefaults = SafeParseJSON(get(kadence_blocks_params, ['configuration'], {}), true);
+	const currentDefaults = SafeParseJSON(get(getBlocksParam('configuration', {}), ['configuration'], {}), true);
 	const currentBlockDefaults = get(currentDefaults, blockSlug, {});
 
 	const [tmpDefaults, setTmpDefaults] = useState(currentBlockDefaults);
@@ -50,60 +50,54 @@ export default function KadenceBlockDefaults({
 	};
 
 	const reset = () => {
-		let config = kadence_blocks_params.configuration
-			? SafeParseJSON(kadence_blocks_params.configuration, true)
-			: {};
+		let config = getBlocksParam('configuration') ? SafeParseJSON(getBlocksParam('configuration'), true) : {};
 		config = omit(config, blockSlug);
 
 		apiFetch({
 			path: '/wp/v2/settings',
 			method: 'POST',
-			data: { kadence_blocks_config_blocks: JSON.stringify(config)},
-		} ).then( () => {
-			createSuccessNotice(__('Block default saved', 'kadence-blocks'), {
-                type: 'snackbar',
-            })
-            setIsOpenResetConfirm(false);
-            kadence_blocks_params.configuration = JSON.stringify(config);
-            setTmpDefaults({});
-		});
-
-    }
-
-    const saveAll = () => {
-
-        const newConfig = calculate();
-
-        const config = (kadence_blocks_params.configuration ? SafeParseJSON(kadence_blocks_params.configuration, true) : {});
-        config[blockSlug] = newConfig;
-		apiFetch( {
-			path: '/wp/v2/settings',
-			method: 'POST',
-			data: { kadence_blocks_config_blocks: JSON.stringify(config)},
-		} ).then( () => {
+			data: { kadence_blocks_config_blocks: JSON.stringify(config) },
+		}).then(() => {
 			createSuccessNotice(__('Block default saved', 'kadence-blocks'), {
 				type: 'snackbar',
 			});
 			setIsOpenResetConfirm(false);
-			kadence_blocks_params.configuration = JSON.stringify(config);
+			getBlocksParam('configuration', JSON.stringify(config));
+			setTmpDefaults({});
+		});
+	};
+
+	const saveAll = () => {
+		const newConfig = calculate();
+
+		const config = getBlocksParam('configuration') ? SafeParseJSON(getBlocksParam('configuration'), true) : {};
+		config[blockSlug] = newConfig;
+		apiFetch({
+			path: '/wp/v2/settings',
+			method: 'POST',
+			data: { kadence_blocks_config_blocks: JSON.stringify(config) },
+		}).then(() => {
+			createSuccessNotice(__('Block default saved', 'kadence-blocks'), {
+				type: 'snackbar',
+			});
+			setIsOpenResetConfirm(false);
+			getBlocksParam('configuration', JSON.stringify(config));
 			setTmpDefaults({});
 		});
 	};
 
 	const saveModified = () => {
-		const config = kadence_blocks_params.configuration
-			? SafeParseJSON(kadence_blocks_params.configuration, true)
-			: {};
+		const config = getBlocksParam('configuration') ? SafeParseJSON(getBlocksParam('configuration'), true) : {};
 		config[blockSlug] = tmpDefaults;
 		apiFetch({
 			path: '/wp/v2/settings',
 			method: 'POST',
-			data: { kadence_blocks_config_blocks: JSON.stringify(config)},
-		} ).then( () => {
+			data: { kadence_blocks_config_blocks: JSON.stringify(config) },
+		}).then(() => {
 			createSuccessNotice(__('Block default saved', 'kadence-blocks'), {
 				type: 'snackbar',
 			});
-			kadence_blocks_params.configuration = JSON.stringify(config);
+			getBlocksParam('configuration', JSON.stringify(config));
 		});
 	};
 

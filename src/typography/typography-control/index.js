@@ -3,8 +3,6 @@
  *
  */
 
-/* global kadence_blocks_params */
-
 /**
  * Internal block libraries
  */
@@ -13,7 +11,7 @@ import './editor.scss';
 /**
  * Import External
  */
-import { capitalizeFirstLetter } from '@kadence/helpers';
+import { capitalizeFirstLetter, getBlocksParam } from '@kadence/helpers';
 import RangeControl from '../../range/range-control';
 import ResponsiveFontSizeControl from '../../font-size/responsive';
 import KadenceRadioButtons from '../../common/radio-buttons';
@@ -48,8 +46,8 @@ class TypographyControls extends Component {
 	}
 	componentDidMount() {
 		const fontsarray =
-			typeof kadence_blocks_params !== 'undefined' && kadence_blocks_params.g_font_names
-				? kadence_blocks_params.g_font_names.map((name) => {
+			typeof getBlocksParam('g_font_names') !== 'undefined' && getBlocksParam('g_font_names')
+				? getBlocksParam('g_font_names').map((name) => {
 						return { label: name, value: name, google: true };
 				  })
 				: {};
@@ -113,22 +111,22 @@ class TypographyControls extends Component {
 				options: fontsarray,
 			},
 		];
-		if (typeof kadence_blocks_params !== 'undefined' && kadence_blocks_params.c_fonts) {
+		if (typeof getBlocksParam('c_fonts') !== 'undefined' && getBlocksParam('c_fonts')) {
 			const newOptions = [];
-			Object.keys(kadence_blocks_params.c_fonts).forEach(function (font) {
-				const name = kadence_blocks_params.c_fonts[font].name;
+			Object.keys(getBlocksParam('c_fonts')).forEach(function (font) {
+				const name = getBlocksParam('c_fonts')[font].name;
 				const weights = [];
-				Object.keys(kadence_blocks_params.c_fonts[font].weights).forEach(function (weight) {
+				Object.keys(getBlocksParam('c_fonts')[font].weights).forEach(function (weight) {
 					weights.push({
-						value: kadence_blocks_params.c_fonts[font].weights[weight],
-						label: kadence_blocks_params.c_fonts[font].weights[weight],
+						value: getBlocksParam('c_fonts')[font].weights[weight],
+						label: getBlocksParam('c_fonts')[font].weights[weight],
 					});
 				});
 				const styles = [];
-				Object.keys(kadence_blocks_params.c_fonts[font].styles).forEach(function (style) {
+				Object.keys(getBlocksParam('c_fonts')[font].styles).forEach(function (style) {
 					styles.push({
-						value: kadence_blocks_params.c_fonts[font].weights[style],
-						label: kadence_blocks_params.c_fonts[font].weights[style],
+						value: getBlocksParam('c_fonts')[font].weights[style],
+						label: getBlocksParam('c_fonts')[font].weights[style],
 					});
 				});
 				newOptions.push({
@@ -148,7 +146,7 @@ class TypographyControls extends Component {
 			];
 			options = custom_fonts.concat(options);
 		}
-		if (typeof kadence_blocks_params !== 'undefined' && kadence_blocks_params?.isKadenceT) {
+		if (typeof getBlocksParam('isKadenceT') !== 'undefined' && getBlocksParam('isKadenceT')) {
 			const themeOptions = [
 				{
 					label: 'Inherit Heading Font Family',
@@ -175,9 +173,7 @@ class TypographyControls extends Component {
 			[],
 			typographyOptions.map((option) => option.options)
 		);
-		const blockConfigObject = kadence_blocks_params.configuration
-			? JSON.parse(kadence_blocks_params.configuration)
-			: [];
+		const blockConfigObject = getBlocksParam('configuration') ? JSON.parse(getBlocksParam('configuration')) : {};
 		if (
 			blockConfigObject['kadence/typography'] !== undefined &&
 			typeof blockConfigObject['kadence/typography'] === 'object'
@@ -218,18 +214,18 @@ class TypographyControls extends Component {
 			{ value: '900', label: __('Ultra-Bold 900', 'kadence-blocks') },
 		];
 		const isKadenceT =
-			typeof kadence_blocks_params !== 'undefined' && kadence_blocks_params.isKadenceT ? true : false;
+			typeof getBlocksParam('isKadenceT') !== 'undefined' && getBlocksParam('isKadenceT') ? true : false;
 		const headingWeights =
-			typeof kadence_blocks_params !== 'undefined' && kadence_blocks_params.headingWeights
-				? kadence_blocks_params.headingWeights
+			typeof getBlocksParam('headingWeights') !== 'undefined' && getBlocksParam('headingWeights')
+				? getBlocksParam('headingWeights')
 				: [];
 		const bodyWeights =
-			typeof kadence_blocks_params !== 'undefined' && kadence_blocks_params.bodyWeights
-				? kadence_blocks_params.bodyWeights
+			typeof getBlocksParam('bodyWeights') !== 'undefined' && getBlocksParam('bodyWeights')
+				? getBlocksParam('bodyWeights')
 				: [];
 		const buttonWeights =
-			typeof kadence_blocks_params !== 'undefined' && kadence_blocks_params.buttonWeights
-				? kadence_blocks_params.buttonWeights
+			typeof getBlocksParam('buttonWeights') !== 'undefined' && getBlocksParam('buttonWeights')
+				? getBlocksParam('buttonWeights')
 				: [];
 		if (
 			isKadenceT &&
@@ -288,19 +284,18 @@ class TypographyControls extends Component {
 		} else if (
 			this.props.googleFont &&
 			this.props.fontFamily &&
-			typeof kadence_blocks_params !== 'undefined' &&
-			kadence_blocks_params.g_fonts &&
-			kadence_blocks_params.g_fonts[this.props.fontFamily]
+			typeof getBlocksParam('g_fonts') !== 'undefined' &&
+			getBlocksParam('g_fonts')[this.props.fontFamily]
 		) {
-			fontStandardWeights = kadence_blocks_params.g_fonts[this.props.fontFamily].w.map((opt) => ({
+			fontStandardWeights = getBlocksParam('g_fonts')[this.props.fontFamily].w.map((opt) => ({
 				label: capitalizeFirstLetter(opt),
 				value: opt,
 			}));
-			fontStandardStyles = kadence_blocks_params.g_fonts[this.props.fontFamily].i.map((opt) => ({
+			fontStandardStyles = getBlocksParam('g_fonts')[this.props.fontFamily].i.map((opt) => ({
 				label: capitalizeFirstLetter(opt),
 				value: opt,
 			}));
-			typographySubsets = kadence_blocks_params.g_fonts[this.props.fontFamily].s.map((opt) => ({
+			typographySubsets = getBlocksParam('g_fonts')[this.props.fontFamily].s.map((opt) => ({
 				label: capitalizeFirstLetter(opt),
 				value: opt,
 			}));
@@ -430,36 +425,36 @@ class TypographyControls extends Component {
 			subset: fontSubset,
 			loadGoogle: loadGoogleFont,
 		};
-		const headingOptions = range( tagLowLevel, tagHighLevel ).map( createhtmlTagControl );
-		if ( otherTags.p ) {
-			headingOptions.push( [
+		const headingOptions = range(tagLowLevel, tagHighLevel).map(createhtmlTagControl);
+		if (otherTags.p) {
+			headingOptions.push([
 				{
-					icon: <HeadingLevelIcon level={ 'p' } isPressed={ ( htmlTag && htmlTag === 'p' ? true : false ) } />,
-					title: __( 'Paragraph', 'kadence-blocks' ),
-					isActive: ( htmlTag && htmlTag === 'p' ? true : false ),
-					onClick: () => onTagLevelHTML( 2, 'p' ),
+					icon: <HeadingLevelIcon level={'p'} isPressed={htmlTag && htmlTag === 'p' ? true : false} />,
+					title: __('Paragraph', 'kadence-blocks'),
+					isActive: htmlTag && htmlTag === 'p' ? true : false,
+					onClick: () => onTagLevelHTML(2, 'p'),
 				},
-			] );
+			]);
 		}
-		if ( otherTags.span ) {
-			headingOptions.push( [
+		if (otherTags.span) {
+			headingOptions.push([
 				{
-					icon: <HeadingLevelIcon level={ 'span' } isPressed={ ( htmlTag && htmlTag === 'span' ? true : false ) } />,
-					title: __( 'Span', 'kadence-blocks' ),
-					isActive: ( htmlTag && htmlTag === 'span' ? true : false ),
-					onClick: () => onTagLevelHTML( 2, 'span' ),
+					icon: <HeadingLevelIcon level={'span'} isPressed={htmlTag && htmlTag === 'span' ? true : false} />,
+					title: __('Span', 'kadence-blocks'),
+					isActive: htmlTag && htmlTag === 'span' ? true : false,
+					onClick: () => onTagLevelHTML(2, 'span'),
 				},
-			] );
+			]);
 		}
-		if ( otherTags.div ) {
-			headingOptions.push( [
+		if (otherTags.div) {
+			headingOptions.push([
 				{
-					icon: <HeadingLevelIcon level={ 'div' } isPressed={ ( htmlTag && htmlTag === 'div' ? true : false ) } />,
-					title: __( 'Div', 'kadence-blocks' ),
-					isActive: ( htmlTag && htmlTag === 'div' ? true : false ),
-					onClick: () => onTagLevelHTML( 2, 'div' ),
+					icon: <HeadingLevelIcon level={'div'} isPressed={htmlTag && htmlTag === 'div' ? true : false} />,
+					title: __('Div', 'kadence-blocks'),
+					isActive: htmlTag && htmlTag === 'div' ? true : false,
+					onClick: () => onTagLevelHTML(2, 'div'),
 				},
-			] );
+			]);
 		}
 
 		const onTypoFontChange = (select) => {
@@ -471,27 +466,27 @@ class TypographyControls extends Component {
 				let subset;
 				if (select.google) {
 					if (
-						typeof kadence_blocks_params !== 'undefined' &&
-						kadence_blocks_params.g_fonts &&
-						!kadence_blocks_params.g_fonts[select.value].v.includes('regular')
+						typeof getBlocksParam('g_fonts') !== 'undefined' &&
+						getBlocksParam('g_fonts') &&
+						!getBlocksParam('g_fonts')[select.value].v.includes('regular')
 					) {
-						variant = kadence_blocks_params.g_fonts[select.value].v[0];
+						variant = getBlocksParam('g_fonts')[select.value].v[0];
 					} else {
 						variant = 'regular';
 					}
 					if (
-						typeof kadence_blocks_params !== 'undefined' &&
-						kadence_blocks_params.g_fonts &&
-						!kadence_blocks_params.g_fonts[select.value].w.includes('regular')
+						typeof getBlocksParam('g_fonts') !== 'undefined' &&
+						getBlocksParam('g_fonts') &&
+						!getBlocksParam('g_fonts')[select.value].w.includes('regular')
 					) {
-						weight = kadence_blocks_params.g_fonts[select.value].w[0];
+						weight = getBlocksParam('g_fonts')[select.value].w[0];
 					} else {
 						weight = '400';
 					}
 					if (
-						typeof kadence_blocks_params !== 'undefined' &&
-						kadence_blocks_params.g_fonts &&
-						kadence_blocks_params.g_fonts[select.value].s.length > 1
+						typeof getBlocksParam('g_fonts') !== 'undefined' &&
+						getBlocksParam('g_fonts') &&
+						getBlocksParam('g_fonts')[select.value].s.length > 1
 					) {
 						subset = 'latin';
 					} else {
@@ -609,28 +604,26 @@ class TypographyControls extends Component {
 			{ value: 'lowercase', label: __('ab', 'kadence-blocks'), tooltip: __('Lowercase', 'kadence-blocks') },
 			{ value: 'capitalize', label: __('Ab', 'kadence-blocks'), tooltip: __('Capitalize', 'kadence-blocks') },
 		];
-		const fontMin = ( fontSizeType !== 'px' ? 0.2 : 5 );
-		const fontMax = ( fontSizeType !== 'px' ? 120 : 3000 );
-		const fontStep = ( fontSizeType !== 'px' ? 0.001 : 1 );
-		const lineMin = ( lineHeightType !== 'px' ? 0.2 : 5 );
-		const lineMax = ( lineHeightType !== 'px' ? 120 : 3000 );
-		const lineStep = ( lineHeightType !== 'px' ? 0.001 : 1 );
-		const usingReg = typographyWeights.some(function(el) {
+		const fontMin = fontSizeType !== 'px' ? 0.2 : 5;
+		const fontMax = fontSizeType !== 'px' ? 120 : 3000;
+		const fontStep = fontSizeType !== 'px' ? 0.001 : 1;
+		const lineMin = lineHeightType !== 'px' ? 0.2 : 5;
+		const lineMax = lineHeightType !== 'px' ? 120 : 3000;
+		const lineStep = lineHeightType !== 'px' ? 0.001 : 1;
+		const usingReg = typographyWeights.some(function (el) {
 			return el.value === 'regular';
 		});
 
 		return (
 			<>
-				<div className={ 'components-base-control kb-typography-control' }>
-					{ label && (
-						<div className='kadence-title-bar kadence-component__header'>
-							<label
-								className="kadence-heading-fontfamily-title components-typography-control__label kadence-component__header__title"
-							>
-								{ label }
+				<div className={'components-base-control kb-typography-control'}>
+					{label && (
+						<div className="kadence-title-bar kadence-component__header">
+							<label className="kadence-heading-fontfamily-title components-typography-control__label kadence-component__header__title">
+								{label}
 							</label>
 						</div>
-					) }
+					)}
 					<div className="kadence-title-bar">
 						{label && (
 							<h2 className="kt-heading-fontfamily-title">{label}</h2>

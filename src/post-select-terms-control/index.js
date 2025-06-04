@@ -8,6 +8,7 @@ import { useState, useRef, useEffect } from '@wordpress/element';
 import { Spinner } from '@wordpress/components';
 import { addQueryArgs } from '@wordpress/url';
 import apiFetch from '@wordpress/api-fetch';
+import { getBlocksParams, getBlocksParam } from '@kadence/helpers';
 
 export default function KadencePostSelectTerms({ value, onChange, source, isMulti = false, termOnly = false }) {
 	const [isLoading, setIsLoading] = useState(true);
@@ -24,12 +25,9 @@ export default function KadencePostSelectTerms({ value, onChange, source, isMult
 			: value;
 
 	useEffect(() => {
-		if (
-			source &&
-			typeof window.kadence_blocks_params.taxonomies[source] != 'undefined' &&
-			window.kadence_blocks_params.taxonomies[source]
-		) {
-			setTerms(Array.from(window.kadence_blocks_params.taxonomies[source]));
+		const taxonomies = getBlocksParams('taxonomies', {});
+		if (source && typeof taxonomies[source] != 'undefined' && taxonomies[source]) {
+			setTerms(Array.from(taxonomies[source]));
 			setIsLoading(false);
 		} else {
 			const options = {
@@ -39,22 +37,22 @@ export default function KadencePostSelectTerms({ value, onChange, source, isMult
 			};
 			setIsLoading(true);
 			apiFetch({
-				path: addQueryArgs(window.kadence_blocks_params.termEndpoint, options),
+				path: addQueryArgs(getBlocksParam('termEndpoint'), options),
 			})
 				.then((taxonomyItems) => {
 					if (!taxonomyItems) {
 						setTerms([]);
-						window.kadence_blocks_params.taxonomies[source] = [];
+						taxonomies[source] = [];
 					} else {
 						setTerms(taxonomyItems);
-						window.kadence_blocks_params.taxonomies[source] = taxonomyItems;
+						taxonomies[source] = taxonomyItems;
 					}
 					setIsLoading(false);
 				})
 				.catch(() => {
 					setIsLoading(false);
 					setTerms([]);
-					window.kadence_blocks_params.taxonomies[source] = [];
+					taxonomies[source] = [];
 				});
 		}
 	}, [source]);

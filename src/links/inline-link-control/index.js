@@ -9,6 +9,7 @@ import { __ } from '@wordpress/i18n';
 import { Fragment, Component } from '@wordpress/element';
 import { ToggleControl, Popover, TextControl, SelectControl } from '@wordpress/components';
 import { LEFT, RIGHT, UP, DOWN, BACKSPACE, ENTER } from '@wordpress/keycodes';
+import { getBlocksParams, getBlocksParam } from '@kadence/helpers';
 /**
  * Import Css
  */
@@ -102,14 +103,14 @@ class URLInputInline extends Component {
 						{changeTargetType && (
 							<Fragment>
 								<SelectControl
-									label={ __( 'Link Target', 'kadence-blocks-pro' ) }
-									value={ opensInNewTab }
-									options={ [
-										{ value: '_self', label: __( 'Same Tab/Window', 'kadence-blocks-pro' ) },
-										{ value: '_blank', label: __( 'Open in New Tab', 'kadence-blocks-pro' ) },
-										{ value: 'video', label: __( 'Video Popup', 'kadence-blocks-pro' ) },
-									] }
-									onChange={ onSetNewTab }
+									label={__('Link Target', 'kadence-blocks-pro')}
+									value={opensInNewTab}
+									options={[
+										{ value: '_self', label: __('Same Tab/Window', 'kadence-blocks-pro') },
+										{ value: '_blank', label: __('Open in New Tab', 'kadence-blocks-pro') },
+										{ value: 'video', label: __('Video Popup', 'kadence-blocks-pro') },
+									]}
+									onChange={onSetNewTab}
 								/>
 								{opensInNewTab === 'video' && (
 									<p>
@@ -165,7 +166,7 @@ class URLInputInline extends Component {
 			<Popover className="kb-popover-link-popover" position="bottom center">
 				<div
 					className={`components-base-control kb-popover-link-control kb-side-link-control${
-						dynamicAttribute && kadence_blocks_params.dynamic_enabled ? ' has-dynamic-support' : ''
+						dynamicAttribute && getBlocksParam('dynamic_enabled') ? ' has-dynamic-support' : ''
 					}`}
 				>
 					<InputSearch

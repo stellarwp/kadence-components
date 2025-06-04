@@ -19,6 +19,8 @@ import { Fragment, Component } from '@wordpress/element';
 import { MediaUpload } from '@wordpress/block-editor';
 import { Button } from '@wordpress/components';
 import { image, closeSmall, plusCircleFilled } from '@wordpress/icons';
+import { getBlocksParams, getBlocksParam } from '@kadence/helpers';
+
 const ALLOWED_MEDIA_TYPES = ['image'];
 /**
  * Basic Image Control.
@@ -54,7 +56,7 @@ class KadenceImageControl extends Component {
 							allowedTypes={ALLOWED_MEDIA_TYPES}
 							disableMediaButtons={disableMediaButtons}
 							dynamicControl={
-								dynamicAttribute && kadence_blocks_params.dynamic_enabled ? (
+								dynamicAttribute && getBlocksParam('dynamic_enabled') ? (
 									<DynamicImageControl {...this.props} />
 								) : undefined
 							}
@@ -65,7 +67,7 @@ class KadenceImageControl extends Component {
 					<Fragment>
 						{label && <div class="components-kadence-image-background__label">{label}</div>}
 						{dynamicAttribute &&
-						kadence_blocks_params.dynamic_enabled &&
+						getBlocksParam('dynamic_enabled') &&
 						kadenceDynamic &&
 						kadenceDynamic[dynamicAttribute] &&
 						kadenceDynamic[dynamicAttribute].enable ? (
@@ -105,7 +107,7 @@ class KadenceImageControl extends Component {
 									}
 									onClick={() => onRemoveImage()}
 								/>
-								{dynamicAttribute && kadence_blocks_params.dynamic_enabled && (
+								{dynamicAttribute && getBlocksParam('dynamic_enabled') && (
 									<DynamicImageControl {...this.props} />
 								)}
 							</Fragment>

@@ -14,6 +14,7 @@ import { applyFilters } from '@wordpress/hooks';
 import { UP, DOWN, ENTER, TAB } from '@wordpress/keycodes';
 import { BaseControl, Button, Spinner, ToggleControl, ExternalLink } from '@wordpress/components';
 import { withInstanceId, withSafeTimeout, compose } from '@wordpress/compose';
+import { getBlocksParams, getBlocksParam } from '@kadence/helpers';
 import DynamicLinkControl from '../dynamic-link-control';
 import TextHighlight from '../text-highlight';
 import fetchSearchResults from '../../links/get-post-search-results';
@@ -338,9 +339,7 @@ class InputSearch extends Component {
 							/>
 						</BaseControl>
 					)}
-					{dynamicAttribute && kadence_blocks_params.dynamic_enabled && (
-						<DynamicLinkControl {...this.props} />
-					)}
+					{dynamicAttribute && getBlocksParam('dynamic_enabled') && <DynamicLinkControl {...this.props} />}
 					{additionalControls && (
 						<Button
 							className="kb-link-settings-toggle"

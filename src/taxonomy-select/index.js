@@ -11,7 +11,7 @@ import apiFetch from '@wordpress/api-fetch';
 import KadencePostSelectTerms from '../post-select-terms-control';
 import { useInstanceId } from '@wordpress/compose';
 import { isArrayLike, has, isEmpty } from 'lodash';
-import { tryParseJSON } from '@kadence/helpers';
+import { tryParseJSON, getBlocksParams, getBlocksParam } from '@kadence/helpers';
 
 export default function TaxonomySelect({
 	label,
@@ -56,7 +56,7 @@ export default function TaxonomySelect({
 		};
 		setIsLoading(true);
 		apiFetch({
-			path: addQueryArgs(window.kadence_blocks_params.taxonomiesEndpoint, options),
+			path: addQueryArgs(getBlocksParam('taxonomiesEndpoint'), options),
 		})
 			.then((taxonomyItems) => {
 				if (!taxonomyItems) {
