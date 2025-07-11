@@ -83,13 +83,14 @@
 		height: 36px;
 	}
 	&.has-dynamic-support .kb-search-selection-name {
-		max-width: calc(100% - 60px);
+		flex-grow: 1;
 	}
 	.kb-side-link-control-inner-row {
 		display: flex;
 		max-width: 100%;
 		.components-button.has-icon {
 			border: 1px solid var(--kb-border-color, #859cb6);
+			border-left: 0;
 			height: 38px;
 			border-radius: 0;
 		}
@@ -179,7 +180,6 @@
 }
 .kb-side-link-control .kb-side-link-control-inner-row .components-button.kb-dynamic-url-sidebar.has-icon {
 	border-left: 0;
-	border-right: 0;
 }
 .kb-side-link-control.kb-side-link-external
 	.kb-side-link-control-inner-row
