@@ -52,6 +52,7 @@ class URLInputControl extends Component {
 			changeTargetType = false,
 			allowClear = false,
 			dynamicAttribute = '',
+			linkTitleLabel = '',
 		} = this.props;
 		const { urlInput, isEditingLink, isSettingsExpanded } = this.state;
 		const stopPropagation = (event) => {
@@ -185,15 +186,15 @@ class URLInputControl extends Component {
 					allowClear={allowClear}
 					{...this.props}
 				/>
-				{ onChangeTitle && (
+				{onChangeTitle && (
 					<TextControl
-						label={ __( 'Title', 'kadence-blocks' ) }
-						onChange={ onSetLinkTitle }
-						value={ linkTitle }
-						style={ url  && !linkTitle ? { backgroundColor: 'rgba(255, 255, 0, 0.5)' } : {} }
-						placeholder={ url  && !linkTitle ? __( 'Add a Title', 'kadence-blocks' ) : '' }
+						label={linkTitleLabel ? linkTitleLabel : __('Title', 'kadence-blocks')}
+						onChange={onSetLinkTitle}
+						value={linkTitle}
+						style={url && !linkTitle ? { backgroundColor: 'rgba(255, 255, 0, 0.5)' } : {}}
+						placeholder={url && !linkTitle ? __('Add a Title', 'kadence-blocks') : ''}
 					/>
-				) }
+				)}
 			</div>
 		);
 	}
