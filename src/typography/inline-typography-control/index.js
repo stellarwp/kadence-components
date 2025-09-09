@@ -111,8 +111,10 @@ class InlineTypographyControls extends Component {
 		];
 		if (typeof getBlocksParams() !== 'undefined' && getBlocksParam('c_fonts')) {
 			const newOptions = [];
+
 			Object.keys(getBlocksParam('c_fonts')).forEach(function (font) {
 				const name = getBlocksParam('c_fonts')[font].name;
+				const label = getBlocksParam('c_fonts')[font].label ? getBlocksParam('c_fonts')[font].label : name;
 				const weights = [];
 				Object.keys(getBlocksParam('c_fonts')[font].weights).forEach(function (weight) {
 					weights.push({
@@ -128,7 +130,7 @@ class InlineTypographyControls extends Component {
 					});
 				});
 				newOptions.push({
-					label: name,
+					label: label,
 					value: name,
 					google: false,
 					weights: weights,
