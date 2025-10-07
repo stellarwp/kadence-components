@@ -8,7 +8,8 @@
 	},
 	"dependencies": {
 		"@floating-ui/react": "^0.26.16",
-		"react-container-dimensions": "^1.4.1"
+		"react-container-dimensions": "^1.4.1",
+		"react-intersection-observer": "^9.5.3"
 	},
 	"devDependencies": {
 		"@wordpress/prettier-config": "^2.25.13",
