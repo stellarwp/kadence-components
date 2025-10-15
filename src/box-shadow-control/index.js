@@ -21,9 +21,7 @@ import {
  * Import Css
  */
 import './editor.scss';
-import {
-	shadowPresetNone,
-} from "../../../icons/src";
+import { shadowPresetNone } from '@kadence/icons';
 
 /**
  * Build the BoxShadow controls

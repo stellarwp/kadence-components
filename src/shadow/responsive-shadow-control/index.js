@@ -22,9 +22,7 @@ import {capitalizeFirstLetter} from '@kadence/helpers';
 import RangeControl from "../../range/range-control";
 import {undo} from "@wordpress/icons";
 import KadenceRadioButtons from "../../common/radio-buttons";
-import {
-	shadowPresetNone,
-} from "../../../../icons/src";
+import { shadowPresetNone } from '@kadence/icons';
 
 /**
  * Build the BoxShadow controls
