@@ -113,7 +113,7 @@ export default function RadioRangeControl({
 							{!disableCustomSizes && (
 								<Button
 									className={'kadence-radio-item radio-custom only-icon'}
-									label={__('Set custom size', 'kadence-blocks')}
+									label={__('Set custom size', '__KADENCE__TEXT__DOMAIN__')}
 									icon={settings}
 									onClick={() => onChange('custom', sizeValue)}
 									isPressed={false}
@@ -147,7 +147,7 @@ export default function RadioRangeControl({
 								) : (
 									<DropdownMenu
 										icon={'%' === unit ? icons.percent : icons[unit]}
-										label={__('Select a Unit', 'kadence-blocks')}
+										label={__('Select a Unit', '__KADENCE__TEXT__DOMAIN__')}
 										controls={units.map((singleUnit) => createLevelControlToolbar(singleUnit))}
 										className={'kadence-units-group'}
 										popoverProps={POPOVER_PROPS}
@@ -159,7 +159,7 @@ export default function RadioRangeControl({
 							<ButtonGroup className="kadence-radio-container-control">
 								<Button
 									className={'kadence-radio-item radio-custom only-icon'}
-									label={__('Use size preset', 'kadence-blocks')}
+									label={__('Use size preset', '__KADENCE__TEXT__DOMAIN__')}
 									icon={settings}
 									isPrimary={true}
 									onClick={() => onChange(defaultValue, sizeValue)}

@@ -76,7 +76,7 @@ export default function SvgSearchModal( {isOpen, setIsOpen, callback} ) {
 			const selectedIcon = allIcons[selectedIndex];
 
 			if (!selectedIcon || !selectedIcon.url) {
-				setError(__("Selected SVG is invalid. Please try again.", "kadence-blocks"));
+				setError(__("Selected SVG is invalid. Please try again.", "__KADENCE__TEXT__DOMAIN__"));
 				return;
 			}
 
@@ -95,21 +95,21 @@ export default function SvgSearchModal( {isOpen, setIsOpen, callback} ) {
 				});
 
 				if (response?.value && response?.label) {
-					createSuccessNotice(__('SVG Saved.', 'kadence-blocks'), {
+					createSuccessNotice(__('SVG Saved.', '__KADENCE__TEXT__DOMAIN__'), {
 						type: 'snackbar',
 					});
 					callback(response.value);
 					setIsOpen(false);
 				} else {
-					throw new Error(__('Invalid response from the server.', 'kadence-blocks'));
+					throw new Error(__('Invalid response from the server.', '__KADENCE__TEXT__DOMAIN__'));
 				}
 			} catch (error) {
-				setError(__('Failed to add the SVG. Please try again.', 'kadence-blocks'));
+				setError(__('Failed to add the SVG. Please try again.', '__KADENCE__TEXT__DOMAIN__'));
 			} finally {
 				setIsAddingIcon(false);
 			}
 		} else {
-			setError(__("No SVG selected", "kadence-blocks"));
+			setError(__("No SVG selected", "__KADENCE__TEXT__DOMAIN__"));
 		}
 	};
 
@@ -144,10 +144,10 @@ export default function SvgSearchModal( {isOpen, setIsOpen, callback} ) {
 		<div className="svg-search-modal">
 			<div className="svg-search-modal__input_row">
 				<TextControl
-					label={__("Search Icons", "kadence-blocks")}
+					label={__("Search Icons", "__KADENCE__TEXT__DOMAIN__")}
 					hideLabelFromVision={true}
 					value={inputValue}
-					placeholder={__("Search Icons", "kadence-blocks")}
+					placeholder={__("Search Icons", "__KADENCE__TEXT__DOMAIN__")}
 					onChange={handleInputChange}
 					onKeyDown={(event) => {
 						if (event.key === "Enter") {
@@ -163,7 +163,7 @@ export default function SvgSearchModal( {isOpen, setIsOpen, callback} ) {
 					isBusy={isLoading}
 					disabled={isLoading || inputValue.length === 0 || isLoadingMore || isAddingIcon}
 				>
-					{__("Search", "kadence-blocks")}
+					{__("Search", "__KADENCE__TEXT__DOMAIN__")}
 				</Button>
 			</div>
 			{isLoading && (
@@ -195,7 +195,7 @@ export default function SvgSearchModal( {isOpen, setIsOpen, callback} ) {
 							isBusy={isLoadingMore}
 							disabled={!hasMore || isAddingIcon}
 						>
-							{__("Load More", "kadence-blocks")}
+							{__("Load More", "__KADENCE__TEXT__DOMAIN__")}
 						</Button>
 						<Button
 							isPrimary={true}
@@ -203,7 +203,7 @@ export default function SvgSearchModal( {isOpen, setIsOpen, callback} ) {
 							disabled={isLoadingMore}
 							onClick={() => handleAddSvg()}
 						>
-							{__("Add", "kadence-blocks")}
+							{__("Add", "__KADENCE__TEXT__DOMAIN__")}
 						</Button>
 					</div>
 				</>
@@ -215,12 +215,12 @@ export default function SvgSearchModal( {isOpen, setIsOpen, callback} ) {
 			)}
 			{!isLoading && !error && (!results || (results.svgs && results.svgs.icons.length === 0)) && (
 				<p className="svg-search-modal__no-results">
-					{__("No results found. Please try a different search.", "kadence-blocks")}
+					{__("No results found. Please try a different search.", "__KADENCE__TEXT__DOMAIN__")}
 				</p>
 			)}
 			{!isLoading && !results.svgs && !error && (
 				<p className="svg-search-modal__start-search">
-					{__("Start Search...", "kadence-blocks")}
+					{__("Start Search...", "__KADENCE__TEXT__DOMAIN__")}
 				</p>
 			)}
 		</div>

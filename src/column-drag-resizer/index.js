@@ -180,7 +180,7 @@ export default function ColumnDragResizer(props) {
 				>
 					<span className="editor-row-controls-container kadence-resize-extra-controls">
 						{columnsUnlocked && (
-							<Tooltip text={__('Switch to 5% step resizing', 'kadence-blocks')}>
+							<Tooltip text={__('Switch to 5% step resizing', '__KADENCE__TEXT__DOMAIN__')}>
 								<Button className="kt-fluid-grid-btn" isSmall onClick={() => onColumnsUnlocked(false)}>
 									{
 										<svg
@@ -200,7 +200,7 @@ export default function ColumnDragResizer(props) {
 							</Tooltip>
 						)}
 						{!columnsUnlocked && (
-							<Tooltip text={__('Switch to fluid resizing', 'kadence-blocks')}>
+							<Tooltip text={__('Switch to fluid resizing', '__KADENCE__TEXT__DOMAIN__')}>
 								<Button className="kt-fluid-grid-btn" isSmall onClick={() => onColumnsUnlocked(true)}>
 									{
 										<svg

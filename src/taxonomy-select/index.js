@@ -99,7 +99,7 @@ export default function TaxonomySelect({
 				menuPortalTarget={document.body}
 				styles={customStyles}
 				maxMenuHeight={200}
-				placeholder={__('Select Taxonomy', 'kadence-blocks-pro')}
+				placeholder={__('Select Taxonomy', '__KADENCE__TEXT__DOMAIN__')}
 				onChange={(val) => {
 					if (taxOnly || termIsOptional) {
 						if (!val) {

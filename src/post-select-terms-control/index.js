@@ -88,7 +88,7 @@ export default function KadencePostSelectTerms({ value, onChange, source, isMult
 				menuPortalTarget={document.body}
 				styles={customStyles}
 				maxMenuHeight={200}
-				placeholder={__('Select Term', 'kadence-blocks-pro')}
+				placeholder={__('Select Term', '__KADENCE__TEXT__DOMAIN__')}
 				onChange={(val) => {
 					if (!val) {
 						onChange('');

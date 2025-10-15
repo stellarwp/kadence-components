@@ -102,12 +102,12 @@ class URLInputInline extends Component {
 						{changeTargetType && (
 							<Fragment>
 								<SelectControl
-									label={ __( 'Link Target', 'kadence-blocks-pro' ) }
+									label={ __( 'Link Target', '__KADENCE__TEXT__DOMAIN__' ) }
 									value={ opensInNewTab }
 									options={ [
-										{ value: '_self', label: __( 'Same Tab/Window', 'kadence-blocks-pro' ) },
-										{ value: '_blank', label: __( 'Open in New Tab', 'kadence-blocks-pro' ) },
-										{ value: 'video', label: __( 'Video Popup', 'kadence-blocks-pro' ) },
+										{ value: '_self', label: __( 'Same Tab/Window', '__KADENCE__TEXT__DOMAIN__' ) },
+										{ value: '_blank', label: __( 'Open in New Tab', '__KADENCE__TEXT__DOMAIN__' ) },
+										{ value: 'video', label: __( 'Video Popup', '__KADENCE__TEXT__DOMAIN__' ) },
 									] }
 									onChange={ onSetNewTab }
 								/>
@@ -115,7 +115,7 @@ class URLInputInline extends Component {
 									<p>
 										{__(
 											'NOTE: Video popup only works with youtube and vimeo links.',
-											'kadence-blocks-pro'
+											'__KADENCE__TEXT__DOMAIN__'
 										)}
 									</p>
 								)}
@@ -123,7 +123,7 @@ class URLInputInline extends Component {
 						)}
 						{!changeTargetType && (
 							<ToggleControl
-								label={__('Open in New Tab', 'kadence-blocks-pro')}
+								label={__('Open in New Tab', '__KADENCE__TEXT__DOMAIN__')}
 								onChange={onSetNewTab}
 								checked={opensInNewTab}
 							/>
@@ -132,28 +132,28 @@ class URLInputInline extends Component {
 				)}
 				{onChangeFollow && (
 					<ToggleControl
-						label={__('No Follow', 'kadence-blocks-pro')}
+						label={__('No Follow', '__KADENCE__TEXT__DOMAIN__')}
 						onChange={onSetLinkNoFollow}
 						checked={linkNoFollow}
 					/>
 				)}
 				{onChangeSponsored && (
 					<ToggleControl
-						label={__('Sponsored', 'kadence-blocks-pro')}
+						label={__('Sponsored', '__KADENCE__TEXT__DOMAIN__')}
 						onChange={onSetLinkSponsored}
 						checked={linkSponsored}
 					/>
 				)}
 				{onChangeDownload && (
 					<ToggleControl
-						label={__('Download', 'kadence-blocks-pro')}
+						label={__('Download', '__KADENCE__TEXT__DOMAIN__')}
 						onChange={onSetLinkDownload}
 						checked={linkDownload}
 					/>
 				)}
 				{onChangeTitle && (
 					<TextControl
-						label={__('Title', 'kadence-blocks-pro')}
+						label={__('Title', '__KADENCE__TEXT__DOMAIN__')}
 						onChange={onSetLinkTitle}
 						value={linkTitle}
 					/>

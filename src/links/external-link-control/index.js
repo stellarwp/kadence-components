@@ -63,7 +63,7 @@ class URLExtenalInputControl extends Component {
 										)}
 										<Button
 											icon={edit}
-											label={__('Edit', 'kadence-blocks-pro')}
+											label={__('Edit', '__KADENCE__TEXT__DOMAIN__')}
 											onClick={() => {
 												this.setState({ isEditing: true });
 											}}
@@ -86,7 +86,7 @@ class URLExtenalInputControl extends Component {
 										allowClear && value ? ' link-input-has-clear' : ''
 									}`}
 									type={'text'}
-									placeholder={__('Paste or type URL', 'kadence-blocks-pro')}
+									placeholder={__('Paste or type URL', '__KADENCE__TEXT__DOMAIN__')}
 									onChange={(event) => onEditLinkChange(event)}
 								/>
 							</div>
@@ -94,7 +94,7 @@ class URLExtenalInputControl extends Component {
 								<Button
 									className="kb-search-url-clear"
 									icon={cancelCircleFilled}
-									label={__('Clear', 'kadence-blocks-pro')}
+									label={__('Clear', '__KADENCE__TEXT__DOMAIN__')}
 									onClick={() => {
 										onSubmitLinkChange('');
 										this.setState({
@@ -106,7 +106,7 @@ class URLExtenalInputControl extends Component {
 							<Button
 								className="kb-search-url-submit"
 								icon={keyboardReturn}
-								label={__('Submit', 'kadence-blocks-pro')}
+								label={__('Submit', '__KADENCE__TEXT__DOMAIN__')}
 								onClick={() => {
 									onSubmitLinkChange(linkEditorValue);
 									this.setState({

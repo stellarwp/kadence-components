@@ -162,7 +162,7 @@ export default function ResponsiveUnitControl({
 					{!compressedDevice && (
 						<ButtonGroup
 							className="kb-responsive-options kb-measure-responsive-options"
-							aria-label={__('Device', 'kadence-blocks')}
+							aria-label={__('Device', '__KADENCE__TEXT__DOMAIN__')}
 						>
 							{map(devices, ({ name, key, title, itemClass }) => (
 								<Button
@@ -183,7 +183,7 @@ export default function ResponsiveUnitControl({
 						<DropdownMenu
 							className="kb-responsive-options-dropdown"
 							icon={icons[deviceType] ? icons[deviceType] : icons.Desktop}
-							label={__('Target Device', 'kadence-blocks')}
+							label={__('Target Device', '__KADENCE__TEXT__DOMAIN__')}
 							controls={devices.map((singleDevice) => createLevelControlToolbar(singleDevice))}
 						/>
 					)}

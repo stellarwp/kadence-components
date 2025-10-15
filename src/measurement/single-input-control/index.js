@@ -86,7 +86,7 @@ export default function MeasurementSingleControl({
 							(preset && Array.isArray(preset) && preset.length > 1 && (
 								<ButtonGroup
 									className="kb-preset-size-options"
-									aria-label={__('Choose a Preset Size', 'kadence-blocks')}
+									aria-label={__('Choose a Preset Size', '__KADENCE__TEXT__DOMAIN__')}
 								>
 									{map(
 										preset && Array.isArray(preset) && preset.length > 1
@@ -114,7 +114,7 @@ export default function MeasurementSingleControl({
 				type="number"
 				className="measure-inputs"
 				disabled={measurement && 'auto' == measurement ? true : false}
-				placeholder={measurement && 'auto' == measurement ? __('auto', 'kadence-blocks') : undefined}
+				placeholder={measurement && 'auto' == measurement ? __('auto', '__KADENCE__TEXT__DOMAIN__') : undefined}
 				value={undefined !== measurement ? measurement : ''}
 				onChange={(value) => onChange(value ? Number(value) : value)}
 				min={min}

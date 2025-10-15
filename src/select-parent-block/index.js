@@ -50,7 +50,7 @@ export default function SelectParentBlock({ clientId, label = null, parentSlug =
 				onClick={() => selectBlock(firstParentClientId)}
 				icon={<BlockIcon icon={blockInformation?.icon} />}
 			>
-				{label ? label : __('View Parent Block Settings', 'kadence-blocks')}
+				{label ? label : __('View Parent Block Settings', '__KADENCE__TEXT__DOMAIN__')}
 			</Button>
 		</div>
 	);

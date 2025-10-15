@@ -67,7 +67,7 @@ export default function SmallResponsiveControl({
 		>
 			<div className="kadence-title-bar">
 				{label && <span className="kadence-control-title">{label}</span>}
-				<ButtonGroup className="kb-small-responsive-options" aria-label={__('Device', 'kadence-blocks')}>
+				<ButtonGroup className="kb-small-responsive-options" aria-label={__('Device', '__KADENCE__TEXT__DOMAIN__')}>
 					{map(devices, ({ name, key, title, itemClass }) => (
 						<Button
 							key={key}

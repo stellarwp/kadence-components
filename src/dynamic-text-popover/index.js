@@ -30,12 +30,12 @@ function DynamicTextPopover() {
 				isPressed={isVisible}
 				aria-haspopup="true"
 				aria-expanded={isVisible}
-				label={__('Dynamic Content', 'kadence-blocks')}
+				label={__('Dynamic Content', '__KADENCE__TEXT__DOMAIN__')}
 				showTooltip={true}
 			/>
 			{isVisible && (
 				<Popover
-					headerTitle={__('Select Dynamic Source', 'kadence-blocks')}
+					headerTitle={__('Select Dynamic Source', '__KADENCE__TEXT__DOMAIN__')}
 					noArrow={false}
 					onClose={debounceToggle}
 					placement="bottom-end"
@@ -44,11 +44,11 @@ function DynamicTextPopover() {
 				>
 					<div className="kb-dynamic-popover-inner-wrap">
 						<div className="kb-pro-notice">
-							<h2>{__('Dynamic Content', 'kadence-blocks')} </h2>
+							<h2>{__('Dynamic Content', '__KADENCE__TEXT__DOMAIN__')} </h2>
 							<p>
 								{__(
 									'Create dynamic sites by populating content from various sources.',
-									'kadence-blocks'
+									'__KADENCE__TEXT__DOMAIN__'
 								)}{' '}
 							</p>
 							<ExternalLink
@@ -56,7 +56,7 @@ function DynamicTextPopover() {
 									'https://www.kadencewp.com/kadence-blocks/pro/?utm_source=in-app&utm_medium=kadence-blocks&utm_campaign=dynamic-content'
 								}
 							>
-								{__('Upgrade to Pro', 'kadence-blocks')}
+								{__('Upgrade to Pro', '__KADENCE__TEXT__DOMAIN__')}
 							</ExternalLink>
 						</div>
 					</div>

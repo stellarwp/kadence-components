@@ -298,9 +298,9 @@ export default function SinglePopColorControl({
 												aria-label={
 													name
 														? // translators: %s: The name of the color e.g: "vivid red".
-														  sprintf(__('Color: %s', 'kadence-blocks'), name)
+														  sprintf(__('Color: %s', '__KADENCE__TEXT__DOMAIN__'), name)
 														: // translators: %s: color hex code e.g: "#f00".
-														  sprintf(__('Color code: %s', 'kadence-blocks'), color)
+														  sprintf(__('Color code: %s', '__KADENCE__TEXT__DOMAIN__'), color)
 												}
 												aria-pressed={isActive}
 											/>

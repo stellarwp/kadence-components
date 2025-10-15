@@ -95,7 +95,7 @@ export default function ResponsiveShadowControl ( {
 	output.Mobile = (
 		<ShadowControl
 			key={'mobile-text-shadow-control'}
-			label={__('Shadow', 'kadence-blocks')}
+			label={__('Shadow', '__KADENCE__TEXT__DOMAIN__')}
 			enable={ enable }
 			color={ color }
 			colorDefault={ colorDefault }
@@ -121,7 +121,7 @@ export default function ResponsiveShadowControl ( {
 	output.Tablet = (
 		<ShadowControl
 			key={'tablet-text-shadow-control'}
-			label={__('Shadow', 'kadence-blocks')}
+			label={__('Shadow', '__KADENCE__TEXT__DOMAIN__')}
 			enable={ enable }
 			color={ color }
 			colorDefault={ colorDefault }
@@ -147,7 +147,7 @@ export default function ResponsiveShadowControl ( {
 	output.Desktop = (
 		<ShadowControl
 			key={'desktop-text-shadow-control'}
-			label={__('Shadow', 'kadence-blocks')}
+			label={__('Shadow', '__KADENCE__TEXT__DOMAIN__')}
 			enable={ enable }
 			color={ color }
 			opacity={ opacity }
@@ -172,14 +172,14 @@ export default function ResponsiveShadowControl ( {
 	);
 
 	const presetOptions = [
-		{ value: 'none', label: __('None', 'kadence-blocks'), icon: shadowPresetNone },
-		{ value: 'soft-inner-glow', label: __('Soft Inner Glow', 'kadence-blocks'), icon: 'soft-inner-glow' },
-		{ value: 'soft-outer-glow', label: __('Soft Outer Glow', 'kadence-blocks'), icon: 'soft-outer-glow' },
-		{ value: 'right-offset-glow', label: __('Right Offset Glow', 'kadence-blocks'), icon: 'right-offset-glow' },
-		{ value: 'bottom-offset-glow', label: __('Bottom Offset Glow', 'kadence-blocks'), icon: 'bottom-offset-glow' },
-		{ value: 'inner-solid', label: __('Inner Solid', 'kadence-blocks'), icon: 'inner-solid' },
-		{ value: 'right-bottom-solid', label: __('Right Bottom Solid', 'kadence-blocks'), icon: 'right-bottom-solid' },
-		{ value: 'top-left-solid', label: __('Top Left Solid', 'kadence-blocks'), icon: 'top-left-solid' },
+		{ value: 'none', label: __('None', '__KADENCE__TEXT__DOMAIN__'), icon: shadowPresetNone },
+		{ value: 'soft-inner-glow', label: __('Soft Inner Glow', '__KADENCE__TEXT__DOMAIN__'), icon: 'soft-inner-glow' },
+		{ value: 'soft-outer-glow', label: __('Soft Outer Glow', '__KADENCE__TEXT__DOMAIN__'), icon: 'soft-outer-glow' },
+		{ value: 'right-offset-glow', label: __('Right Offset Glow', '__KADENCE__TEXT__DOMAIN__'), icon: 'right-offset-glow' },
+		{ value: 'bottom-offset-glow', label: __('Bottom Offset Glow', '__KADENCE__TEXT__DOMAIN__'), icon: 'bottom-offset-glow' },
+		{ value: 'inner-solid', label: __('Inner Solid', '__KADENCE__TEXT__DOMAIN__'), icon: 'inner-solid' },
+		{ value: 'right-bottom-solid', label: __('Right Bottom Solid', '__KADENCE__TEXT__DOMAIN__'), icon: 'right-bottom-solid' },
+		{ value: 'top-left-solid', label: __('Top Left Solid', '__KADENCE__TEXT__DOMAIN__'), icon: 'top-left-solid' },
 	];
 	const presetSettings = {
 		'none': {hOffset: 0, vOffset: 0, blur: 0, spread: 0, inset: false},
@@ -226,7 +226,7 @@ export default function ResponsiveShadowControl ( {
 							) }
 						</span>
 					) }
-					<ButtonGroup className="kb-measure-responsive-options" aria-label={ __( 'Device', 'kadence-blocks' ) }>
+					<ButtonGroup className="kb-measure-responsive-options" aria-label={ __( 'Device', '__KADENCE__TEXT__DOMAIN__' ) }>
 						{ map( devices, ( { name, key, title, itemClass } ) => (
 							<Button
 								key={ key }

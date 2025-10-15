@@ -138,8 +138,8 @@ export default function MeasurementControls({
 									}
 									label={
 										realControl !== 'individual'
-											? __('Individual', 'kadence-blocks')
-											: __('Linked', 'kadence-blocks')
+											? __('Individual', '__KADENCE__TEXT__DOMAIN__')
+											: __('Linked', '__KADENCE__TEXT__DOMAIN__')
 									}
 									icon={realControl !== 'individual' ? linkIcon : unlinkIcon}
 									onClick={() =>
@@ -165,7 +165,7 @@ export default function MeasurementControls({
 							<Fragment>
 								<MeasurementSingleControl
 									placement="top"
-									label={__('Top', 'kadence-blocks')}
+									label={__('Top', '__KADENCE__TEXT__DOMAIN__')}
 									measurement={measurement ? measurement[0] : ''}
 									onChange={(value) =>
 										onChange([
@@ -191,7 +191,7 @@ export default function MeasurementControls({
 								/>
 								<MeasurementSingleControl
 									placement="right"
-									label={__('Right', 'kadence-blocks')}
+									label={__('Right', '__KADENCE__TEXT__DOMAIN__')}
 									measurement={measurement ? measurement[1] : ''}
 									onChange={(value) =>
 										onChange([
@@ -217,7 +217,7 @@ export default function MeasurementControls({
 								/>
 								<MeasurementSingleControl
 									placement="bottom"
-									label={__('Bottom', 'kadence-blocks')}
+									label={__('Bottom', '__KADENCE__TEXT__DOMAIN__')}
 									measurement={measurement ? measurement[2] : ''}
 									onChange={(value) =>
 										onChange([
@@ -243,7 +243,7 @@ export default function MeasurementControls({
 								/>
 								<MeasurementSingleControl
 									placement="left"
-									label={__('Left', 'kadence-blocks')}
+									label={__('Left', '__KADENCE__TEXT__DOMAIN__')}
 									measurement={measurement ? measurement[3] : ''}
 									onChange={(value) =>
 										onChange([

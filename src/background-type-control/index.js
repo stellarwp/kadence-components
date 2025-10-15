@@ -32,22 +32,22 @@ export default function BackgroundTypeControl({ label, type, onChange, allowedTy
 	const defaultTabs = [
 		{
 			key: 'normal',
-			title: __('Classic', 'kadence-blocks'),
+			title: __('Classic', '__KADENCE__TEXT__DOMAIN__'),
 			icon: brush,
 		},
 		{
 			key: 'gradient',
-			title: __('Gradient', 'kadence-blocks'),
+			title: __('Gradient', '__KADENCE__TEXT__DOMAIN__'),
 			icon: gradient,
 		},
 		{
 			key: 'slider',
-			title: __('Slider', 'kadence-blocks'),
+			title: __('Slider', '__KADENCE__TEXT__DOMAIN__'),
 			icon: slider,
 		},
 		{
 			key: 'video',
-			title: __('Video', 'kadence-blocks'),
+			title: __('Video', '__KADENCE__TEXT__DOMAIN__'),
 			icon: video,
 		},
 	];

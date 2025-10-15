@@ -16,8 +16,8 @@ function SelectPostsModal(props) {
 		selectedPosts,
 		onSelect,
 		postType = '',
-		modalTitle = __('Select posts', 'kadence-blocks-pro'),
-		buttonLabel = __('Select posts', 'kadence-blocks-pro'),
+		modalTitle = __('Select posts', '__KADENCE__TEXT__DOMAIN__'),
+		buttonLabel = __('Select posts', '__KADENCE__TEXT__DOMAIN__'),
 		categoryRestBase = 'wp/v2/categories',
 	} = props;
 
@@ -204,7 +204,7 @@ function SelectPostsModal(props) {
 								moveUp(currentIndex, post.id);
 							}}
 							disabled={!canMoveUp}
-							label={__('Move Up', 'kadence-blocks')}
+							label={__('Move Up', '__KADENCE__TEXT__DOMAIN__')}
 							showTooltip={true}
 						>
 							<Dashicon icon="arrow-up" />
@@ -213,7 +213,7 @@ function SelectPostsModal(props) {
 							onClick={() => {
 								moveDown(currentIndex, post.id);
 							}}
-							label={__('Move Down', 'kadence-blocks')}
+							label={__('Move Down', '__KADENCE__TEXT__DOMAIN__')}
 							disabled={!canMoveDown}
 							showTooltip={true}
 						>
@@ -223,7 +223,7 @@ function SelectPostsModal(props) {
 							onClick={() => {
 								updateSelected(post.id);
 							}}
-							label={__('Unselect', 'kadence-blocks')}
+							label={__('Unselect', '__KADENCE__TEXT__DOMAIN__')}
 							showTooltip={true}
 						>
 							<Dashicon icon="no" />
@@ -239,15 +239,15 @@ function SelectPostsModal(props) {
 			<div className={'pagination'}>
 				{!showFilters && (
 					<Button className={'mobile-toggle'} variant={'primary'} onClick={() => setShowFilters(true)}>
-						{__('Show Filters', 'kadence-blocks-pro')}
+						{__('Show Filters', '__KADENCE__TEXT__DOMAIN__')}
 					</Button>
 				)}
 				<Button variant={'secondary'} disabled={page === 1} onClick={() => setPage(page - 1)}>
-					{__('Previous', 'kadence-blocks-pro')}
+					{__('Previous', '__KADENCE__TEXT__DOMAIN__')}
 				</Button>
 				Page {page}
 				<Button variant={'secondary'} disabled={!hasMorePages} onClick={() => setPage(page + 1)}>
-					{__('Next', 'kadence-blocks-pro')}
+					{__('Next', '__KADENCE__TEXT__DOMAIN__')}
 				</Button>
 			</div>
 		);
@@ -276,16 +276,16 @@ function SelectPostsModal(props) {
 							<Flex align="start" justify="space-between" style={{ height: '100%', gap: 0 }}>
 								{window.innerWidth > 767 || (showFilters && window.innerWidth < 767) ? (
 									<FlexItem className={'post-filters'}>
-										<h4>{__('Filter Posts', 'kadence-blocks-pro')}</h4>
+										<h4>{__('Filter Posts', '__KADENCE__TEXT__DOMAIN__')}</h4>
 
 										<TextControl
-											label={__('Search', 'kadence-blocks-pro')}
+											label={__('Search', '__KADENCE__TEXT__DOMAIN__')}
 											value={searchTerm}
 											onChange={(value) => setSearchTerm(value)}
 										/>
 										{showCategoryFilter && (
 											<KadenceSelectTerms
-												placeholder={__('Filter by Category', 'kadence-blocks')}
+												placeholder={__('Filter by Category', '__KADENCE__TEXT__DOMAIN__')}
 												restBase={categoryRestBase}
 												fieldId={'tax-select-category'}
 												value={filterCategories}
@@ -298,7 +298,7 @@ function SelectPostsModal(props) {
 										<br />
 										{showTagFilter && (
 											<KadenceSelectTerms
-												placeholder={__('Filter by Tag', 'kadence-blocks')}
+												placeholder={__('Filter by Tag', '__KADENCE__TEXT__DOMAIN__')}
 												restBase={'wp/v2/tags'}
 												fieldId={'tax-select-tags'}
 												value={filterTags}
@@ -316,7 +316,7 @@ function SelectPostsModal(props) {
 												setShowFilters(false);
 											}}
 										>
-											{__('Filter Posts', 'kadence-blocks-pro')}
+											{__('Filter Posts', '__KADENCE__TEXT__DOMAIN__')}
 										</Button>
 									</FlexItem>
 								) : null}
@@ -342,14 +342,14 @@ function SelectPostsModal(props) {
 
 										{!isLoading && fetchedPosts.length === 0 && (
 											<>
-												<p>{__('No posts found matching filters', 'kadence-blocks-pro')}</p>
+												<p>{__('No posts found matching filters', '__KADENCE__TEXT__DOMAIN__')}</p>
 
 												<Button
 													className={'mobile-toggle'}
 													variant={'primary'}
 													onClick={() => setShowFilters(true)}
 												>
-													{__('Show Filters', 'kadence-blocks-pro')}
+													{__('Show Filters', '__KADENCE__TEXT__DOMAIN__')}
 												</Button>
 											</>
 										)}
@@ -366,7 +366,7 @@ function SelectPostsModal(props) {
 								)}
 
 								{!isLoadingMeta && selectedMeda.length === 0 && (
-									<p>{__('No posts have been selected', 'kadence-blocks-pro')}</p>
+									<p>{__('No posts have been selected', '__KADENCE__TEXT__DOMAIN__')}</p>
 								)}
 
 								{!isLoadingMeta && selectedMeda.length > 0 && (
@@ -389,16 +389,16 @@ function SelectPostsModal(props) {
 								setIsOpen(false);
 							}}
 						>
-							{__('Select', 'kadence-blocks-pro')}
+							{__('Select', '__KADENCE__TEXT__DOMAIN__')}
 						</Button>
 
 						{currentView === 'browse' ? (
 							<Button variant={'secondary'} onClick={() => setCurrentView('selected')}>
-								{__('View Selected', 'kadence-blocks-pro')}
+								{__('View Selected', '__KADENCE__TEXT__DOMAIN__')}
 							</Button>
 						) : (
 							<Button variant={'secondary'} onClick={() => setCurrentView('browse')}>
-								{__('Browse Posts', 'kadence-blocks-pro')}
+								{__('Browse Posts', '__KADENCE__TEXT__DOMAIN__')}
 							</Button>
 						)}
 					</div>

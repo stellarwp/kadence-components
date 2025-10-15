@@ -89,7 +89,7 @@ export default class extends Component {
 					<div className="kadence-pop-color-popovers">
 						<SinglePopColorControl
 							label={
-								this.props.swatchLabel ? this.props.swatchLabel : __('Select Color', 'kadence-blocks')
+								this.props.swatchLabel ? this.props.swatchLabel : __('Select Color', '__KADENCE__TEXT__DOMAIN__')
 							}
 							onChange={(value) => onChange(value)}
 							onOpacityChange={
@@ -115,7 +115,7 @@ export default class extends Component {
 								label={
 									this.props.swatchLabel2
 										? this.props.swatchLabel2
-										: __('Select Color', 'kadence-blocks')
+										: __('Select Color', '__KADENCE__TEXT__DOMAIN__')
 								}
 								onChange={(value) => onChange2(value)}
 								onOpacityChange={
@@ -144,7 +144,7 @@ export default class extends Component {
 								label={
 									this.props.swatchLabel3
 										? this.props.swatchLabel3
-										: __('Select Color', 'kadence-blocks')
+										: __('Select Color', '__KADENCE__TEXT__DOMAIN__')
 								}
 								onChange={(value) => onChange3(value)}
 								onOpacityChange={

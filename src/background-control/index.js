@@ -61,14 +61,14 @@ class BackgroundControl extends Component {
 			attributes,
 		} = this.props;
 		let attachmentOptions = [
-			{ value: 'scroll', label: __('Scroll', 'kadence-blocks') },
-			{ value: 'fixed', label: __('Fixed', 'kadence-blocks') },
+			{ value: 'scroll', label: __('Scroll', '__KADENCE__TEXT__DOMAIN__') },
+			{ value: 'fixed', label: __('Fixed', '__KADENCE__TEXT__DOMAIN__') },
 		];
 		if (imageAttachmentParallax) {
 			attachmentOptions = [
-				{ value: 'scroll', label: __('Scroll', 'kadence-blocks') },
-				{ value: 'fixed', label: __('Fixed', 'kadence-blocks') },
-				{ value: 'parallax', label: __('Parallax', 'kadence-blocks') },
+				{ value: 'scroll', label: __('Scroll', '__KADENCE__TEXT__DOMAIN__') },
+				{ value: 'fixed', label: __('Fixed', '__KADENCE__TEXT__DOMAIN__') },
+				{ value: 'parallax', label: __('Parallax', '__KADENCE__TEXT__DOMAIN__') },
 			];
 		}
 		return (
@@ -79,7 +79,7 @@ class BackgroundControl extends Component {
 						<KadenceMediaPlaceholder
 							labels={''}
 							selectIcon={plusCircleFilled}
-							selectLabel={__('Select Image', 'kadence-blocks')}
+							selectLabel={__('Select Image', '__KADENCE__TEXT__DOMAIN__')}
 							onSelect={(img) => onSaveImage(img)}
 							onSelectURL={(newURL) => onSaveURL(newURL)}
 							accept="image/*"
@@ -120,13 +120,13 @@ class BackgroundControl extends Component {
 											onClick={open}
 											icon={image}
 										>
-											{__('Edit Image', 'kadence-blocks')}
+											{__('Edit Image', '__KADENCE__TEXT__DOMAIN__')}
 										</Button>
 									)}
 								/>
 								<Button
 									icon={closeSmall}
-									label={__('Remove Image', 'kadence-blocks')}
+									label={__('Remove Image', '__KADENCE__TEXT__DOMAIN__')}
 									className={
 										'components-button components-icon-button kt-remove-img kt-cta-upload-btn'
 									}
@@ -143,24 +143,24 @@ class BackgroundControl extends Component {
 							onChange={(value) => onSavePosition(value)}
 						/>
 						<BackgroundSizeControl
-							label={__('Background Image Size', 'kadence-blocks')}
+							label={__('Background Image Size', '__KADENCE__TEXT__DOMAIN__')}
 							value={imageSize ? imageSize : 'cover'}
 							options={[
-								{ value: 'cover', label: __('Cover', 'kadence-blocks') },
-								{ value: 'contain', label: __('Contain', 'kadence-blocks') },
-								{ value: 'auto', label: __('Auto', 'kadence-blocks') },
+								{ value: 'cover', label: __('Cover', '__KADENCE__TEXT__DOMAIN__') },
+								{ value: 'contain', label: __('Contain', '__KADENCE__TEXT__DOMAIN__') },
+								{ value: 'auto', label: __('Auto', '__KADENCE__TEXT__DOMAIN__') },
 							]}
 							onChange={(value) => onSaveSize(value)}
 						/>
 						{(imageSize ? imageSize : 'cover') !== 'cover' && (
 							<KadenceRadioButtons
-								label={__('Background Image Repeat', 'kadence-blocks')}
+								label={__('Background Image Repeat', '__KADENCE__TEXT__DOMAIN__')}
 								value={imageRepeat ? imageRepeat : 'no-repeat'}
 								options={[
-									{ value: 'no-repeat', label: __('No Repeat', 'kadence-blocks') },
-									{ value: 'repeat', label: __('Repeat', 'kadence-blocks') },
-									{ value: 'repeat-x', label: __('Repeat-x', 'kadence-blocks') },
-									{ value: 'repeat-y', label: __('Repeat-y', 'kadence-blocks') },
+									{ value: 'no-repeat', label: __('No Repeat', '__KADENCE__TEXT__DOMAIN__') },
+									{ value: 'repeat', label: __('Repeat', '__KADENCE__TEXT__DOMAIN__') },
+									{ value: 'repeat-x', label: __('Repeat-x', '__KADENCE__TEXT__DOMAIN__') },
+									{ value: 'repeat-y', label: __('Repeat-y', '__KADENCE__TEXT__DOMAIN__') },
 								]}
 								onChange={(value) => onSaveRepeat(value)}
 							/>
@@ -168,7 +168,7 @@ class BackgroundControl extends Component {
 
 						{onSaveAttachment && (
 							<KadenceRadioButtons
-								label={__('Background Image Attachment', 'kadence-blocks')}
+								label={__('Background Image Attachment', '__KADENCE__TEXT__DOMAIN__')}
 								value={imageAttachment ? imageAttachment : 'scroll'}
 								options={attachmentOptions}
 								onChange={(value) => onSaveAttachment(value)}
@@ -176,12 +176,12 @@ class BackgroundControl extends Component {
 						)}
 						{(imageAttachment ? imageAttachment : 'scroll') === 'fixed' && (
 							<p className="kb-sidebar-help">
-								{__('Note: Attachment Fixed works only on desktop.', 'kadence-blocks')}
+								{__('Note: Attachment Fixed works only on desktop.', '__KADENCE__TEXT__DOMAIN__')}
 							</p>
 						)}
 						{onSaveInlineImage && (
 							<ToggleControl
-								label={__('Force Background Image inline?', 'kadence-blocks')}
+								label={__('Force Background Image inline?', '__KADENCE__TEXT__DOMAIN__')}
 								checked={undefined !== inlineImage ? inlineImage : false}
 								onChange={(value) => onSaveInlineImage(value)}
 							/>

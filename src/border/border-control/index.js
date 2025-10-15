@@ -160,8 +160,8 @@ export default function BorderControl({
 								className={'kadence-radio-item border-control-toggle is-single only-icon'}
 								label={
 									realControl !== 'individual'
-										? __('Individual', 'kadence-blocks')
-										: __('Linked', 'kadence-blocks')
+										? __('Individual', '__KADENCE__TEXT__DOMAIN__')
+										: __('Linked', '__KADENCE__TEXT__DOMAIN__')
 								}
 								icon={realControl !== 'individual' ? measureIcons.link : measureIcons.unlink}
 								onClick={() => realSetOnControl(realControl !== 'individual' ? 'individual' : 'linked')}

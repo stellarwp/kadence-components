@@ -53,7 +53,7 @@ class DynamicBackgroundControl extends Component {
 					isPressed={open}
 					aria-haspopup="true"
 					aria-expanded={open}
-					label={__('Dynamic Background Image', 'kadence-blocks')}
+					label={__('Dynamic Background Image', '__KADENCE__TEXT__DOMAIN__')}
 					showTooltip={true}
 				/>
 				{open && (
@@ -67,11 +67,11 @@ class DynamicBackgroundControl extends Component {
 					>
 						<div className="kb-dynamic-popover-inner-wrap">
 							<div className="kb-pro-notice">
-								<h2>{__('Dynamic Background Image', 'kadence-blocks-pro')} </h2>
+								<h2>{__('Dynamic Background Image', '__KADENCE__TEXT__DOMAIN__')} </h2>
 								<p>
 									{__(
 										'Create dynamic sites by populating background images from various sources.',
-										'kadence-blocks-pro'
+										'__KADENCE__TEXT__DOMAIN__'
 									)}{' '}
 								</p>
 								<ExternalLink
@@ -79,7 +79,7 @@ class DynamicBackgroundControl extends Component {
 										'https://www.kadencewp.com/kadence-blocks/pro/?utm_source=in-app&utm_medium=kadence-blocks&utm_campaign=dynamic-content'
 									}
 								>
-									{__('Upgrade to Pro', 'kadence-blocks-pro')}
+									{__('Upgrade to Pro', '__KADENCE__TEXT__DOMAIN__')}
 								</ExternalLink>
 							</div>
 						</div>

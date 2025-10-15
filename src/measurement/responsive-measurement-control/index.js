@@ -111,7 +111,7 @@ export default function ResponsiveMeasurementControls({
 		<MeasurementControls
 			key={2}
 			className="measure-mobile-size"
-			label={subLabel ? __('Mobile:', 'kadence-blocks') + subLabel : undefined}
+			label={subLabel ? __('Mobile:', '__KADENCE__TEXT__DOMAIN__') + subLabel : undefined}
 			measurement={mobileValue ? mobileValue : ['', '', '', '']}
 			control={realControl}
 			onChange={(size) => onChangeMobile(size)}
@@ -137,7 +137,7 @@ export default function ResponsiveMeasurementControls({
 		<MeasurementControls
 			key={1}
 			className="measure-tablet-size"
-			label={subLabel ? __('Tablet:', 'kadence-blocks') + subLabel : undefined}
+			label={subLabel ? __('Tablet:', '__KADENCE__TEXT__DOMAIN__') + subLabel : undefined}
 			measurement={tabletValue ? tabletValue : ['', '', '', '']}
 			control={realControl}
 			onChange={(size) => onChangeTablet(size)}
@@ -212,7 +212,7 @@ export default function ResponsiveMeasurementControls({
 							)}
 						</div>
 					)}
-					<ButtonGroup className="kb-measure-responsive-options" aria-label={__('Device', 'kadence-blocks')}>
+					<ButtonGroup className="kb-measure-responsive-options" aria-label={__('Device', '__KADENCE__TEXT__DOMAIN__')}>
 						{map(devices, ({ name, key, title, itemClass }) => (
 							<Button
 								key={key}
@@ -231,8 +231,8 @@ export default function ResponsiveMeasurementControls({
 							className={'kadence-radio-item kadence-control-toggle radio-custom is-single only-icon'}
 							label={
 								realControl !== 'individual'
-									? __('Individual', 'kadence-blocks')
-									: __('Linked', 'kadence-blocks')
+									? __('Individual', '__KADENCE__TEXT__DOMAIN__')
+									: __('Linked', '__KADENCE__TEXT__DOMAIN__')
 							}
 							icon={realControl !== 'individual' ? linkIcon : unlinkIcon}
 							onClick={() => realSetOnControl(realControl !== 'individual' ? 'individual' : 'linked')}

@@ -60,7 +60,7 @@ export default function KadenceBlockDefaults({
 			method: 'POST',
 			data: { kadence_blocks_config_blocks: JSON.stringify(config)},
 		} ).then( () => {
-			createSuccessNotice(__('Block default saved', 'kadence-blocks'), {
+			createSuccessNotice(__('Block default saved', '__KADENCE__TEXT__DOMAIN__'), {
                 type: 'snackbar',
             })
             setIsOpenResetConfirm(false);
@@ -81,7 +81,7 @@ export default function KadenceBlockDefaults({
 			method: 'POST',
 			data: { kadence_blocks_config_blocks: JSON.stringify(config)},
 		} ).then( () => {
-			createSuccessNotice(__('Block default saved', 'kadence-blocks'), {
+			createSuccessNotice(__('Block default saved', '__KADENCE__TEXT__DOMAIN__'), {
 				type: 'snackbar',
 			});
 			setIsOpenResetConfirm(false);
@@ -100,7 +100,7 @@ export default function KadenceBlockDefaults({
 			method: 'POST',
 			data: { kadence_blocks_config_blocks: JSON.stringify(config)},
 		} ).then( () => {
-			createSuccessNotice(__('Block default saved', 'kadence-blocks'), {
+			createSuccessNotice(__('Block default saved', '__KADENCE__TEXT__DOMAIN__'), {
 				type: 'snackbar',
 			});
 			kadence_blocks_params.configuration = JSON.stringify(config);
@@ -110,21 +110,21 @@ export default function KadenceBlockDefaults({
 	return (
 		<>
 			<KadencePanelBody
-				title={__('Block Defaults', 'kadence-blocks')}
+				title={__('Block Defaults', '__KADENCE__TEXT__DOMAIN__')}
 				initialOpen={false}
 				panelName={`kb-${blockSlug}-defaults`}
 			>
 				{__(
 					'This will set the current block attributes as the default styles for this block type.',
-					'kadence-blocks'
+					'__KADENCE__TEXT__DOMAIN__'
 				)}
 				&nbsp;
-				{__('This will not modify any blocks that have already been created.', 'kadence-blocks')}&nbsp;
-				{__('Block content is not included.', 'kadence-blocks')}&nbsp;
+				{__('This will not modify any blocks that have already been created.', '__KADENCE__TEXT__DOMAIN__')}&nbsp;
+				{__('Block content is not included.', '__KADENCE__TEXT__DOMAIN__')}&nbsp;
 				<br />
 				<br />
 				<Button isPrimary={true} onClick={() => setIsOpenSaveConfirm(true)}>
-					{__(' Save as default', 'kadence-blocks')}
+					{__(' Save as default', '__KADENCE__TEXT__DOMAIN__')}
 				</Button>
 				{hasConfig && (
 					<>
@@ -132,7 +132,7 @@ export default function KadenceBlockDefaults({
 						<br />
 
 						<a href={'#'} onClick={() => setIsOpenModify(true)}>
-							{__('Modify attributes', 'kadence-blocks')}
+							{__('Modify attributes', '__KADENCE__TEXT__DOMAIN__')}
 						</a>
 
 						<a
@@ -140,7 +140,7 @@ export default function KadenceBlockDefaults({
 							style={{ color: 'red', float: 'right' }}
 							onClick={() => setIsOpenResetConfirm(true)}
 						>
-							{__('Reset defaults', 'kadence-blocks')}
+							{__('Reset defaults', '__KADENCE__TEXT__DOMAIN__')}
 						</a>
 					</>
 				)}
@@ -151,7 +151,7 @@ export default function KadenceBlockDefaults({
 				onConfirm={() => reset()}
 				onCancel={() => setIsOpenResetConfirm(false)}
 			>
-				{__("Are you sure you'd like to reset this blocks default attributes?", 'kadence-blocks')}
+				{__("Are you sure you'd like to reset this blocks default attributes?", '__KADENCE__TEXT__DOMAIN__')}
 			</ConfirmDialog>
 
 			<ConfirmDialog
@@ -159,13 +159,13 @@ export default function KadenceBlockDefaults({
 				onConfirm={() => saveAll()}
 				onCancel={() => setIsOpenSaveConfirm(false)}
 			>
-				{__("Are you sure you'd like to save this as the blocks default attributes?", 'kadence-blocks')}
+				{__("Are you sure you'd like to save this as the blocks default attributes?", '__KADENCE__TEXT__DOMAIN__')}
 			</ConfirmDialog>
 
 			{isOpenModify ? (
 				<Modal
 					className="kt-block-defaults-modal"
-					title={__('Modify Block Defaults', 'kadence-blocks')}
+					title={__('Modify Block Defaults', '__KADENCE__TEXT__DOMAIN__')}
 					onRequestClose={() => {
 						setTmpDefaults(currentBlockDefaults);
 						setIsOpenModify(false);
@@ -194,7 +194,7 @@ export default function KadenceBlockDefaults({
 								setIsOpenModify(false);
 							}}
 						>
-							{__('Cancel', 'kadence-blocks')}
+							{__('Cancel', '__KADENCE__TEXT__DOMAIN__')}
 						</Button>
 
 						<Button
@@ -205,7 +205,7 @@ export default function KadenceBlockDefaults({
 								setIsOpenModify(false);
 							}}
 						>
-							{__('Save', 'kadence-blocks')}
+							{__('Save', '__KADENCE__TEXT__DOMAIN__')}
 						</Button>
 					</div>
 				</Modal>

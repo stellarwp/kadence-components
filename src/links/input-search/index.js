@@ -220,7 +220,7 @@ class InputSearch extends Component {
 			className,
 			isFullWidth,
 			instanceId,
-			placeholder = __('Paste URL or type to search', 'kadence-blocks'),
+			placeholder = __('Paste URL or type to search', '__KADENCE__TEXT__DOMAIN__'),
 			url = '',
 			attributes,
 			dynamicAttribute = '',
@@ -255,7 +255,7 @@ class InputSearch extends Component {
 			placeholder,
 			onKeyDown: this.onKeyDown,
 			role: 'combobox',
-			'aria-label': __('URL Input or Search', 'kadence-blocks'),
+			'aria-label': __('URL Input or Search', '__KADENCE__TEXT__DOMAIN__'),
 			'aria-expanded': showSuggestions,
 			'aria-autocomplete': 'list',
 			'aria-owns': suggestionsListboxId,
@@ -285,7 +285,7 @@ class InputSearch extends Component {
 										)}
 										<Button
 											icon={edit}
-											label={__('Edit', 'kadence-blocks')}
+											label={__('Edit', '__KADENCE__TEXT__DOMAIN__')}
 											onClick={() => {
 												if (this.state.search) {
 													this.updateSuggestions(this.state.search);
@@ -312,7 +312,7 @@ class InputSearch extends Component {
 								<Button
 									className="kb-search-url-clear"
 									icon={cancelCircleFilled}
-									label={__('Clear', 'kadence-blocks')}
+									label={__('Clear', '__KADENCE__TEXT__DOMAIN__')}
 									onClick={() => {
 										this.props.onChange('', '');
 										this.setState({
@@ -326,7 +326,7 @@ class InputSearch extends Component {
 							<Button
 								className="kb-search-url-submit"
 								icon={keyboardReturn}
-								label={__('Submit', 'kadence-blocks')}
+								label={__('Submit', '__KADENCE__TEXT__DOMAIN__')}
 								onClick={() => {
 									this.props.onChange(this.state.search || url, '');
 									this.setState({
@@ -345,7 +345,7 @@ class InputSearch extends Component {
 						<Button
 							className="kb-link-settings-toggle"
 							icon={chevronDown}
-							label={__('Link settings', 'kadence-blocks')}
+							label={__('Link settings', '__KADENCE__TEXT__DOMAIN__')}
 							onClick={onExpandSettings}
 							aria-expanded={isSettingsExpanded}
 						/>

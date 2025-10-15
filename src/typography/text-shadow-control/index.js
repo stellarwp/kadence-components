@@ -43,7 +43,7 @@ const TextShadowControl = ({
 			<div className="kt-inner-sub-section">
 				<div className="kt-inner-sub-section-row">
 					<div className="kt-box-color-settings kt-box-shadow-subset">
-						<p className="kt-box-shadow-title">{__('Color', 'kadence-blocks')}</p>
+						<p className="kt-box-shadow-title">{__('Color', '__KADENCE__TEXT__DOMAIN__')}</p>
 						<PopColorControl
 							value={color ? color : colorDefault}
 							default={colorDefault}

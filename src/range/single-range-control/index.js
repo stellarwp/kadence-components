@@ -82,7 +82,7 @@ export default function ResponsiveSingleRangeControl({
 						) : (
 							<DropdownMenu
 								icon={'%' === unit ? icons.percent : icons[unit]}
-								label={__('Select a Unit', 'kadence-blocks')}
+								label={__('Select a Unit', '__KADENCE__TEXT__DOMAIN__')}
 								controls={units.map((singleUnit) => createLevelControlToolbar(singleUnit))}
 								className={'kadence-units-group'}
 								popoverProps={POPOVER_PROPS}

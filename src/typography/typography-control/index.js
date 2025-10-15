@@ -56,7 +56,7 @@ class TypographyControls extends Component {
 		let options = [
 			{
 				type: 'group',
-				label: __('Standard Fonts', 'kadence-blocks'),
+				label: __('Standard Fonts', '__KADENCE__TEXT__DOMAIN__'),
 				options: [
 					{
 						label: 'System Default',
@@ -109,7 +109,7 @@ class TypographyControls extends Component {
 			},
 			{
 				type: 'group',
-				label: __('Google Fonts', 'kadence-blocks'),
+				label: __('Google Fonts', '__KADENCE__TEXT__DOMAIN__'),
 				options: fontsarray,
 			},
 		];
@@ -143,7 +143,7 @@ class TypographyControls extends Component {
 			const custom_fonts = [
 				{
 					type: 'group',
-					label: __('Custom Fonts', 'kadence-blocks'),
+					label: __('Custom Fonts', '__KADENCE__TEXT__DOMAIN__'),
 					options: newOptions,
 				},
 			];
@@ -165,7 +165,7 @@ class TypographyControls extends Component {
 			const theme_fonts = [
 				{
 					type: 'group',
-					label: __('Theme Global Fonts', 'kadence-blocks'),
+					label: __('Theme Global Fonts', '__KADENCE__TEXT__DOMAIN__'),
 					options: themeOptions,
 				},
 			];
@@ -202,21 +202,21 @@ class TypographyControls extends Component {
 	}
 	setTypographyOptions(typographySelectOptions) {
 		let standardWeights = [
-			{ value: 'inherit', label: __('Inherit', 'kadence-blocks') },
-			{ value: '400', label: __('Normal', 'kadence-blocks') },
-			{ value: 'bold', label: __('Bold', 'kadence-blocks') },
+			{ value: 'inherit', label: __('Inherit', '__KADENCE__TEXT__DOMAIN__') },
+			{ value: '400', label: __('Normal', '__KADENCE__TEXT__DOMAIN__') },
+			{ value: 'bold', label: __('Bold', '__KADENCE__TEXT__DOMAIN__') },
 		];
 		const systemWeights = [
-			{ value: 'inherit', label: __('Inherit', 'kadence-blocks') },
-			{ value: '100', label: __('Thin 100', 'kadence-blocks') },
-			{ value: '200', label: __('Extra-Light 200', 'kadence-blocks') },
-			{ value: '300', label: __('Light 300', 'kadence-blocks') },
-			{ value: '400', label: __('Regular', 'kadence-blocks') },
-			{ value: '500', label: __('Medium 500', 'kadence-blocks') },
-			{ value: '600', label: __('Semi-Bold 600', 'kadence-blocks') },
-			{ value: '700', label: __('Bold 700', 'kadence-blocks') },
-			{ value: '800', label: __('Extra-Bold 800', 'kadence-blocks') },
-			{ value: '900', label: __('Ultra-Bold 900', 'kadence-blocks') },
+			{ value: 'inherit', label: __('Inherit', '__KADENCE__TEXT__DOMAIN__') },
+			{ value: '100', label: __('Thin 100', '__KADENCE__TEXT__DOMAIN__') },
+			{ value: '200', label: __('Extra-Light 200', '__KADENCE__TEXT__DOMAIN__') },
+			{ value: '300', label: __('Light 300', '__KADENCE__TEXT__DOMAIN__') },
+			{ value: '400', label: __('Regular', '__KADENCE__TEXT__DOMAIN__') },
+			{ value: '500', label: __('Medium 500', '__KADENCE__TEXT__DOMAIN__') },
+			{ value: '600', label: __('Semi-Bold 600', '__KADENCE__TEXT__DOMAIN__') },
+			{ value: '700', label: __('Bold 700', '__KADENCE__TEXT__DOMAIN__') },
+			{ value: '800', label: __('Extra-Bold 800', '__KADENCE__TEXT__DOMAIN__') },
+			{ value: '900', label: __('Ultra-Bold 900', '__KADENCE__TEXT__DOMAIN__') },
 		];
 		const isKadenceT =
 			typeof kadence_blocks_params !== 'undefined' && kadence_blocks_params.isKadenceT ? true : false;
@@ -260,8 +260,8 @@ class TypographyControls extends Component {
 			standardWeights = buttonWeights;
 		}
 		const standardStyles = [
-			{ value: 'normal', label: __('Normal', 'kadence-blocks') },
-			{ value: 'italic', label: __('Italic', 'kadence-blocks') },
+			{ value: 'normal', label: __('Normal', '__KADENCE__TEXT__DOMAIN__') },
+			{ value: 'italic', label: __('Italic', '__KADENCE__TEXT__DOMAIN__') },
 		];
 		const activeFont = typographySelectOptions
 			? typographySelectOptions.filter(({ value }) => value === this.props.fontFamily)
@@ -400,7 +400,7 @@ class TypographyControls extends Component {
 					),
 					title: sprintf(
 						/* translators: %d: heading level e.g: "1", "2", "3" */
-						__('Heading %d', 'kadence-blocks'),
+						__('Heading %d', '__KADENCE__TEXT__DOMAIN__'),
 						targetLevel
 					),
 					isActive: targetLevel === tagLevel && htmlTag && htmlTag === 'heading' ? true : false,
@@ -436,7 +436,7 @@ class TypographyControls extends Component {
 			headingOptions.push( [
 				{
 					icon: <HeadingLevelIcon level={ 'p' } isPressed={ ( htmlTag && htmlTag === 'p' ? true : false ) } />,
-					title: __( 'Paragraph', 'kadence-blocks' ),
+					title: __( 'Paragraph', '__KADENCE__TEXT__DOMAIN__' ),
 					isActive: ( htmlTag && htmlTag === 'p' ? true : false ),
 					onClick: () => onTagLevelHTML( 2, 'p' ),
 				},
@@ -446,7 +446,7 @@ class TypographyControls extends Component {
 			headingOptions.push( [
 				{
 					icon: <HeadingLevelIcon level={ 'span' } isPressed={ ( htmlTag && htmlTag === 'span' ? true : false ) } />,
-					title: __( 'Span', 'kadence-blocks' ),
+					title: __( 'Span', '__KADENCE__TEXT__DOMAIN__' ),
 					isActive: ( htmlTag && htmlTag === 'span' ? true : false ),
 					onClick: () => onTagLevelHTML( 2, 'span' ),
 				},
@@ -456,7 +456,7 @@ class TypographyControls extends Component {
 			headingOptions.push( [
 				{
 					icon: <HeadingLevelIcon level={ 'div' } isPressed={ ( htmlTag && htmlTag === 'div' ? true : false ) } />,
-					title: __( 'Div', 'kadence-blocks' ),
+					title: __( 'Div', '__KADENCE__TEXT__DOMAIN__' ),
 					isActive: ( htmlTag && htmlTag === 'div' ? true : false ),
 					onClick: () => onTagLevelHTML( 2, 'div' ),
 				},
@@ -596,7 +596,7 @@ class TypographyControls extends Component {
 					icon: <HeadingLevelIcon level={targetLevel} isPressed={targetLevel === tagLevel} />,
 					title: sprintf(
 						/* translators: %d: heading level e.g: "1", "2", "3" */
-						__('Heading %d', 'kadence-blocks'),
+						__('Heading %d', '__KADENCE__TEXT__DOMAIN__'),
 						targetLevel
 					),
 					isActive: targetLevel === tagLevel,
@@ -605,10 +605,10 @@ class TypographyControls extends Component {
 			];
 		};
 		const textTransformOptions = [
-			{ value: 'none', label: __('-', 'kadence-blocks'), tooltip: __('None', 'kadence-blocks') },
-			{ value: 'uppercase', label: __('AB', 'kadence-blocks'), tooltip: __('Uppercase', 'kadence-blocks') },
-			{ value: 'lowercase', label: __('ab', 'kadence-blocks'), tooltip: __('Lowercase', 'kadence-blocks') },
-			{ value: 'capitalize', label: __('Ab', 'kadence-blocks'), tooltip: __('Capitalize', 'kadence-blocks') },
+			{ value: 'none', label: __('-', '__KADENCE__TEXT__DOMAIN__'), tooltip: __('None', '__KADENCE__TEXT__DOMAIN__') },
+			{ value: 'uppercase', label: __('AB', '__KADENCE__TEXT__DOMAIN__'), tooltip: __('Uppercase', '__KADENCE__TEXT__DOMAIN__') },
+			{ value: 'lowercase', label: __('ab', '__KADENCE__TEXT__DOMAIN__'), tooltip: __('Lowercase', '__KADENCE__TEXT__DOMAIN__') },
+			{ value: 'capitalize', label: __('Ab', '__KADENCE__TEXT__DOMAIN__'), tooltip: __('Capitalize', '__KADENCE__TEXT__DOMAIN__') },
 		];
 		const fontMin = ( fontSizeType !== 'px' ? 0.2 : 5 );
 		const fontMax = ( fontSizeType !== 'px' ? 120 : 3000 );
@@ -651,7 +651,7 @@ class TypographyControls extends Component {
 						<>
 							{onTagLevelHTML && (
 								<TagSelect
-									label={__('HTML Tag', 'kadence-blocks')}
+									label={__('HTML Tag', '__KADENCE__TEXT__DOMAIN__')}
 									value={'heading' === htmlTag ? tagLevel : htmlTag}
 									onChange={(value) => {
 										if ('div' === value || 'p' === value || 'span' === value) {
@@ -665,7 +665,7 @@ class TypographyControls extends Component {
 							)}
 							{!onTagLevelHTML && (
 								<TagSelect
-									label={__('HTML Tag', 'kadence-blocks')}
+									label={__('HTML Tag', '__KADENCE__TEXT__DOMAIN__')}
 									value={tagLevel}
 									headingOnly={true}
 									tagHighLevel={tagHighLevel}
@@ -679,7 +679,7 @@ class TypographyControls extends Component {
 					)}
 					{onFontSize && onFontSizeType && (
 						<ResponsiveFontSizeControl
-							label={__('Font Size', 'kadence-blocks')}
+							label={__('Font Size', '__KADENCE__TEXT__DOMAIN__')}
 							value={fontSize && undefined !== fontSize[0] ? fontSize[0] : ''}
 							onChange={(value) =>
 								onFontSize([
@@ -714,7 +714,7 @@ class TypographyControls extends Component {
 					)}
 					{!onTextTransform && onLineHeight && onLineHeightType && (
 						<ResponsiveUnitControl
-							label={__('Line Height', 'kadence-blocks')}
+							label={__('Line Height', '__KADENCE__TEXT__DOMAIN__')}
 							value={lineHeight && undefined !== lineHeight[0] ? lineHeight[0] : ''}
 							onChange={(value) =>
 								onLineHeight([
@@ -750,7 +750,7 @@ class TypographyControls extends Component {
 					{onTextTransform && onLineHeight && onLineHeightType && (
 						<TwoColumn className="kb-font-settings">
 							<ResponsiveUnitControl
-								label={__('Line Height', 'kadence-blocks')}
+								label={__('Line Height', '__KADENCE__TEXT__DOMAIN__')}
 								value={lineHeight && undefined !== lineHeight[0] ? lineHeight[0] : ''}
 								onChange={(value) =>
 									onLineHeight([
@@ -784,7 +784,7 @@ class TypographyControls extends Component {
 								compressedDevice={true}
 							/>
 							<KadenceRadioButtons
-								label={__('Letter Case', 'kadence-blocks')}
+								label={__('Letter Case', '__KADENCE__TEXT__DOMAIN__')}
 								value={textTransform}
 								options={textTransformOptions}
 								className={'kb-letter-case'}
@@ -795,7 +795,7 @@ class TypographyControls extends Component {
 					)}
 					{onTextTransform && (!onLineHeight || !onLineHeightType) && (
 						<KadenceRadioButtons
-							label={__('Letter Case', 'kadence-blocks')}
+							label={__('Letter Case', '__KADENCE__TEXT__DOMAIN__')}
 							value={textTransform}
 							options={textTransformOptions}
 							className={'kb-letter-case'}
@@ -808,7 +808,7 @@ class TypographyControls extends Component {
 							<div className="components-base-control">
 								<div className="kadence-component__header kadence-title-bar">
 									<label className="kadence-control-title kadence-component__header__title">
-										{__('Font Family', 'kadence-blocks')}
+										{__('Font Family', '__KADENCE__TEXT__DOMAIN__')}
 									</label>
 								</div>
 								<div className="typography-family-select-form-row">
@@ -819,7 +819,7 @@ class TypographyControls extends Component {
 										isMulti={false}
 										maxMenuHeight={300}
 										isClearable={true}
-										placeholder={__('Select a font family', 'kadence-blocks')}
+										placeholder={__('Select a font family', '__KADENCE__TEXT__DOMAIN__')}
 										onChange={onTypoFontChange}
 										styles={{
 											control: (baseStyles, state) => ({
@@ -836,7 +836,7 @@ class TypographyControls extends Component {
 							</div>
 							{onFontWeight && (
 								<SelectControl
-									label={__('Font Weight', 'kadence-blocks')}
+									label={__('Font Weight', '__KADENCE__TEXT__DOMAIN__')}
 									value={'400' === fontWeight && usingReg ? 'regular' : fontWeight}
 									options={typographyWeights}
 									onChange={onTypoFontWeightChange}
@@ -845,7 +845,7 @@ class TypographyControls extends Component {
 							)}
 							{fontFamily && onFontStyle && (
 								<SelectControl
-									label={__('Font Style', 'kadence-blocks')}
+									label={__('Font Style', '__KADENCE__TEXT__DOMAIN__')}
 									value={fontStyle}
 									options={typographyStyles}
 									onChange={onTypoFontStyleChange}
@@ -854,7 +854,7 @@ class TypographyControls extends Component {
 							)}
 							{fontFamily && googleFont && onLoadGoogleFont && (
 								<ToggleControl
-									label={__('Load Google Font on Frontend', 'kadence-blocks')}
+									label={__('Load Google Font on Frontend', '__KADENCE__TEXT__DOMAIN__')}
 									checked={loadGoogleFont}
 									onChange={onLoadGoogleFont}
 								/>
@@ -869,14 +869,14 @@ class TypographyControls extends Component {
 								undefined !== typographyStyles[1].value &&
 								'italic' === typographyStyles[1].value && (
 									<ToggleControl
-										label={__('Load Italic Styles Also', 'kadence-blocks')}
+										label={__('Load Italic Styles Also', '__KADENCE__TEXT__DOMAIN__')}
 										checked={loadItalic}
 										onChange={onLoadItalic}
 									/>
 								)}
 							{onLetterSpacing && reLetterSpacing && (
 								<ResponsiveUnitControl
-									label={__('Letter Spacing', 'kadence-blocks')}
+									label={__('Letter Spacing', '__KADENCE__TEXT__DOMAIN__')}
 									value={
 										undefined !== reLetterSpacing && undefined !== reLetterSpacing[0]
 											? reLetterSpacing[0]
@@ -935,7 +935,7 @@ class TypographyControls extends Component {
 							)}
 							{onLetterSpacing && !reLetterSpacing && (
 								<RangeControl
-									label={__('Letter Spacing', 'kadence-blocks')}
+									label={__('Letter Spacing', '__KADENCE__TEXT__DOMAIN__')}
 									value={undefined !== letterSpacing ? letterSpacing : ''}
 									onChange={(value) => onLetterSpacing(value)}
 									min={-5}
@@ -948,7 +948,7 @@ class TypographyControls extends Component {
 					{onPadding && onPaddingControl && (
 						<>
 							<MeasurementControls
-								label={__('Padding (px)', 'kadence-blocks')}
+								label={__('Padding (px)', '__KADENCE__TEXT__DOMAIN__')}
 								measurement={padding ? padding : ''}
 								control={paddingControl}
 								onChange={(value) => onPadding(value)}
@@ -963,7 +963,7 @@ class TypographyControls extends Component {
 					{onMargin && onMarginControl && (
 						<>
 							<MeasurementControls
-								label={__('Margin (px)', 'kadence-blocks')}
+								label={__('Margin (px)', '__KADENCE__TEXT__DOMAIN__')}
 								measurement={margin ? margin : ''}
 								control={marginControl}
 								onChange={(value) => onMargin(value)}

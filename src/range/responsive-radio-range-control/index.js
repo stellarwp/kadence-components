@@ -142,7 +142,7 @@ export default function ResponsiveRadioRangeControls({
 						></Button>
 					)}
 					{label && <span className="kadence-control-title">{label}</span>}
-					<ButtonGroup className="kb-measure-responsive-options" aria-label={__('Device', 'kadence-blocks')}>
+					<ButtonGroup className="kb-measure-responsive-options" aria-label={__('Device', '__KADENCE__TEXT__DOMAIN__')}>
 						{map(devices, ({ name, key, title, itemClass }) => (
 							<Button
 								key={key}

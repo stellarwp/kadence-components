@@ -73,7 +73,7 @@ export default function CopyPasteAttributes ( {
 		<ToolbarDropdownMenu
 			className="components-toolbar kb-copy-paste-attributes"
 			icon={ copyStyles }
-			label={ __( 'Copy/Paste Styles', 'kadence-blocks' ) }
+			label={ __( 'Copy/Paste Styles', '__KADENCE__TEXT__DOMAIN__' ) }
 			popoverProps={ {
 				className: 'kb-copy-paste-attributes__popover',
 			} }
@@ -84,25 +84,25 @@ export default function CopyPasteAttributes ( {
 						<MenuItem
 							icon={ copy }
 							onClick={ flow( onClose, copyAction ) }
-							label={ __( 'Copy Styles', 'kadence-blocks' ) }
+							label={ __( 'Copy Styles', '__KADENCE__TEXT__DOMAIN__' ) }
 						>
-							{ __( 'Copy Styles', 'kadence-blocks' ) }
+							{ __( 'Copy Styles', '__KADENCE__TEXT__DOMAIN__' ) }
 						</MenuItem>
 						<MenuItem
 							icon={ paste }
 							onClick={ flow( onClose, pasteAction ) }
 							disabled={ ! currentCopiedStyles }
-							label={ __( 'Paste Styles', 'kadence-blocks' ) }
+							label={ __( 'Paste Styles', '__KADENCE__TEXT__DOMAIN__' ) }
 						>
-							{ __( 'Paste Styles', 'kadence-blocks' ) }
+							{ __( 'Paste Styles', '__KADENCE__TEXT__DOMAIN__' ) }
 						</MenuItem>
 						<MenuItem
 							icon={ paste }
 							onClick={ flow( onClose, pasteAndReplaceAction ) }
 							disabled={ ! currentCopiedStyles }
-							label={ __( 'Paste and Replace', 'kadence-blocks' ) }
+							label={ __( 'Paste and Replace', '__KADENCE__TEXT__DOMAIN__' ) }
 						>
-							{ __( 'Paste and Replace', 'kadence-blocks' ) }
+							{ __( 'Paste and Replace', '__KADENCE__TEXT__DOMAIN__' ) }
 						</MenuItem>
 					</MenuGroup>
 				</>

@@ -15,7 +15,7 @@ export default function KadenceIconPicker({
 	value,
 	onChange,
 	label,
-	placeholder = __('Select Icon', 'kadence-blocks'),
+	placeholder = __('Select Icon', '__KADENCE__TEXT__DOMAIN__'),
 	showSearch = true,
 	renderFunc = null,
 	className,
@@ -83,7 +83,7 @@ export default function KadenceIconPicker({
 		getCustomSvgs(true);
 	};
 
-	const translatedCustomSvgString = __('My Icons', 'kadence-blocks');
+	const translatedCustomSvgString = __('My Icons', '__KADENCE__TEXT__DOMAIN__');
 
 	const iconNames = useMemo(() => {
 		if (icons) {
@@ -121,7 +121,7 @@ export default function KadenceIconPicker({
 			return { value: index, label: label };
 		});
 
-		return [{ value: 'all', label: __('Show All', 'kadence-blocks') }, ...options];
+		return [{ value: 'all', label: __('Show All', '__KADENCE__TEXT__DOMAIN__') }, ...options];
 	}, [kadence_blocks_params.icon_names, iconNames]);
 
 	const iconRenderFunc = useCallback(
@@ -222,7 +222,7 @@ export default function KadenceIconPicker({
 
 			{isVisible && (
 				<Popover
-					headerTitle={__('Select Icon', 'kadence-blocks')}
+					headerTitle={__('Select Icon', '__KADENCE__TEXT__DOMAIN__')}
 					noArrow={false}
 					// expandOnMobile={true}
 					onClose={debounceToggle}
@@ -236,14 +236,14 @@ export default function KadenceIconPicker({
 						{showSearch && (
 							<div className={'kadence-icon-picker-search'}>
 								<TextControl
-									label={__('Search Icons', 'kadence-blocks')}
+									label={__('Search Icons', '__KADENCE__TEXT__DOMAIN__')}
 									hideLabelFromVision={true}
 									value={search}
-									placeholder={__('Search Icons', 'kadence-blocks')}
+									placeholder={__('Search Icons', '__KADENCE__TEXT__DOMAIN__')}
 									onChange={(value) => setSearch(value)}
 								/>
 								<SelectControl
-									label={__('Filter Icons', 'kadence-blocks')}
+									label={__('Filter Icons', '__KADENCE__TEXT__DOMAIN__')}
 									hideLabelFromVision={true}
 									value={filter}
 									options={iconFilterOptions}
@@ -273,7 +273,7 @@ export default function KadenceIconPicker({
 								<>
 									{Object.keys(results).length === 0 && (
 										<div style={{ padding: '15px' }}>
-											<p>{__('No icons found', 'kadence-blocks')}</p>
+											<p>{__('No icons found', '__KADENCE__TEXT__DOMAIN__')}</p>
 										</div>
 									)}
 									{Object.keys(results).map((groupKey) => {

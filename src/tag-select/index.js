@@ -34,7 +34,7 @@ export default function tagSelect({
 	onChange,
 	value = '',
 	className = '',
-	ariaLabel = __('Change HTML Tag', 'kadence-blocks'),
+	ariaLabel = __('Change HTML Tag', '__KADENCE__TEXT__DOMAIN__'),
 	reset = false,
 	headingOnly = false,
 	tagLowLevel = 1,
@@ -54,7 +54,7 @@ export default function tagSelect({
 				),
 				title: sprintf(
 					/* translators: %d: heading level e.g: "1", "2", "3" */
-					__('Heading %d', 'kadence-blocks'),
+					__('Heading %d', '__KADENCE__TEXT__DOMAIN__'),
 					targetLevel
 				),
 				isActive: targetLevel === level && htmlTag && htmlTag === 'heading' ? true : false,
@@ -69,7 +69,7 @@ export default function tagSelect({
 		headingOptions.push([
 			{
 				icon: <HeadingLevelIcon level={'p'} isPressed={htmlTag && htmlTag === 'p' ? true : false} />,
-				title: __('Paragraph', 'kadence-blocks'),
+				title: __('Paragraph', '__KADENCE__TEXT__DOMAIN__'),
 				isActive: htmlTag && htmlTag === 'p' ? true : false,
 				onClick: () => onChange('p'),
 			},
@@ -79,7 +79,7 @@ export default function tagSelect({
 		headingOptions.push([
 			{
 				icon: <HeadingLevelIcon level={'span'} isPressed={htmlTag && htmlTag === 'span' ? true : false} />,
-				title: __('Span', 'kadence-blocks'),
+				title: __('Span', '__KADENCE__TEXT__DOMAIN__'),
 				isActive: htmlTag && htmlTag === 'span' ? true : false,
 				onClick: () => onChange('span'),
 			},
@@ -89,7 +89,7 @@ export default function tagSelect({
 		headingOptions.push([
 			{
 				icon: <HeadingLevelIcon level={'div'} isPressed={htmlTag && htmlTag === 'div' ? true : false} />,
-				title: __('div', 'kadence-blocks'),
+				title: __('div', '__KADENCE__TEXT__DOMAIN__'),
 				isActive: htmlTag && htmlTag === 'div' ? true : false,
 				onClick: () => onChange('div'),
 			},

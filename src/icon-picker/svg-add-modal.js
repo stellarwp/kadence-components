@@ -24,19 +24,19 @@ export default function SvgAddModal( { isOpen, setIsOpen, callback, proVersion }
 		let fileBlob;
 		if ( source === 'upload' ) {
 			if ( !file || file.length === 0 ) {
-				setError( __( 'No file selected', 'kadence-blocks' ) );
+				setError( __( 'No file selected', '__KADENCE__TEXT__DOMAIN__' ) );
 				return;
 			}
 			fileBlob = file[ 0 ];
 
 			// Check MIME type
 			if ( fileBlob.type !== 'image/svg+xml' ) {
-				setError( __( 'The selected file is not an SVG', 'kadence-blocks' ) );
+				setError( __( 'The selected file is not an SVG', '__KADENCE__TEXT__DOMAIN__' ) );
 				return;
 			}
 		} else {
 			if ( !pastedSVG.trim() ) {
-				setError( __( 'No SVG content pasted', 'kadence-blocks' ) );
+				setError( __( 'No SVG content pasted', '__KADENCE__TEXT__DOMAIN__' ) );
 				return;
 			}
 			fileBlob = new Blob( [ pastedSVG ], { type: 'image/svg+xml' } );
@@ -52,7 +52,7 @@ export default function SvgAddModal( { isOpen, setIsOpen, callback, proVersion }
 					method: 'POST',
 				} ).then( ( response ) => {
 					if ( has( response, 'value' ) && has( response, 'label' ) ) {
-						createSuccessNotice( __( 'SVG Saved.', 'kadence-blocks' ), {
+						createSuccessNotice( __( 'SVG Saved.', '__KADENCE__TEXT__DOMAIN__' ), {
 							type: 'snackbar',
 						} );
 						callback( response.value );
@@ -60,7 +60,7 @@ export default function SvgAddModal( { isOpen, setIsOpen, callback, proVersion }
 					} else if ( has( response, 'error' ) && has( response, 'message' ) ) {
 						setError( response.message );
 					} else {
-						setError( __( 'An error occurred when uploading your file', 'kadence-blocks' ) );
+						setError( __( 'An error occurred when uploading your file', '__KADENCE__TEXT__DOMAIN__' ) );
 					}
 				} );
 			}
@@ -73,7 +73,7 @@ export default function SvgAddModal( { isOpen, setIsOpen, callback, proVersion }
 		<>
 			{isOpen && (
 				<Modal
-					title={__( 'Add a Custom Icon ', 'kadence-blocks' )}
+					title={__( 'Add a Custom Icon ', '__KADENCE__TEXT__DOMAIN__' )}
 					className={'upload-svg-modal'}
 					size={'medium'}
 					onRequestClose={() => setIsOpen( false )}
@@ -104,15 +104,15 @@ export default function SvgAddModal( { isOpen, setIsOpen, callback, proVersion }
 								{ tab.name === 'upload' && (
 									<>
 										<div className={'security-notice'}>
-											<h4>{__( 'Important: SVG Safety', 'kadence-blocks' )}</h4>
+											<h4>{__( 'Important: SVG Safety', '__KADENCE__TEXT__DOMAIN__' )}</h4>
 											<p>
 												{__(
 													'SVGs can contain malicious code. For your security, we suggest sanitizing your files before uploading.',
-													'kadence-blocks',
+													'__KADENCE__TEXT__DOMAIN__',
 												)}
 												&nbsp;
 												<a href={'https://www.kadencewp.com/help-center/?post_type=docs&p=8510'}>
-													{__( 'Learn more about SVG security and supported SVG formatting.', 'kadence-blocks' )}
+													{__( 'Learn more about SVG security and supported SVG formatting.', '__KADENCE__TEXT__DOMAIN__' )}
 												</a>
 											</p>
 										</div>
@@ -122,7 +122,7 @@ export default function SvgAddModal( { isOpen, setIsOpen, callback, proVersion }
 										{uploadView === 'upload' && (
 											<div className={'drag-drop-container'}>
 												<TextControl
-													placeholder={__( 'Title your SVG', 'kadence-blocks' )}
+													placeholder={__( 'Title your SVG', '__KADENCE__TEXT__DOMAIN__' )}
 													value={title}
 													onChange={( value ) => setTitle( value )}
 												/>
@@ -146,7 +146,7 @@ export default function SvgAddModal( { isOpen, setIsOpen, callback, proVersion }
 															style={{ position: 'relative' }}
 														>
 															<DropZone
-																label={__( 'Upload SVG', 'kadence-blocks' )}
+																label={__( 'Upload SVG', '__KADENCE__TEXT__DOMAIN__' )}
 																onFilesDrop={( file ) => {
 																	setFile( file );
 																	if ( title === '' ) {
@@ -158,20 +158,20 @@ export default function SvgAddModal( { isOpen, setIsOpen, callback, proVersion }
 															/>
 															{file === null || file.length === 0 ? (
 																<>
-																	<h3>{__( 'Select a file or drop it here', 'kadence-blocks' )}</h3>
-																	<p>{__( 'SVG dimensions: 24px by 24px', 'kadence-blocks' )}</p>
+																	<h3>{__( 'Select a file or drop it here', '__KADENCE__TEXT__DOMAIN__' )}</h3>
+																	<p>{__( 'SVG dimensions: 24px by 24px', '__KADENCE__TEXT__DOMAIN__' )}</p>
 																</>
 															) : (
 																<>
-																	<h3>{__( 'File Selected', 'kadence-blocks' )}</h3>
+																	<h3>{__( 'File Selected', '__KADENCE__TEXT__DOMAIN__' )}</h3>
 																	<p>{get( file, [ '0', 'name' ], '' )}</p>
 																</>
 															)}
 
 															<Button isPrimary={true}>
 																{file === null
-																	? __( 'Select a file', 'kadence-blocks' )
-																	: __( 'Change file', 'kadence-blocks' )}
+																	? __( 'Select a file', '__KADENCE__TEXT__DOMAIN__' )
+																	: __( 'Change file', '__KADENCE__TEXT__DOMAIN__' )}
 															</Button>
 														</div>
 													)}
@@ -184,16 +184,16 @@ export default function SvgAddModal( { isOpen, setIsOpen, callback, proVersion }
 														setFile( null );
 													}}
 												>
-													{__( 'Paste an SVG', 'kadence-blocks' )}
+													{__( 'Paste an SVG', '__KADENCE__TEXT__DOMAIN__' )}
 												</Button>
 											</div>
 										)}
 
 										{uploadView === 'paste' && (
 											<div className={'paste-container'}>
-												<h3>{__( 'Paste your SVG', 'kadence-blocks' )}</h3>
+												<h3>{__( 'Paste your SVG', '__KADENCE__TEXT__DOMAIN__' )}</h3>
 												<TextControl
-													placeholder={__( 'Title your SVG', 'kadence-blocks' )}
+													placeholder={__( 'Title your SVG', '__KADENCE__TEXT__DOMAIN__' )}
 													value={title}
 													onChange={( value ) => setTitle( value )}
 												/>
@@ -206,13 +206,13 @@ export default function SvgAddModal( { isOpen, setIsOpen, callback, proVersion }
 														setPastedSVG( '' );
 													}}
 												>
-													{__( 'Upload an SVG', 'kadence-blocks' )}
+													{__( 'Upload an SVG', '__KADENCE__TEXT__DOMAIN__' )}
 												</Button>
 											</div>
 										)}
 										<div className={'footer'}>
 											<Button isSecondary={true} onClick={() => setIsOpen( false )}>
-												{__( 'Cancel', 'kadence-blocks' )}
+												{__( 'Cancel', '__KADENCE__TEXT__DOMAIN__' )}
 											</Button>
 
 											<Button
@@ -221,7 +221,7 @@ export default function SvgAddModal( { isOpen, setIsOpen, callback, proVersion }
 													parseAndUpload();
 												}}
 											>
-												{__( 'Add', 'kadence-blocks' )}
+												{__( 'Add', '__KADENCE__TEXT__DOMAIN__' )}
 											</Button>
 										</div>
 

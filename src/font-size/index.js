@@ -138,8 +138,8 @@ export default function FontSizeControl({
 			value: '',
 			output: '',
 			size: '',
-			label: __('Inherit', 'kadence-blocks'),
-			name: __('Inherit', 'kadence-blocks'),
+			label: __('Inherit', '__KADENCE__TEXT__DOMAIN__'),
+			name: __('Inherit', '__KADENCE__TEXT__DOMAIN__'),
 		},
 		...options,
 	];
@@ -194,7 +194,7 @@ export default function FontSizeControl({
 							{!disableCustomSizes && (
 								<Button
 									className={'kadence-radio-item radio-custom only-icon'}
-									label={__('Set custom size', 'kadence-blocks')}
+									label={__('Set custom size', '__KADENCE__TEXT__DOMAIN__')}
 									icon={settings}
 									onClick={() => {
 										if (currentValue && unit === 'px') {
@@ -227,7 +227,7 @@ export default function FontSizeControl({
 							<ButtonGroup className="kadence-radio-container-control">
 								<Button
 									className={'kadence-radio-item radio-custom only-icon'}
-									label={__('Set custom size', 'kadence-blocks')}
+									label={__('Set custom size', '__KADENCE__TEXT__DOMAIN__')}
 									icon={settings}
 									onClick={() => {
 										if (currentValue && unit === 'px') {
@@ -274,7 +274,7 @@ export default function FontSizeControl({
 							<ButtonGroup className="kadence-radio-container-control">
 								<Button
 									className={'kadence-radio-item radio-custom only-icon'}
-									label={__('Use size preset', 'kadence-blocks')}
+									label={__('Use size preset', '__KADENCE__TEXT__DOMAIN__')}
 									icon={settings}
 									isPrimary={true}
 									onClick={() => {

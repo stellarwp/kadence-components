@@ -59,7 +59,7 @@ function FieldMultiRule({ props, formPostID, setAttributes, combine }) {
 			}
 			return result;
 		}, []);
-		currentFieldsSelect.unshift({ label: __('Select Field', 'kadence-blocks-pro'), value: '' });
+		currentFieldsSelect.unshift({ label: __('Select Field', '__KADENCE__TEXT__DOMAIN__'), value: '' });
 	}
 
 	const rows = [];
@@ -71,20 +71,20 @@ function FieldMultiRule({ props, formPostID, setAttributes, combine }) {
 
 	const compareOptions = {
 		text: [
-			{ value: 'not_empty', label: __('Not Empty', 'kadence-blocks-pro') },
-			{ value: 'is_empty', label: __('Empty', 'kadence-blocks-pro') },
+			{ value: 'not_empty', label: __('Not Empty', '__KADENCE__TEXT__DOMAIN__') },
+			{ value: 'is_empty', label: __('Empty', '__KADENCE__TEXT__DOMAIN__') },
 			{ value: 'equals', label: '=' },
 			{ value: 'not_equals', label: '!=' },
-			{ value: 'contains', label: __('Contains', 'kadence-blocks-pro') },
-			{ value: 'doesnotcontain', label: __('Does Not Contain', 'kadence-blocks-pro') },
-			{ value: 'beginswith', label: __('Begins With', 'kadence-blocks-pro') },
-			{ value: 'doesnotbeginwith', label: __('Does Not Begin With', 'kadence-blocks-pro') },
-			{ value: 'endswith', label: __('Ends With', 'kadence-blocks-pro') },
-			{ value: 'doesnotendwith', label: __('Does Not End With', 'kadence-blocks-pro') },
+			{ value: 'contains', label: __('Contains', '__KADENCE__TEXT__DOMAIN__') },
+			{ value: 'doesnotcontain', label: __('Does Not Contain', '__KADENCE__TEXT__DOMAIN__') },
+			{ value: 'beginswith', label: __('Begins With', '__KADENCE__TEXT__DOMAIN__') },
+			{ value: 'doesnotbeginwith', label: __('Does Not Begin With', '__KADENCE__TEXT__DOMAIN__') },
+			{ value: 'endswith', label: __('Ends With', '__KADENCE__TEXT__DOMAIN__') },
+			{ value: 'doesnotendwith', label: __('Does Not End With', '__KADENCE__TEXT__DOMAIN__') },
 		],
 		number: [
-			{ value: 'not_empty', label: __('Not Empty', 'kadence-blocks-pro') },
-			{ value: 'is_empty', label: __('Empty', 'kadence-blocks-pro') },
+			{ value: 'not_empty', label: __('Not Empty', '__KADENCE__TEXT__DOMAIN__') },
+			{ value: 'is_empty', label: __('Empty', '__KADENCE__TEXT__DOMAIN__') },
 			{ value: 'equals', label: '=' },
 			{ value: 'not_equals', label: '!=' },
 			{ value: 'equals_or_greater', label: '>=' },
@@ -99,11 +99,11 @@ function FieldMultiRule({ props, formPostID, setAttributes, combine }) {
 		optionMulti: [
 			{ value: 'equals', label: '=' },
 			{ value: 'not_equals', label: '!=' },
-			{ value: 'contains', label: __('Contains', 'kadence-blocks-pro') },
+			{ value: 'contains', label: __('Contains', '__KADENCE__TEXT__DOMAIN__') },
 		],
 		fill: [
-			{ value: 'not_empty', label: __('Not Empty', 'kadence-blocks-pro') },
-			{ value: 'is_empty', label: __('Empty', 'kadence-blocks-pro') },
+			{ value: 'not_empty', label: __('Not Empty', '__KADENCE__TEXT__DOMAIN__') },
+			{ value: 'is_empty', label: __('Empty', '__KADENCE__TEXT__DOMAIN__') },
 		],
 	};
 
@@ -168,7 +168,7 @@ function FieldMultiRule({ props, formPostID, setAttributes, combine }) {
 				return { label: option.label, value: option?.value ? option.value : option.label };
 			});
 
-			options.unshift({ label: __('Select Option', 'kadence-blocks-pro'), value: '' });
+			options.unshift({ label: __('Select Option', '__KADENCE__TEXT__DOMAIN__'), value: '' });
 			// console.log(1, block, options);
 		}
 		return options;
@@ -226,7 +226,7 @@ function FieldMultiRule({ props, formPostID, setAttributes, combine }) {
 					return (
 						<div className="components-base-control">
 							<SelectControl
-								label={__('Compare Value', 'kadence-blocks-pro')}
+								label={__('Compare Value', '__KADENCE__TEXT__DOMAIN__')}
 								options={selectedFieldOptions}
 								className="kb-dynamic-select"
 								classNamePrefix="kbp"
@@ -276,8 +276,8 @@ function FieldMultiRule({ props, formPostID, setAttributes, combine }) {
 					return (
 						<div className="components-base-control">
 							<TextControl
-								label={__('Compare Value', 'kadence-blocks')}
-								placeholder={__('Compare to...', 'kadence-blocks')}
+								label={__('Compare Value', '__KADENCE__TEXT__DOMAIN__')}
+								placeholder={__('Compare to...', '__KADENCE__TEXT__DOMAIN__')}
 								value={rValue}
 								onChange={(val) => {
 									if (!val) {
@@ -297,7 +297,7 @@ function FieldMultiRule({ props, formPostID, setAttributes, combine }) {
 			<>
 				<div className="kb-field-rule">
 					<Button
-						label={__('Remove Rule', 'kadence-blocks-pro')}
+						label={__('Remove Rule', '__KADENCE__TEXT__DOMAIN__')}
 						icon={closeIcon}
 						size={'small'}
 						// iconSize={18}
@@ -307,7 +307,7 @@ function FieldMultiRule({ props, formPostID, setAttributes, combine }) {
 					/>
 					<div className="components-base-control">
 						<SelectControl
-							label={__('Field', 'kadence-blocks-pro')}
+							label={__('Field', '__KADENCE__TEXT__DOMAIN__')}
 							options={currentFieldsSelect}
 							className="kb-dynamic-select"
 							classNamePrefix="kbp"
@@ -324,7 +324,7 @@ function FieldMultiRule({ props, formPostID, setAttributes, combine }) {
 					{rField && (
 						<div className="components-base-control">
 							<SelectControl
-								label={__('Compare Type', 'kadence-blocks-pro')}
+								label={__('Compare Type', '__KADENCE__TEXT__DOMAIN__')}
 								options={compareOptions[selectedFieldType]}
 								className="kb-dynamic-select"
 								classNamePrefix="kbp"
@@ -362,7 +362,7 @@ function FieldMultiRule({ props, formPostID, setAttributes, combine }) {
 		<div className="kb-field-rules">
 			{rows}
 			<Button
-				text={__('Add Rule', 'kadence-blocks-pro')}
+				text={__('Add Rule', '__KADENCE__TEXT__DOMAIN__')}
 				variant="primary"
 				icon={plus}
 				onClick={addConditionalRule}

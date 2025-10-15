@@ -10,7 +10,7 @@ export default function SvgDeleteModal({ isOpen, setIsOpen, id, callback }) {
 	const { createSuccessNotice, createErrorNotice } = useDispatch(noticesStore);
 
 	const deleteFailedSnacbkar = () => {
-		createErrorNotice(__('There was an error deleting the SVG.', 'kadence-blocks'), {
+		createErrorNotice(__('There was an error deleting the SVG.', '__KADENCE__TEXT__DOMAIN__'), {
 			type: 'snackbar',
 		});
 	};
@@ -24,7 +24,7 @@ export default function SvgDeleteModal({ isOpen, setIsOpen, id, callback }) {
 				console.log('response');
 				console.log(response);
 				if (get(response, 'id', false)) {
-					createSuccessNotice(__('SVG Deleted.', 'kadence-blocks'), {
+					createSuccessNotice(__('SVG Deleted.', '__KADENCE__TEXT__DOMAIN__'), {
 						type: 'snackbar',
 					});
 					callback();
@@ -47,7 +47,7 @@ export default function SvgDeleteModal({ isOpen, setIsOpen, id, callback }) {
 			{isOpen && id !== null && (
 				<Modal title={__('Delete SVG')} onRequestClose={() => setIsOpen(false)}>
 					<Button isSecondary={true} onClick={() => setIsOpen(false)}>
-						{__('Cancel', 'kadence-blocks')}
+						{__('Cancel', '__KADENCE__TEXT__DOMAIN__')}
 					</Button>
 					<Button
 						isDestructive={true}
@@ -56,7 +56,7 @@ export default function SvgDeleteModal({ isOpen, setIsOpen, id, callback }) {
 							setIsOpen(false);
 						}}
 					>
-						{__('Delete', 'kadence-blocks')}
+						{__('Delete', '__KADENCE__TEXT__DOMAIN__')}
 					</Button>
 				</Modal>
 			)}

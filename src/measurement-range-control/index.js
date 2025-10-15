@@ -103,9 +103,9 @@ export default function MeasureRangeControl({
 	reviewOptions.push({
 		value: 'ss-auto',
 		output: 'var(--global-kb-spacing-auto, auto)',
-		label: __('Auto', 'kadence-blocks'),
+		label: __('Auto', '__KADENCE__TEXT__DOMAIN__'),
 		size: 0,
-		name: __('Auto', 'kadence-blocks'),
+		name: __('Auto', '__KADENCE__TEXT__DOMAIN__'),
 	});
 	useEffect(() => {
 		setIsCustom(isCustomOption(reviewOptions, value));
@@ -172,8 +172,8 @@ export default function MeasureRangeControl({
 								className={'kadence-radio-item radio-custom only-icon'}
 								label={
 									!realIsCustomControl
-										? __('Set custom size', 'kadence-blocks')
-										: __('Use size preset', 'kadence-blocks')
+										? __('Set custom size', '__KADENCE__TEXT__DOMAIN__')
+										: __('Use size preset', '__KADENCE__TEXT__DOMAIN__')
 								}
 								icon={settings}
 								isSmall={true}
@@ -188,8 +188,8 @@ export default function MeasureRangeControl({
 								className={'kadence-radio-item radio-custom is-single only-icon'}
 								label={
 									realControl !== 'individual'
-										? __('Individual', 'kadence-blocks')
-										: __('Linked', 'kadence-blocks')
+										? __('Individual', '__KADENCE__TEXT__DOMAIN__')
+										: __('Linked', '__KADENCE__TEXT__DOMAIN__')
 								}
 								icon={realControl !== 'individual' ? measureIcons.link : measureIcons.unlink}
 								onClick={() => realSetOnControl(realControl !== 'individual' ? 'individual' : 'linked')}
@@ -232,7 +232,7 @@ export default function MeasureRangeControl({
 						<>
 							<SingleMeasureRangeControl
 								parentLabel={parentLabel ? parentLabel : label}
-								label={__('Top', 'kadence-blocks')}
+								label={__('Top', '__KADENCE__TEXT__DOMAIN__')}
 								className={'kb-measure-box-top'}
 								value={value ? value[0] : ''}
 								onChange={(newVal) => {
@@ -264,7 +264,7 @@ export default function MeasureRangeControl({
 							/>
 							<SingleMeasureRangeControl
 								parentLabel={parentLabel ? parentLabel : label}
-								label={__('Right', 'kadence-blocks')}
+								label={__('Right', '__KADENCE__TEXT__DOMAIN__')}
 								className={'kb-measure-box-right'}
 								value={value ? value[1] : ''}
 								onChange={(newVal) =>
@@ -296,7 +296,7 @@ export default function MeasureRangeControl({
 							/>
 							<SingleMeasureRangeControl
 								parentLabel={parentLabel ? parentLabel : label}
-								label={__('Bottom', 'kadence-blocks')}
+								label={__('Bottom', '__KADENCE__TEXT__DOMAIN__')}
 								className={'kb-measure-box-bottom'}
 								value={value ? value[2] : ''}
 								onChange={(newVal) =>
@@ -328,7 +328,7 @@ export default function MeasureRangeControl({
 							/>
 							<SingleMeasureRangeControl
 								parentLabel={parentLabel ? parentLabel : label}
-								label={__('Left', 'kadence-blocks')}
+								label={__('Left', '__KADENCE__TEXT__DOMAIN__')}
 								className={'kb-measure-box-left'}
 								value={value ? value[3] : ''}
 								onChange={(newVal) =>

@@ -19,17 +19,17 @@ function InspectorControlTabs({ allowedTabs = null, activeTab, setActiveTab, ope
 	const defaultTabs = [
 		{
 			key: 'general',
-			title: __('General', 'kadence-blocks'),
+			title: __('General', '__KADENCE__TEXT__DOMAIN__'),
 			icon: blockDefault,
 		},
 		{
 			key: 'style',
-			title: __('Style', 'kadence-blocks'),
+			title: __('Style', '__KADENCE__TEXT__DOMAIN__'),
 			icon: brush,
 		},
 		{
 			key: 'advanced',
-			title: __('Advanced', 'kadence-blocks'),
+			title: __('Advanced', '__KADENCE__TEXT__DOMAIN__'),
 			icon: settings,
 		},
 	];
@@ -82,7 +82,7 @@ function InspectorControlTabs({ allowedTabs = null, activeTab, setActiveTab, ope
 					return (
 						<button
 							key={key}
-							aria-label={title + ' ' + __('tab', 'kadence-blocks')}
+							aria-label={title + ' ' + __('tab', '__KADENCE__TEXT__DOMAIN__')}
 							onClick={() => switchTab(key)}
 							className={classnames({
 								['is-active']: key === activeTab,

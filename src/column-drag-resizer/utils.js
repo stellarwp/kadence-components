@@ -68,13 +68,13 @@ export function getPreviewGutterSize(previewDevice, columnGutter, customGutter, 
 }
 export function getSpacingOptionName(value, unit) {
 	if (!value) {
-		return __('None', 'kadence-blocks');
+		return __('None', '__KADENCE__TEXT__DOMAIN__');
 	}
 	if (!SPACING_SIZES_MAP) {
-		return __('Unset', 'kadence-blocks');
+		return __('Unset', '__KADENCE__TEXT__DOMAIN__');
 	}
 	if (value === '0') {
-		return __('None', 'kadence-blocks');
+		return __('None', '__KADENCE__TEXT__DOMAIN__');
 	}
 	const found = SPACING_SIZES_MAP.find((option) => option.value === value);
 	if (!found) {

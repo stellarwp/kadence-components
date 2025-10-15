@@ -35,20 +35,20 @@ export const RADIAL_GRADIENT_ORIENTATION = [
 
 export const DEFAULT_RADIAL_GRADIENT_SHAPE = 'ellipse';
 export const GRADIENT_OPTIONS = [
-	{ value: 'linear-gradient', label: __('Linear', 'kadence-blocks') },
-	{ value: 'radial-gradient', label: __('Radial', 'kadence-blocks') },
+	{ value: 'linear-gradient', label: __('Linear', '__KADENCE__TEXT__DOMAIN__') },
+	{ value: 'radial-gradient', label: __('Radial', '__KADENCE__TEXT__DOMAIN__') },
 ];
 
 export const GRADIENT_POSITION_OPTIONS = [
-	{ value: 'center top', label: __('Center Top', 'kadence-blocks') },
-	{ value: 'center center', label: __('Center Center', 'kadence-blocks') },
-	{ value: 'center bottom', label: __('Center Bottom', 'kadence-blocks') },
-	{ value: 'left top', label: __('Left Top', 'kadence-blocks') },
-	{ value: 'left center', label: __('Left Center', 'kadence-blocks') },
-	{ value: 'left bottom', label: __('Left Bottom', 'kadence-blocks') },
-	{ value: 'right top', label: __('Right Top', 'kadence-blocks') },
-	{ value: 'right center', label: __('Right Center', 'kadence-blocks') },
-	{ value: 'right bottom', label: __('Right Bottom', 'kadence-blocks') },
+	{ value: 'center top', label: __('Center Top', '__KADENCE__TEXT__DOMAIN__') },
+	{ value: 'center center', label: __('Center Center', '__KADENCE__TEXT__DOMAIN__') },
+	{ value: 'center bottom', label: __('Center Bottom', '__KADENCE__TEXT__DOMAIN__') },
+	{ value: 'left top', label: __('Left Top', '__KADENCE__TEXT__DOMAIN__') },
+	{ value: 'left center', label: __('Left Center', '__KADENCE__TEXT__DOMAIN__') },
+	{ value: 'left bottom', label: __('Left Bottom', '__KADENCE__TEXT__DOMAIN__') },
+	{ value: 'right top', label: __('Right Top', '__KADENCE__TEXT__DOMAIN__') },
+	{ value: 'right center', label: __('Right Center', '__KADENCE__TEXT__DOMAIN__') },
+	{ value: 'right bottom', label: __('Right Bottom', '__KADENCE__TEXT__DOMAIN__') },
 ];
 
 export const DIRECTIONAL_ORIENTATION_ANGLE_MAP = {

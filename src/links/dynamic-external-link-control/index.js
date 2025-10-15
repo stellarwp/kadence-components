@@ -42,7 +42,7 @@ class DynamicExternalLinkControl extends Component {
 					isPressed={false}
 					aria-haspopup="true"
 					aria-expanded={open}
-					label={__('Dynamic Link', 'kadence-blocks-pro')}
+					label={__('Dynamic Link', '__KADENCE__TEXT__DOMAIN__')}
 					showTooltip={true}
 				/>
 				{open && (
@@ -56,11 +56,11 @@ class DynamicExternalLinkControl extends Component {
 					>
 						<div className="kb-dynamic-popover-inner-wrap">
 							<div className="kb-pro-notice">
-								<h2>{__('Dynamic URL', 'kadence-blocks-pro')} </h2>
+								<h2>{__('Dynamic URL', '__KADENCE__TEXT__DOMAIN__')} </h2>
 								<p>
 									{__(
 										'Create dynamic sites by populating urls from various sources.',
-										'kadence-blocks-pro'
+										'__KADENCE__TEXT__DOMAIN__'
 									)}{' '}
 								</p>
 								<ExternalLink
@@ -68,7 +68,7 @@ class DynamicExternalLinkControl extends Component {
 										'https://www.kadencewp.com/kadence-blocks/pro/?utm_source=in-app&utm_medium=kadence-blocks&utm_campaign=dynamic-content'
 									}
 								>
-									{__('Upgrade to Pro', 'kadence-blocks-pro')}
+									{__('Upgrade to Pro', '__KADENCE__TEXT__DOMAIN__')}
 								</ExternalLink>
 							</div>
 						</div>

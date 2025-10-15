@@ -40,7 +40,7 @@ class KadenceVideoControl extends Component {
 						<KadenceMediaPlaceholder
 							labels={''}
 							selectIcon={plusCircleFilled}
-							selectLabel={__('Select Video', 'kadence-blocks')}
+							selectLabel={__('Select Video', '__KADENCE__TEXT__DOMAIN__')}
 							onSelect={(img) => onSaveVideo(img)}
 							accept="video/*"
 							className={'kadence-image-upload'}
@@ -65,13 +65,13 @@ class KadenceVideoControl extends Component {
 										onClick={open}
 										icon={video}
 									>
-										{__('Edit Video', 'kadence-blocks')}
+										{__('Edit Video', '__KADENCE__TEXT__DOMAIN__')}
 									</Button>
 								)}
 							/>
 							<Button
 								icon={closeSmall}
-								label={__('Remove Image', 'kadence-blocks')}
+								label={__('Remove Image', '__KADENCE__TEXT__DOMAIN__')}
 								className={'components-button components-icon-button kb-remove-video kb-cta-upload-btn'}
 								onClick={() => onRemoveVideo()}
 							/>

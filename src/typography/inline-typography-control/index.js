@@ -161,7 +161,7 @@ class InlineTypographyControls extends Component {
 			const theme_fonts = [
 				{
 					type: 'group',
-					label: __('Theme Global Fonts', 'kadence-blocks'),
+					label: __('Theme Global Fonts', '__KADENCE__TEXT__DOMAIN__'),
 					options: themeOptions,
 				},
 			];
@@ -198,25 +198,25 @@ class InlineTypographyControls extends Component {
 	}
 	setTypographyOptions(typographySelectOptions) {
 		let standardWeights = [
-			{ value: 'inherit', label: __('Inherit', 'kadence-blocks') },
-			{ value: '400', label: __('Normal', 'kadence-blocks') },
-			{ value: 'bold', label: __('Bold', 'kadence-blocks') },
+			{ value: 'inherit', label: __('Inherit', '__KADENCE__TEXT__DOMAIN__') },
+			{ value: '400', label: __('Normal', '__KADENCE__TEXT__DOMAIN__') },
+			{ value: 'bold', label: __('Bold', '__KADENCE__TEXT__DOMAIN__') },
 		];
 		const systemWeights = [
-			{ value: 'inherit', label: __('Inherit', 'kadence-blocks') },
-			{ value: '100', label: __('Thin 100', 'kadence-blocks') },
-			{ value: '200', label: __('Extra-Light 200', 'kadence-blocks') },
-			{ value: '300', label: __('Light 300', 'kadence-blocks') },
-			{ value: '400', label: __('Regular', 'kadence-blocks') },
-			{ value: '500', label: __('Medium 500', 'kadence-blocks') },
-			{ value: '600', label: __('Semi-Bold 600', 'kadence-blocks') },
-			{ value: '700', label: __('Bold 700', 'kadence-blocks') },
-			{ value: '800', label: __('Extra-Bold 800', 'kadence-blocks') },
-			{ value: '900', label: __('Ultra-Bold 900', 'kadence-blocks') },
+			{ value: 'inherit', label: __('Inherit', '__KADENCE__TEXT__DOMAIN__') },
+			{ value: '100', label: __('Thin 100', '__KADENCE__TEXT__DOMAIN__') },
+			{ value: '200', label: __('Extra-Light 200', '__KADENCE__TEXT__DOMAIN__') },
+			{ value: '300', label: __('Light 300', '__KADENCE__TEXT__DOMAIN__') },
+			{ value: '400', label: __('Regular', '__KADENCE__TEXT__DOMAIN__') },
+			{ value: '500', label: __('Medium 500', '__KADENCE__TEXT__DOMAIN__') },
+			{ value: '600', label: __('Semi-Bold 600', '__KADENCE__TEXT__DOMAIN__') },
+			{ value: '700', label: __('Bold 700', '__KADENCE__TEXT__DOMAIN__') },
+			{ value: '800', label: __('Extra-Bold 800', '__KADENCE__TEXT__DOMAIN__') },
+			{ value: '900', label: __('Ultra-Bold 900', '__KADENCE__TEXT__DOMAIN__') },
 		];
 		const standardStyles = [
-			{ value: 'normal', label: __('Normal', 'kadence-blocks') },
-			{ value: 'italic', label: __('Italic', 'kadence-blocks') },
+			{ value: 'normal', label: __('Normal', '__KADENCE__TEXT__DOMAIN__') },
+			{ value: 'italic', label: __('Italic', '__KADENCE__TEXT__DOMAIN__') },
 		];
 		const isKadenceT =
 			typeof kadence_blocks_params !== 'undefined' && kadence_blocks_params.isKadenceT ? true : false;
@@ -671,7 +671,7 @@ class InlineTypographyControls extends Component {
 							<div className="typography-row-settings">
 								{onFontWeight && (
 									<SelectControl
-										label={__('Weight', 'kadence-blocks')}
+										label={__('Weight', '__KADENCE__TEXT__DOMAIN__')}
 										value={'400' === fontWeight && usingReg ? 'regular' : fontWeight}
 										options={typographyWeights}
 										onChange={onTypoFontWeightChange}
@@ -742,7 +742,7 @@ class InlineTypographyControls extends Component {
 										{onFontSize && (
 											<div className="kt-type-size-input-wrap">
 												<ResponsiveFontSizeControl
-													label={__('Size', 'kadence-blocks')}
+													label={__('Size', '__KADENCE__TEXT__DOMAIN__')}
 													value={fontSize ? fontSize : ''}
 													onChange={(value) => onFontSize(value)}
 													tabletValue={tabSize ? tabSize : ''}
@@ -766,7 +766,7 @@ class InlineTypographyControls extends Component {
 									<div className="kt-size-input-wrap">
 										<div className="kt-type-size-input-wrap">
 											<ResponsiveUnitControl
-												label={__('Height', 'kadence-blocks')}
+												label={__('Height', '__KADENCE__TEXT__DOMAIN__')}
 												value={lineHeight ? lineHeight : ''}
 												onChange={(value) => onLineHeight(value)}
 												tabletValue={tabLineHeight ? tabLineHeight : ''}

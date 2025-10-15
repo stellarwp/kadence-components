@@ -37,21 +37,21 @@ export default function ResponsiveControl({ desktopChildren, tabletChildren, mob
 		{
 			name: 'Desktop',
 			key: 'desktop',
-			label: __('Desktop', 'kadence-blocks'),
+			label: __('Desktop', '__KADENCE__TEXT__DOMAIN__'),
 			title: <Dashicon icon="desktop" />,
 			itemClass: 'kb-desk-tab',
 		},
 		{
 			name: 'Tablet',
 			key: 'tablet',
-			label: __('Tablet', 'kadence-blocks'),
+			label: __('Tablet', '__KADENCE__TEXT__DOMAIN__'),
 			title: <Dashicon icon="tablet" />,
 			itemClass: 'kb-tablet-tab',
 		},
 		{
 			name: 'Mobile',
 			key: 'mobile',
-			label: __('Mobile', 'kadence-blocks'),
+			label: __('Mobile', '__KADENCE__TEXT__DOMAIN__'),
 			title: <Dashicon icon="smartphone" />,
 			itemClass: 'kb-mobile-tab',
 		},
@@ -63,7 +63,7 @@ export default function ResponsiveControl({ desktopChildren, tabletChildren, mob
 	return (
 		<div className={'components-base-control kt-inspect-tabs kb-responsive-control'}>
 			<div className="kadence-title-bar">
-				<ButtonGroup className="components-tab-panel__tabs" aria-label={__('Device', 'kadence-blocks')}>
+				<ButtonGroup className="components-tab-panel__tabs" aria-label={__('Device', '__KADENCE__TEXT__DOMAIN__')}>
 					{map(devices, ({ name, key, title, itemClass, label }) => (
 						<Button
 							key={key}

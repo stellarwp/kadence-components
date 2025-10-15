@@ -98,9 +98,9 @@ export default function SingleMeasureRangeControl({
 	reviewOptions.push({
 		value: 'ss-auto',
 		output: 'var(--global-kb-spacing-auto, auto)',
-		label: __('Auto', 'kadence-blocks'),
+		label: __('Auto', '__KADENCE__TEXT__DOMAIN__'),
 		size: 0,
-		name: __('Auto', 'kadence-blocks'),
+		name: __('Auto', '__KADENCE__TEXT__DOMAIN__'),
 	});
 	useEffect(() => {
 		setIsCustom(isCustomOption(reviewOptions, value));
@@ -154,10 +154,10 @@ export default function SingleMeasureRangeControl({
 	};
 	const currentValueLabel = reviewOptions[currentValue]?.label
 		? reviewOptions[currentValue]?.label
-		: __('Unset', 'kadence-blocks');
+		: __('Unset', '__KADENCE__TEXT__DOMAIN__');
 	const currentValueName = reviewOptions[currentValue]?.name
 		? reviewOptions[currentValue]?.name + ' ' + reviewOptions[currentValue]?.size + 'px'
-		: __('Unset', 'kadence-blocks');
+		: __('Unset', '__KADENCE__TEXT__DOMAIN__');
 	const addParent = parentLabel ? parentLabel + ' ' : '';
 	let rangeLabel = label;
 	if (isSingle) {
@@ -204,7 +204,7 @@ export default function SingleMeasureRangeControl({
 			{!disableCustomSizes && (
 				<Button
 					className={'kadence-radio-item radio-custom only-icon'}
-					label={__('Set custom size', 'kadence-blocks')}
+					label={__('Set custom size', '__KADENCE__TEXT__DOMAIN__')}
 					icon={settings}
 					onClick={() => realSetIsCustom(true)}
 					isPressed={false}
@@ -260,7 +260,7 @@ export default function SingleMeasureRangeControl({
 													className={'custom-auto-button'}
 													variant="secondary"
 													isSmall
-													text={__('Auto', 'kadence-blocks')}
+													text={__('Auto', '__KADENCE__TEXT__DOMAIN__')}
 													onClick={() => onChange('ss-auto')}
 													isPressed={value && 'ss-auto' == value ? true : false}
 												/>
@@ -269,7 +269,7 @@ export default function SingleMeasureRangeControl({
 												className={'custom-reset-button'}
 												variant="secondary"
 												isSmall
-												text={__('Reset', 'kadence-blocks')}
+												text={__('Reset', '__KADENCE__TEXT__DOMAIN__')}
 												onClick={() => onChange('')}
 											/>
 										</div>
@@ -322,7 +322,7 @@ export default function SingleMeasureRangeControl({
 							<ButtonGroup className="kadence-radio-container-control">
 								<Button
 									className={'kadence-radio-item radio-custom only-icon'}
-									label={__('Use size preset', 'kadence-blocks')}
+									label={__('Use size preset', '__KADENCE__TEXT__DOMAIN__')}
 									icon={settings}
 									isPrimary={true}
 									onClick={() => realSetIsCustom(false)}

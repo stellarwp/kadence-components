@@ -146,10 +146,10 @@ export default function SingleBorderControl({
 		),
 	};
 	const styleLabels = {
-		solid: __('Solid', 'kadence-blocks'),
-		dashed: __('Dashed', 'kadence-blocks'),
-		dotted: __('Dotted', 'kadence-blocks'),
-		double: __('Double', 'kadence-blocks'),
+		solid: __('Solid', '__KADENCE__TEXT__DOMAIN__'),
+		dashed: __('Dashed', '__KADENCE__TEXT__DOMAIN__'),
+		dotted: __('Dotted', '__KADENCE__TEXT__DOMAIN__'),
+		double: __('Double', '__KADENCE__TEXT__DOMAIN__'),
 	};
 	const controlUnits = units.map((unitItem) => ({
 		value: unitItem,
@@ -180,7 +180,7 @@ export default function SingleBorderControl({
 					<DropdownMenu
 						className="border-control-style-select"
 						icon={styleIcons[currentStyle]}
-						label={__('Border Style', 'kadence-blocks')}
+						label={__('Border Style', '__KADENCE__TEXT__DOMAIN__')}
 						popoverProps={{
 							className: 'border-control-style-select__popover',
 							placement: 'bottom',

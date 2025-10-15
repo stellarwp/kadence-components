@@ -285,14 +285,14 @@ const GradientPositionPicker = ({ gradientAST, hasGradient, onChange }) => {
 		<div className={`components-base-control kadence-gradient-position-control`}>
 			<Flex justify="space-between" className={'kadence-gradient-position_header'}>
 				<FlexItem>
-					<label className="kadence-gradient-position__label">{__('Position', 'kadence-blocks')}</label>
+					<label className="kadence-gradient-position__label">{__('Position', '__KADENCE__TEXT__DOMAIN__')}</label>
 				</FlexItem>
 			</Flex>
 			{positionType === 'position-keyword' && (
 				<div className={'kadence-controls-content'}>
 					<SelectControl
 						className="components-custom-gradient-picker__position-picker"
-						// label={ __( 'Position', 'kadence-blocks' ) }
+						// label={ __( 'Position', '__KADENCE__TEXT__DOMAIN__' ) }
 						// labelPosition="top"
 						onChange={onPositionChange}
 						options={GRADIENT_POSITION_OPTIONS}
@@ -300,7 +300,7 @@ const GradientPositionPicker = ({ gradientAST, hasGradient, onChange }) => {
 					/>
 					<Button
 						className={'kadence-control-toggle-advanced only-icon'}
-						label={__('Set custom position', 'kadence-blocks')}
+						label={__('Set custom position', '__KADENCE__TEXT__DOMAIN__')}
 						icon={settings}
 						onClick={() => onPositionTypeChange('%')}
 						isPressed={false}
@@ -312,7 +312,7 @@ const GradientPositionPicker = ({ gradientAST, hasGradient, onChange }) => {
 				<div className={'kadence-controls-content'}>
 					<UnitControl
 						labelPosition="left"
-						label={__('Left', 'kadence-blocks')}
+						label={__('Left', '__KADENCE__TEXT__DOMAIN__')}
 						max={100}
 						min={0}
 						units={[{ value: '%', label: '%' }]}
@@ -321,7 +321,7 @@ const GradientPositionPicker = ({ gradientAST, hasGradient, onChange }) => {
 					/>
 					<UnitControl
 						labelPosition="left"
-						label={__('Top', 'kadence-blocks')}
+						label={__('Top', '__KADENCE__TEXT__DOMAIN__')}
 						max={100}
 						min={0}
 						value={positionTop}
@@ -330,7 +330,7 @@ const GradientPositionPicker = ({ gradientAST, hasGradient, onChange }) => {
 					/>
 					<Button
 						className={'kadence-control-toggle-advanced only-icon'}
-						label={__('Set standard position', 'kadence-blocks')}
+						label={__('Set standard position', '__KADENCE__TEXT__DOMAIN__')}
 						icon={settings}
 						onClick={() => onPositionTypeChange('position-keyword')}
 						isPrimary={true}
@@ -368,12 +368,12 @@ const GradientShapePicker = ({ gradientAST, hasGradient, onChange }) => {
 	return (
 		<SelectControl
 			className="components-custom-gradient-picker__shape-picker kadence-select-large"
-			label={__('Shape', 'kadence-blocks')}
+			label={__('Shape', '__KADENCE__TEXT__DOMAIN__')}
 			labelPosition="top"
 			onChange={onShapeChange}
 			options={[
-				{ value: 'ellipse', label: __('Ellipse', 'kadence-blocks') },
-				{ value: 'circle', label: __('Circle', 'kadence-blocks') },
+				{ value: 'ellipse', label: __('Ellipse', '__KADENCE__TEXT__DOMAIN__') },
+				{ value: 'circle', label: __('Circle', '__KADENCE__TEXT__DOMAIN__') },
 			]}
 			value={hasGradient && shape}
 		/>

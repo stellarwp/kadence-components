@@ -254,7 +254,7 @@ export default function ResponsiveBorderControl({
 					)}
 					<ButtonGroup
 						className="kb-responsive-options kb-measure-responsive-options"
-						aria-label={__('Device', 'kadence-blocks')}
+						aria-label={__('Device', '__KADENCE__TEXT__DOMAIN__')}
 					>
 						{map(devices, ({ name, key, title, itemClass }) => (
 							<Button
@@ -274,8 +274,8 @@ export default function ResponsiveBorderControl({
 							className={'kadence-radio-item border-control-toggle is-single only-icon'}
 							label={
 								realControl !== 'individual'
-									? __('Individual', 'kadence-blocks')
-									: __('Linked', 'kadence-blocks')
+									? __('Individual', '__KADENCE__TEXT__DOMAIN__')
+									: __('Linked', '__KADENCE__TEXT__DOMAIN__')
 							}
 							icon={realControl !== 'individual' ? measureIcons.link : measureIcons.unlink}
 							onClick={() => realSetOnControl(realControl !== 'individual' ? 'individual' : 'linked')}

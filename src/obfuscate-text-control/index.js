@@ -55,7 +55,7 @@ export default function ObfuscateTextControl({
 								onClick={() => onChange(tempValue)}
 								disabled={'' === tempValue}
 							>
-								{__('Save', 'kadence-blocks')}
+								{__('Save', '__KADENCE__TEXT__DOMAIN__')}
 								{isSaving ? <Spinner /> : ''}
 							</Button>
 						</>
@@ -64,7 +64,7 @@ export default function ObfuscateTextControl({
 						<>
 							<TextControl id={id} value={'***************************'} readOnly={true} />
 							<Button isSecondary isSmall className="kb-obfuscate-save" onClick={() => onChange('')}>
-								{__('Remove', 'kadence-blocks')}
+								{__('Remove', '__KADENCE__TEXT__DOMAIN__')}
 								{isSaving ? <Spinner /> : ''}
 							</Button>
 						</>
@@ -73,7 +73,7 @@ export default function ObfuscateTextControl({
 						<>
 							<TextControl id={id} value={value} readOnly={true} />
 							<Button isSecondary isSmall className="kb-obfuscate-save" onClick={() => onChange('')}>
-								{__('Clear', 'kadence-blocks')}
+								{__('Clear', '__KADENCE__TEXT__DOMAIN__')}
 								{isSaving ? <Spinner /> : ''}
 							</Button>
 						</>

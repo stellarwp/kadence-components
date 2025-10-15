@@ -26,12 +26,12 @@ import { hoverToggle, click } from '@kadence/icons';
  * @returns {object} Measure settings.
  */
 export default function HoverToggleControl({
-	label = __('Hover Styles', 'kadence-blocks'),
-	activeLabel = __('Active Styles', 'kadence-blocks'),
+	label = __('Hover Styles', '__KADENCE__TEXT__DOMAIN__'),
+	activeLabel = __('Active Styles', '__KADENCE__TEXT__DOMAIN__'),
 	initial = 'normal',
-	hoverTab = __( 'Hover', 'kadence-blocks' ),
-	normalTab = __( 'Normal', 'kadence-blocks' ),
-	activeTab = __( 'Active', 'kadence-blocks' ),
+	hoverTab = __( 'Hover', '__KADENCE__TEXT__DOMAIN__' ),
+	normalTab = __( 'Normal', '__KADENCE__TEXT__DOMAIN__' ),
+	activeTab = __( 'Active', '__KADENCE__TEXT__DOMAIN__' ),
 	active,
 	hover,
 	normal,
@@ -88,8 +88,8 @@ export default function HoverToggleControl({
 												isPressed={ activePreview }
 												text={
 													activePreview
-														? __( 'Hide Active State', 'kadence-blocks' )
-														: __( 'Preview Active State', 'kadence-blocks' )
+														? __( 'Hide Active State', '__KADENCE__TEXT__DOMAIN__' )
+														: __( 'Preview Active State', '__KADENCE__TEXT__DOMAIN__' )
 												}
 												onClick={ () => {
 													setActivePreview( ! activePreview );

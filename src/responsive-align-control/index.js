@@ -123,22 +123,22 @@ export default function ResponsiveAlignControls({
 		alignmentControls = [
 			{
 				icon: arrowRight,
-				title: __('Horizontal Direction', 'kadence-blocks'),
+				title: __('Horizontal Direction', '__KADENCE__TEXT__DOMAIN__'),
 				align: 'row',
 			},
 			{
 				icon: arrowDown,
-				title: __('Vertical Direction', 'kadence-blocks'),
+				title: __('Vertical Direction', '__KADENCE__TEXT__DOMAIN__'),
 				align: 'column',
 			},
 			{
 				icon: arrowLeft,
-				title: __('Horizontal Reverse', 'kadence-blocks'),
+				title: __('Horizontal Reverse', '__KADENCE__TEXT__DOMAIN__'),
 				align: 'row-reverse',
 			},
 			{
 				icon: arrowUp,
-				title: __('Vertical Reverse', 'kadence-blocks'),
+				title: __('Vertical Reverse', '__KADENCE__TEXT__DOMAIN__'),
 				align: 'column-reverse',
 			},
 		];
@@ -146,22 +146,22 @@ export default function ResponsiveAlignControls({
 		alignmentControls = [
 			{
 				icon: alignTop,
-				title: __('Top', 'kadence-blocks'),
+				title: __('Top', '__KADENCE__TEXT__DOMAIN__'),
 				align: 'top',
 			},
 			{
 				icon: alignCenter,
-				title: __('Middle', 'kadence-blocks'),
+				title: __('Middle', '__KADENCE__TEXT__DOMAIN__'),
 				align: 'middle',
 			},
 			{
 				icon: alignBottom,
-				title: __('Bottom', 'kadence-blocks'),
+				title: __('Bottom', '__KADENCE__TEXT__DOMAIN__'),
 				align: 'bottom',
 			},
 			{
 				icon: alignStretch,
-				title: __('Stretch', 'kadence-blocks'),
+				title: __('Stretch', '__KADENCE__TEXT__DOMAIN__'),
 				align: 'stretch',
 			},
 		];
@@ -214,7 +214,7 @@ export default function ResponsiveAlignControls({
 			<div className={'components-base-control kb-sidebar-alignment kb-responsive-align-control'}>
 				<div className="kadence-title-bar">
 					{label && <span className="kadence-control-title">{label}</span>}
-					<ButtonGroup className="kb-measure-responsive-options" aria-label={__('Device', 'kadence-blocks')}>
+					<ButtonGroup className="kb-measure-responsive-options" aria-label={__('Device', '__KADENCE__TEXT__DOMAIN__')}>
 						{map(devices, ({ name, key, title, itemClass }) => (
 							<Button
 								key={key}

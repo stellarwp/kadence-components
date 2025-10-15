@@ -60,13 +60,13 @@ export default function ButtonStyleControls({
 	return (
 		<>
 			<PopColorControl
-				label={__('Color', 'kadence-blocks')}
+				label={__('Color', '__KADENCE__TEXT__DOMAIN__')}
 				value={color ? color : ''}
 				default={''}
 				onChange={(value) => setAttributes({ [colorKey]: value })}
 			/>
 			<BackgroundTypeControl
-				label={__('Type', 'kadence-blocks')}
+				label={__('Type', '__KADENCE__TEXT__DOMAIN__')}
 				type={backgroundType ? backgroundType : 'normal'}
 				onChange={(value) => setAttributes({ [backgroundTypeKey]: value })}
 				allowedTypes={['normal', 'gradient']}
@@ -80,14 +80,14 @@ export default function ButtonStyleControls({
 			)}
 			{'normal' === backgroundType && (
 				<PopColorControl
-					label={__('Background Color', 'kadence-blocks')}
+					label={__('Background Color', '__KADENCE__TEXT__DOMAIN__')}
 					value={background ? background : ''}
 					default={''}
 					onChange={(value) => setAttributes({ [backgroundKey]: value })}
 				/>
 			)}
 			<ResponsiveBorderControl
-				label={__('Border', 'kadence-blocks')}
+				label={__('Border', '__KADENCE__TEXT__DOMAIN__')}
 				value={borderStyle}
 				tabletValue={tabletBorderStyle}
 				mobileValue={mobileBorderStyle}
@@ -96,7 +96,7 @@ export default function ButtonStyleControls({
 				onChangeMobile={(value) => setAttributes({ [mobileBorderStyleKey]: value })}
 			/>
 			<ResponsiveMeasurementControls
-				label={__('Border Radius', 'kadence-blocks')}
+				label={__('Border Radius', '__KADENCE__TEXT__DOMAIN__')}
 				value={borderRadius}
 				tabletValue={tabletBorderRadius}
 				mobileValue={mobileBorderRadius}
@@ -113,7 +113,7 @@ export default function ButtonStyleControls({
 				allowEmpty={true}
 			/>
 			<BoxShadowControl
-				label={__('Box Shadow', 'kadence-blocks')}
+				label={__('Box Shadow', '__KADENCE__TEXT__DOMAIN__')}
 				enable={undefined !== displayShadow ? displayShadow : false}
 				color={
 					undefined !== shadow && undefined !== shadow[0] && undefined !== shadow[0].color

@@ -108,12 +108,12 @@ class URLInputControl extends Component {
 						{changeTargetType && (
 							<Fragment>
 								<SelectControl
-									label={__('Link Target', 'kadence-blocks')}
+									label={__('Link Target', '__KADENCE__TEXT__DOMAIN__')}
 									value={opensInNewTab}
 									options={[
-										{ value: '_self', label: __('Same Window', 'kadence-blocks') },
-										{ value: '_blank', label: __('New Window', 'kadence-blocks') },
-										{ value: 'video', label: __('Video Popup', 'kadence-blocks') },
+										{ value: '_self', label: __('Same Window', '__KADENCE__TEXT__DOMAIN__') },
+										{ value: '_blank', label: __('New Window', '__KADENCE__TEXT__DOMAIN__') },
+										{ value: 'video', label: __('Video Popup', '__KADENCE__TEXT__DOMAIN__') },
 									]}
 									onChange={onSetNewTab}
 								/>
@@ -121,7 +121,7 @@ class URLInputControl extends Component {
 									<p>
 										{__(
 											'NOTE: Video popup only works with youtube and vimeo links.',
-											'kadence-blocks'
+											'__KADENCE__TEXT__DOMAIN__'
 										)}
 									</p>
 								)}
@@ -129,7 +129,7 @@ class URLInputControl extends Component {
 						)}
 						{!changeTargetType && (
 							<ToggleControl
-								label={__('Open in New Tab', 'kadence-blocks')}
+								label={__('Open in New Tab', '__KADENCE__TEXT__DOMAIN__')}
 								onChange={onSetNewTab}
 								checked={opensInNewTab}
 							/>
@@ -138,28 +138,28 @@ class URLInputControl extends Component {
 				)}
 				{onChangeFollow && (
 					<ToggleControl
-						label={__('No Follow', 'kadence-blocks')}
+						label={__('No Follow', '__KADENCE__TEXT__DOMAIN__')}
 						onChange={onSetLinkNoFollow}
 						checked={linkNoFollow}
 					/>
 				)}
 				{onChangeSponsored && (
 					<ToggleControl
-						label={__('Sponsored', 'kadence-blocks')}
+						label={__('Sponsored', '__KADENCE__TEXT__DOMAIN__')}
 						onChange={onSetLinkSponsored}
 						checked={linkSponsored}
 					/>
 				)}
 				{onChangeDownload && (
 					<ToggleControl
-						label={__('Download', 'kadence-blocks')}
+						label={__('Download', '__KADENCE__TEXT__DOMAIN__')}
 						onChange={onSetLinkDownload}
 						checked={linkDownload}
 					/>
 				)}
 				{onChangeLinkClass && (
 					<TextControl
-						label={__('Link CSS Class', 'kadence-blocks')}
+						label={__('Link CSS Class', '__KADENCE__TEXT__DOMAIN__')}
 						onChange={onSetLinkClass}
 						value={linkClass}
 					/>
@@ -188,11 +188,11 @@ class URLInputControl extends Component {
 				/>
 				{onChangeTitle && (
 					<TextControl
-						label={linkTitleLabel ? linkTitleLabel : __('Title', 'kadence-blocks')}
+						label={linkTitleLabel ? linkTitleLabel : __('Title', '__KADENCE__TEXT__DOMAIN__')}
 						onChange={onSetLinkTitle}
 						value={linkTitle}
 						style={url && !linkTitle ? { backgroundColor: 'rgba(255, 255, 0, 0.5)' } : {}}
-						placeholder={url && !linkTitle ? __('Add a Title', 'kadence-blocks') : ''}
+						placeholder={url && !linkTitle ? __('Add a Title', '__KADENCE__TEXT__DOMAIN__') : ''}
 					/>
 				)}
 			</div>

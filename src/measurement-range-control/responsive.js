@@ -79,9 +79,9 @@ export default function ResponsiveMeasureRangeControl({
 	reviewOptions.push({
 		value: 'ss-auto',
 		output: 'var(--global-kb-spacing-auto, auto)',
-		label: __('Auto', 'kadence-blocks'),
+		label: __('Auto', '__KADENCE__TEXT__DOMAIN__'),
 		size: 0,
-		name: __('Auto', 'kadence-blocks'),
+		name: __('Auto', '__KADENCE__TEXT__DOMAIN__'),
 	});
 	const onSetIsCustom = () => {
 		convertValueToFromCustomByDeviceType();
@@ -206,7 +206,7 @@ export default function ResponsiveMeasureRangeControl({
 			key={2}
 			className="measure-mobile-size"
 			parentLabel={label}
-			label={subLabel ? __('Mobile:', 'kadence-blocks') + subLabel : undefined}
+			label={subLabel ? __('Mobile:', '__KADENCE__TEXT__DOMAIN__') + subLabel : undefined}
 			value={mobileValue ? mobileValue : ['', '', '', '']}
 			placeholder={mobilePlaceholder}
 			onChange={(size) => onChangeMobile(clearNonMatchingValues(mobileValue, size))}
@@ -240,7 +240,7 @@ export default function ResponsiveMeasureRangeControl({
 			key={1}
 			className="measure-tablet-size"
 			parentLabel={label}
-			label={subLabel ? __('Tablet:', 'kadence-blocks') + subLabel : undefined}
+			label={subLabel ? __('Tablet:', '__KADENCE__TEXT__DOMAIN__') + subLabel : undefined}
 			value={tabletValue ? tabletValue : ['', '', '', '']}
 			placeholder={value ? value : ['', '', '', '']}
 			onChange={(size) => onChangeTablet(clearNonMatchingValues(tabletValue, size))}
@@ -339,7 +339,7 @@ export default function ResponsiveMeasureRangeControl({
 					)}
 					<ButtonGroup
 						className="kb-responsive-options kb-measure-responsive-options"
-						aria-label={__('Device', 'kadence-blocks')}
+						aria-label={__('Device', '__KADENCE__TEXT__DOMAIN__')}
 					>
 						{map(devices, ({ name, key, title, itemClass }) => (
 							<Button
@@ -358,8 +358,8 @@ export default function ResponsiveMeasureRangeControl({
 							className={'kadence-radio-item radio-custom only-icon'}
 							label={
 								!realIsCustomControl
-									? __('Set custom size', 'kadence-blocks')
-									: __('Use size preset', 'kadence-blocks')
+									? __('Set custom size', '__KADENCE__TEXT__DOMAIN__')
+									: __('Use size preset', '__KADENCE__TEXT__DOMAIN__')
 							}
 							icon={settings}
 							isSmall={true}
@@ -374,8 +374,8 @@ export default function ResponsiveMeasureRangeControl({
 							className={'kadence-radio-item radio-custom is-single only-icon'}
 							label={
 								realControl !== 'individual'
-									? __('Individual', 'kadence-blocks')
-									: __('Linked', 'kadence-blocks')
+									? __('Individual', '__KADENCE__TEXT__DOMAIN__')
+									: __('Linked', '__KADENCE__TEXT__DOMAIN__')
 							}
 							icon={realControl !== 'individual' ? measureIcons.link : measureIcons.unlink}
 							onClick={() => realSetOnControl(realControl !== 'individual' ? 'individual' : 'linked')}

@@ -91,13 +91,13 @@ export default function BorderColorControls({
 				{realOnChangeControl && (
 					<div className="kadence-units kadence-locked">
 						{realControl !== 'individual' ? (
-							<Tooltip text={__('Individual', 'kadence-blocks')}>
+							<Tooltip text={__('Individual', '__KADENCE__TEXT__DOMAIN__')}>
 								<Button className="is-single" isSmall onClick={() => realOnChangeControl('individual')}>
 									{measureIcons.link}
 								</Button>
 							</Tooltip>
 						) : (
-							<Tooltip text={__('Linked', 'kadence-blocks')}>
+							<Tooltip text={__('Linked', '__KADENCE__TEXT__DOMAIN__')}>
 								<Button className="is-single" isSmall onClick={() => realOnChangeControl('linked')}>
 									{measureIcons.unlink}
 								</Button>

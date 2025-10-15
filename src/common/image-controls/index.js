@@ -47,7 +47,7 @@ class KadenceImageControl extends Component {
 						<KadenceMediaPlaceholder
 							labels={''}
 							selectIcon={plusCircleFilled}
-							selectLabel={__('Select Image', 'kadence-blocks')}
+							selectLabel={__('Select Image', '__KADENCE__TEXT__DOMAIN__')}
 							onSelect={(img) => onSaveImage(img)}
 							accept="image/*"
 							className={'kadence-image-upload'}
@@ -93,13 +93,13 @@ class KadenceImageControl extends Component {
 											onClick={open}
 											icon={image}
 										>
-											{__('Edit Image', 'kadence-blocks')}
+											{__('Edit Image', '__KADENCE__TEXT__DOMAIN__')}
 										</Button>
 									)}
 								/>
 								<Button
 									icon={closeSmall}
-									label={__('Remove Image', 'kadence-blocks')}
+									label={__('Remove Image', '__KADENCE__TEXT__DOMAIN__')}
 									className={
 										'components-button components-icon-button kt-remove-img kt-cta-upload-btn'
 									}

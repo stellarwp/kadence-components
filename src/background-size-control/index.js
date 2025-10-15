@@ -43,9 +43,9 @@ export default function BackgroundSizeControl({
 	value,
 	onChange,
 	options = [
-		{ value: 'cover', label: __('Cover', 'kadence-blocks') },
-		{ value: 'contain', label: __('Contain', 'kadence-blocks') },
-		{ value: 'auto', label: __('Auto', 'kadence-blocks') },
+		{ value: 'cover', label: __('Cover', '__KADENCE__TEXT__DOMAIN__') },
+		{ value: 'contain', label: __('Contain', '__KADENCE__TEXT__DOMAIN__') },
+		{ value: 'auto', label: __('Auto', '__KADENCE__TEXT__DOMAIN__') },
 	],
 	allowCustom = true,
 }) {
@@ -106,7 +106,7 @@ export default function BackgroundSizeControl({
 						{allowCustom && (
 							<Button
 								className={'kadence-radio-item radio-custom only-icon'}
-								label={__('Set custom size', 'kadence-blocks')}
+								label={__('Set custom size', '__KADENCE__TEXT__DOMAIN__')}
 								icon={settings}
 								onClick={() => setIsCustom(true)}
 								isPressed={false}
@@ -120,7 +120,7 @@ export default function BackgroundSizeControl({
 				<div className={'kadence-controls-content'}>
 					<UnitControl
 						labelPosition="top"
-						label={__('Width', 'kadence-blocks')}
+						label={__('Width', '__KADENCE__TEXT__DOMAIN__')}
 						max={4000}
 						min={0}
 						units={[
@@ -133,7 +133,7 @@ export default function BackgroundSizeControl({
 					/>
 					<UnitControl
 						labelPosition="top"
-						label={__('Height', 'kadence-blocks')}
+						label={__('Height', '__KADENCE__TEXT__DOMAIN__')}
 						max={4000}
 						min={0}
 						value={height}
@@ -148,7 +148,7 @@ export default function BackgroundSizeControl({
 						<ButtonGroup className="kadence-radio-container-control kadence-small-radio-container">
 							<Button
 								className={'kadence-radio-item radio-custom only-icon'}
-								label={__('Use size preset', 'kadence-blocks')}
+								label={__('Use size preset', '__KADENCE__TEXT__DOMAIN__')}
 								icon={settings}
 								isPrimary={true}
 								onClick={() => setIsCustom(false)}
