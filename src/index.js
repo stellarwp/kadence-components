@@ -120,3 +120,11 @@ export { default as TaxonomySelect } from './taxonomy-select';
 
 export { default as FieldMultiRule } from './field-multi-rule';
 export { default as ColumnDragResizer } from './column-drag-resizer';
+export { default as getFormFields } from './advanced-form/get-form-fields';
+export { default as SendinBlueOptions } from './advanced-form/submit-actions/sendinblue';
+export { default as MailchimpOptions } from './advanced-form/submit-actions/mailchimp';
+export { default as ConvertKitOptions } from './advanced-form/submit-actions/convert-kit';
+export { default as ActiveCampaignOptions } from './advanced-form/submit-actions/active-campaign';
+export { default as WebhookOptions } from './advanced-form/submit-actions/webhook';
+export { default as AutoEmailOptions } from './advanced-form/submit-actions/auto-email';
+export { default as DbEntryOptions } from './advanced-form/submit-actions/db-entry';
