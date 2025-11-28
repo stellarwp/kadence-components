@@ -39,7 +39,7 @@
 		"colord": "^2.9.3",
 		"react-color": "^2.18.0",
 		"react-container-dimensions": "^1.4.1",
-		"react-select": "^2.2.0"
+		"react-select": "^5.10.0"
 	},
 	"peerDependencies": {
 		"@kadence/helpers": "*",
