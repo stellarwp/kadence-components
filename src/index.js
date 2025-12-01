@@ -13,8 +13,10 @@ export { default as ColorFields } from './color-fields';
 export { default as InlinePopColorControl } from './inline-pop-color';
 export { default as ResponsiveAlignControls } from './responsive-align-control';
 export { default as KadenceSelectPosts } from './select-posts-controls';
+export { default as SimpleWebfontLoader } from './simple-web-font-loader';
 export { default as WebfontLoader } from './web-font-loader';
 export { default as KadenceFormConditionals } from './form-conditionals';
+export { default as SimpleKadenceWebfontLoader } from './simple-webfont-loader';
 export { default as KadenceWebfontLoader } from './kadence-web-font-loader';
 export { default as HeadingLevelIcon } from './heading-level-icon';
 export { default as BoxShadowControl } from './box-shadow-control';
@@ -34,6 +36,7 @@ export { default as ResponsiveMeasureRangeControl } from './measurement-range-co
 export { default as SpacingVisualizer } from './visualizer/spacing';
 export { default as KadenceFocalPicker } from './focal-picker';
 export { default as KadenceRadioButtons } from './common/radio-buttons';
+export { default as ResponsiveKadenceRadioButtons } from './responsive-radio-buttons';
 export { default as KadenceMediaPlaceholder } from './common/media-placeholder';
 export { default as ImageSizeControl } from './common/image-size-controls';
 export { default as VerticalAlignmentIcon } from './common/vertical-align-icon';
@@ -66,6 +69,7 @@ export { default as CopyPasteAttributes } from './copy-paste-attributes';
 export { default as DynamicTextInputControl } from './dynamic-text-input-control';
 export { default as KadencePanelButton } from './panel-button';
 export { default as SelectPostsModal } from './select-posts-modal';
+export { default as SelectPostFromPostType } from './select-post-from-post-type';
 export { default as Tooltip } from './tooltip';
 
 /* Panels */
@@ -115,9 +119,12 @@ export { default as KadenceBlockDefaults } from './block-defaults';
 export { default as KadenceIconPicker } from './icon-picker';
 
 export { default as SelectParentBlock } from './select-parent-block';
+export { default as SelectChildBlock } from './select-child-block';
 export { default as ObfuscateTextControl } from './obfuscate-text-control';
 export { default as TaxonomySelect } from './taxonomy-select';
 
+export { default as PostSelectorCheckbox } from './post-selector-checkbox';
+export { default as OnboardingModal } from './onboarding-modal';
 export { default as FieldMultiRule } from './field-multi-rule';
 export { default as ColumnDragResizer } from './column-drag-resizer';
 export { default as getFormFields } from './advanced-form/get-form-fields';
