@@ -23,6 +23,8 @@
 		"LICENSE"
 	],
 	"scripts": {
+		"lint-js": "wp-scripts lint-js",
+		"lint-js-fix": "wp-scripts lint-js --fix",
 		"prettier": "prettier . --write",
 		"clean": "rimraf dist",
 		"copy:assets": "node scripts/copy-assets.js",
@@ -50,8 +52,16 @@
 	"devDependencies": {
 		"@babel/cli": "^7.26.0",
 		"@babel/core": "^7.26.0",
+		"@wordpress/eslint-plugin": "^14.12.0",
 		"@wordpress/babel-preset-default": "^8.0.0",
+		"@wordpress/scripts": "^26.2.0",
 		"@wordpress/prettier-config": "^2.25.13",
+		"eslint": "^8.39.0",
+		"eslint-import-resolver-webpack": "^0.13.8",
+		"eslint-plugin-jest": "^27.2.1",
+		"eslint-plugin-jsx-a11y": "^6.7.1",
+		"eslint-plugin-prettier": "^3.4.1",
+		"eslint-plugin-react": "^7.32.1",
 		"fs-extra": "^11.2.0",
 		"prettier": "^2.8.8",
 		"rimraf": "^5.0.5"
