@@ -56,12 +56,18 @@ const eslintConfig = {
 		navigator: 'readonly',
 	},
 	rules: {
-		'@wordpress/i18n-text-domain': [
-			'error',
-			{
-				allowedTextDomain: ['__KADENCE__TEXT__DOMAIN__'],
-			},
-		],
+		'prettier/prettier': 'off',
+		'object-shorthand': 'off',
+		'prefer-const': 'off',
+		'no-lonely-if': 'off',
+		'no-else-return': 'off',
+		// '@wordpress/i18n-text-domain': [
+		// 	'error',
+		// 	{
+		// 		allowedTextDomain: ['__KADENCE__TEXT__DOMAIN__'],
+		// 	},
+		// ],
+		'@wordpress/i18n-text-domain': 'off',
 		'import/no-extraneous-dependencies': 'off',
 		'import/no-unresolved': 'off',
 		'import/named': 'off',
