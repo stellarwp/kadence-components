@@ -93,6 +93,7 @@ export default function MeasurementControls({
 			onChange(['', '', '', '']);
 		}
 	};
+	const liveValue = measurement;
 	return (
 		<>
 			{onChange && (

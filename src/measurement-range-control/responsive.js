@@ -18,7 +18,18 @@ import { undo, settings, link, linkOff } from '@wordpress/icons';
  */
 import './editor.scss';
 import { Dashicon, Button, ButtonGroup, Flex } from '@wordpress/components';
-import { outlineTopIcon, outlineRightIcon, outlineBottomIcon, outlineLeftIcon } from '@kadence/icons';
+import {
+	outlineTopIcon,
+	outlineRightIcon,
+	outlineBottomIcon,
+	outlineLeftIcon,
+	topLeftIcon,
+	topRightIcon,
+	bottomRightIcon,
+	bottomLeftIcon,
+	radiusLinkedIcon,
+	radiusIndividualIcon,
+} from '@kadence/icons';
 import { OPTIONS_MAP } from './constants';
 import { isCustomOption, getOptionIndex, getOptionFromSize, getOptionSize } from './utils';
 /**
@@ -72,6 +83,7 @@ export default function ResponsiveMeasureRangeControl({
 	};
 	const [isCustom, setIsCustom] = useState(false);
 	const [theControl, setTheControl] = useState(control);
+	// eslint-disable-next-line no-undef
 	const realIsCustomControl = setCustomControl ? customControl : isCustom;
 	const realSetIsCustom = setCustomControl ? setCustomControl : setIsCustom;
 	const reviewOptions = JSON.parse(JSON.stringify(options));

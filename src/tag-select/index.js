@@ -101,8 +101,10 @@ export default function tagSelect({
 											className="is-reset is-single"
 											label="reset"
 											isSmall
+											// eslint-disable-next-line no-undef
 											disabled={isEqual(defaultValue, value) ? true : false}
 											icon={undo}
+											// eslint-disable-next-line no-undef
 											onClick={() => onReset()}
 										/>
 									</div>
