@@ -1,5 +1,5 @@
 import { Button, Tooltip, ResizableBox } from '@wordpress/components';
-import { isRTL } from '@kadence/helpers';
+import { isRTL, getPreviewSize } from '@kadence/helpers';
 import classnames from 'classnames';
 import { debounce, throttle } from 'lodash';
 
@@ -10,7 +10,6 @@ import { __ } from '@wordpress/i18n';
 import { useState } from '@wordpress/element';
 import { getPreviewGutterSize, getGutterTotal } from './utils';
 import ContainerDimensions from 'react-container-dimensions';
-import { getPreviewSize } from '@kadence/helpers';
 
 /**
  * Import Css

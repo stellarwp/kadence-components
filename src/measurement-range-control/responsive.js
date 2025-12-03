@@ -12,7 +12,7 @@ import { __ } from '@wordpress/i18n';
 import { map, isEqual } from 'lodash';
 import MeasureRangeControl from './index';
 import { capitalizeFirstLetter, objectSameFill, clearNonMatchingValues } from '@kadence/helpers';
-import { undo } from '@wordpress/icons';
+import { undo, settings, link, linkOff } from '@wordpress/icons';
 /**
  * Import Css
  */
@@ -20,7 +20,6 @@ import './editor.scss';
 import { Dashicon, Button, ButtonGroup, Flex } from '@wordpress/components';
 import { outlineTopIcon, outlineRightIcon, outlineBottomIcon, outlineLeftIcon } from '@kadence/icons';
 import { OPTIONS_MAP } from './constants';
-import { settings, link, linkOff } from '@wordpress/icons';
 import { isCustomOption, getOptionIndex, getOptionFromSize, getOptionSize } from './utils';
 /**
  * Build the Measure controls

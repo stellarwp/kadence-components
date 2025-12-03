@@ -54,6 +54,8 @@ const eslintConfig = {
 		navMenu: 'readonly',
 		kb_meta_file: 'readonly',
 		navigator: 'readonly',
+		localStorage: 'readonly',
+		ktgooglefonts: 'readonly',
 	},
 	rules: {
 		'prettier/prettier': 'off',

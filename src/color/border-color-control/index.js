@@ -19,10 +19,9 @@ import './editor.scss';
  * Internal block libraries
  */
 import { __ } from '@wordpress/i18n';
-import { Fragment } from '@wordpress/element';
+import { Fragment, useState, useRef } from '@wordpress/element';
 import { Button, ButtonGroup, Tooltip } from '@wordpress/components';
 import { useSelect, useDispatch } from '@wordpress/data';
-import { useState, useRef } from '@wordpress/element';
 
 import {
 	outlineTopIcon,

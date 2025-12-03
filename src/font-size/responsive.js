@@ -12,9 +12,8 @@ import { __ } from '@wordpress/i18n';
 import { map, isEqual } from 'lodash';
 import FontSizeControl from './index';
 import { capitalizeFirstLetter, FONT_SIZES_MAP } from '@kadence/helpers';
-import { undo } from '@wordpress/icons';
+import { undo, settings, link, linkOff } from '@wordpress/icons';
 import { Dashicon, Button, DropdownMenu, ButtonGroup } from '@wordpress/components';
-import { settings, link, linkOff } from '@wordpress/icons';
 /**
  * Build the Measure controls
  * @returns {object} Measure settings.

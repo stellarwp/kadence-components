@@ -7,9 +7,8 @@
  * Internal block libraries
  */
 import { __ } from '@wordpress/i18n';
-import { Flex, FlexBlock, FlexItem, RangeControl as CoreRangeControl } from '@wordpress/components';
+import { Flex, FlexBlock, FlexItem, RangeControl as CoreRangeControl, Button, DropdownMenu, ButtonGroup } from '@wordpress/components';
 import { useState, useMemo, forwardRef } from '@wordpress/element';
-import { Button, DropdownMenu, ButtonGroup } from '@wordpress/components';
 import { pxIcon, emIcon, remIcon, vhIcon, vwIcon, percentIcon } from '@kadence/icons';
 import { settings } from '@wordpress/icons';
 
