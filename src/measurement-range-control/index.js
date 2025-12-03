@@ -47,7 +47,7 @@ import {
 	radiusLinkedIcon,
 	radiusIndividualIcon,
 } from '@kadence/icons';
-import { settings, link, linkOff } from '@wordpress/icons';
+import { undo, settings, link, linkOff } from '@wordpress/icons';
 import { OPTIONS_MAP } from './constants';
 import { isCustomOption, getOptionIndex, getOptionFromSize, getOptionSize } from './utils';
 

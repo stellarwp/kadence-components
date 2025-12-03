@@ -39,7 +39,7 @@ import {
 	radiusLinkedIcon,
 	radiusIndividualIcon,
 } from '@kadence/icons';
-import { settings, link, linkOff } from '@wordpress/icons';
+import { settings, link, linkOff, undo } from '@wordpress/icons';
 import SingleBorderControl from '../single-border-control';
 /**
  * Build the Border controls
