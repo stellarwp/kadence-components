@@ -1,3 +1,4 @@
+/* global frames */
 import { useState, useEffect, useRef, useCallback } from '@wordpress/element';
 import { useSelect } from '@wordpress/data';
 import PropTypes from 'prop-types';

@@ -1,6 +1,7 @@
 if (ktgooglefonts === undefined) {
 	var ktgooglefonts = [];
 }
+/* global frames */
 import { Component } from '@wordpress/element';
 import PropTypes from 'prop-types';
 import WebFont from 'webfontloader';

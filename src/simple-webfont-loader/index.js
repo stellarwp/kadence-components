@@ -1,3 +1,4 @@
+/* global frames */
 import { useEffect, useRef, useCallback } from '@wordpress/element';
 import { useSelect, useDispatch } from '@wordpress/data';
 

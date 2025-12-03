@@ -7,24 +7,15 @@
  * Internal block libraries
  */
 import { __, sprintf } from '@wordpress/i18n';
-import { useInstanceId } from '@wordpress/compose';
-import { range } from 'lodash';
-import { Button, DropdownMenu, ToolbarGroup } from '@wordpress/components';
+import { range, isEqual } from 'lodash';
+import { Button, ToolbarGroup } from '@wordpress/components';
+import { undo } from '@wordpress/icons';
 /**
  * Import Css
  */
 import './editor.scss';
 import HeadingLevelIcon from './../heading-level-icon';
-import { pxIcon, emIcon, remIcon, vhIcon, vwIcon, percentIcon } from '@kadence/icons';
 
-let icons = {
-	px: pxIcon,
-	em: emIcon,
-	rem: remIcon,
-	vh: vhIcon,
-	vw: vwIcon,
-	percent: percentIcon,
-};
 /**
  * Build the Measure controls
  * @returns {object} Measure settings.
@@ -110,8 +101,10 @@ export default function tagSelect({
 											className="is-reset is-single"
 											label="reset"
 											isSmall
+											// eslint-disable-next-line no-undef
 											disabled={isEqual(defaultValue, value) ? true : false}
 											icon={undo}
+											// eslint-disable-next-line no-undef
 											onClick={() => onReset()}
 										/>
 									</div>

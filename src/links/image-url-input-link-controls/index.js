@@ -7,7 +7,7 @@ import { find, map } from 'lodash';
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useRef, useState, useCallback } from '@wordpress/element';
+import { useRef, useState, useCallback, Fragment } from '@wordpress/element';
 import {
 	ToolbarButton,
 	Button,
@@ -17,6 +17,7 @@ import {
 	TextControl,
 	SVG,
 	Path,
+	SelectControl,
 } from '@wordpress/components';
 import { URLPopover } from '@wordpress/block-editor';
 import { link as linkIcon, close } from '@wordpress/icons';

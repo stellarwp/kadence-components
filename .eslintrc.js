@@ -56,6 +56,7 @@ const eslintConfig = {
 		navigator: 'readonly',
 		localStorage: 'readonly',
 		ktgooglefonts: 'readonly',
+		frames: 'readonly',
 	},
 	rules: {
 		'prettier/prettier': 'off',
