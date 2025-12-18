@@ -69,9 +69,7 @@ export default function SinglePopColorControl({
 
 		// If override is enabled, only show custom colors (kb-palette colors)
 		if (kadenceColors.override === true) {
-			return allColors.filter(color => 
-				color.slug && color.slug.startsWith('kb-palette')
-			);
+			return allColors.filter((color) => color.slug && color.slug.startsWith('kb-palette'));
 		}
 
 		// If override is disabled, show all colors (theme + custom)
@@ -102,10 +100,8 @@ export default function SinglePopColorControl({
 	};
 	const convertedOpacityValue = 100 === opacityUnit ? convertOpacity(currentOpacity) : currentOpacity;
 	const colorVal = currentColor ? currentColor : value;
-	let currentColorString =
-		isPalette && colors && colorVal && colors[parseInt(colorVal.slice(-1), 10) - 1]
-			? colors[parseInt(colorVal.slice(-1), 10) - 1].color
-			: colorVal;
+	const paletteIndex = isPalette && colors && colorVal ? colorVal.match(/\d+$/)?.[0] - 1 : null;
+	let currentColorString = paletteIndex !== null && colors[paletteIndex] ? colors[paletteIndex].color : colorVal;
 	if (!isPalette && currentColorString && currentColorString.startsWith('var(')) {
 		currentColorString = window
 			.getComputedStyle(document.documentElement)
@@ -298,9 +294,9 @@ export default function SinglePopColorControl({
 												aria-label={
 													name
 														? // translators: %s: The name of the color e.g: "vivid red".
-														  sprintf(__('Color: %s', '__KADENCE__TEXT__DOMAIN__'), name)
+															sprintf(__('Color: %s', 'kadence-blocks'), name)
 														: // translators: %s: color hex code e.g: "#f00".
-														  sprintf(__('Color code: %s', '__KADENCE__TEXT__DOMAIN__'), color)
+															sprintf(__('Color code: %s', 'kadence-blocks'), color)
 												}
 												aria-pressed={isActive}
 											/>
