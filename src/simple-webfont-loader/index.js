@@ -1,58 +1,122 @@
-/* global frames */
-import { useEffect, useRef, useCallback } from '@wordpress/element';
-import { useSelect, useDispatch } from '@wordpress/data';
+import { Component } from '@wordpress/element';
+import PropTypes from 'prop-types';
+import { withSelect } from '@wordpress/data';
+import { compose } from '@wordpress/compose';
 
-export default function SimpleWebfontLoader({ typography, children }) {
-	const { addWebFont } = useDispatch('kadenceblocks/data');
-	const { previewDevice, isUniqueFont } = useSelect(
-		(select) => ({
-			isUniqueFont: (value, frame) => select('kadenceblocks/data').isUniqueFont(value, frame),
-			previewDevice: select('kadenceblocks/data').getPreviewDeviceType(),
-		}),
-		[]
-	);
+const statuses = {
+	inactive: 'inactive',
+	active: 'active',
+	loading: 'loading',
+};
 
-	const loadFont = useCallback((fontFamily) => {
-		const context = frames['editor-canvas']?.document || document;
-		const url = `https://fonts.googleapis.com/css?family=${fontFamily.replace(/\s+/g, '+')}`;
+const noop = () => {};
 
-		const link = document.createElement('link');
-		link.rel = 'stylesheet';
-		link.href = url;
+class SimpleWebfontLoader extends Component {
+	constructor() {
+		super(...arguments);
+		this.state = {
+			status: undefined,
+			mounted: false,
+			loadedFonts: new Set(),
+		};
+		this.linkElements = new Map();
+	}
 
-		context.head.appendChild(link);
-		return link;
-	}, []);
+	loadFonts() {
+		if (this.state.mounted && this.props.config?.google?.families?.length) {
+			const families = this.props.config.google.families;
 
-	const loadFonts = useCallback(() => {
-		setTimeout(() => {
-			if (!typography || typography.length === 0) {
-				return;
-			}
-			const fontFamily = typography[0].family + (typography[0]?.variant ? ':' + typography[0].variant : '');
-			const frame = frames['editor-canvas'] ? 'Desktop' : 'iframe';
+			families.forEach((family) => {
+				if (!this.state.loadedFonts.has(family)) {
+					// Set loading status
+					this.setState({ status: statuses.loading });
 
-			if (fontFamily && isUniqueFont(fontFamily, frame)) {
-				loadFont(fontFamily);
-				addWebFont(fontFamily, frame);
-			}
-		}, 50);
-	}, [typography, isUniqueFont, addWebFont, loadFont]);
+					// Build Google Fonts URL
+					const url = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(
+						family.replace(/ /g, '+')
+					)}&display=swap`;
 
-	const isInitialMount = useRef(true);
+					// Create and append link element
+					const link = document.createElement('link');
+					link.rel = 'stylesheet';
+					link.href = url;
 
-	useEffect(() => {
-		// Don't run on mount
-		if (isInitialMount.current) {
-			isInitialMount.current = false;
-		} else {
-			loadFonts();
+					// Add load event listener
+					link.onload = () => {
+						this.setState((prevState) => ({
+							status: statuses.active,
+							loadedFonts: new Set([...prevState.loadedFonts, family]),
+						}));
+					};
+
+					link.onerror = () => {
+						this.setState({ status: statuses.inactive });
+					};
+
+					const context = frames['editor-canvas']?.document || document;
+					context.head.appendChild(link);
+
+					// Store reference for cleanup
+					this.linkElements.set(family, link);
+				}
+			});
 		}
-	}, [previewDevice, loadFonts]);
+	}
 
-	useEffect(() => {
-		loadFonts();
-	}, [loadFonts]);
+	componentDidMount() {
+		this.setState({ mounted: true, device: this.props.getPreviewDevice });
+		this.loadFonts();
+	}
 
-	return children || null;
+	componentDidUpdate(prevProps, prevState) {
+		const { onStatus, config, getPreviewDevice } = this.props;
+
+		if (prevState.status !== this.state.status) {
+			onStatus(this.state.status);
+		}
+
+		if (this.state.device !== getPreviewDevice) {
+			// Clear loaded fonts on device change
+			this.state.loadedFonts.clear();
+			this.setState({ device: getPreviewDevice });
+			this.loadFonts();
+		} else if (prevProps.config !== config) {
+			this.loadFonts();
+		}
+	}
+
+	componentWillUnmount() {
+		this.setState({ mounted: false });
+
+		// Clean up link elements
+		this.linkElements.forEach((link) => {
+			if (link && link.parentNode) {
+				link.parentNode.removeChild(link);
+			}
+		});
+		this.linkElements.clear();
+	}
+
+	render() {
+		const { children } = this.props;
+		return children || null;
+	}
 }
+
+SimpleWebfontLoader.propTypes = {
+	config: PropTypes.object.isRequired,
+	children: PropTypes.element,
+	onStatus: PropTypes.func.isRequired,
+};
+
+SimpleWebfontLoader.defaultProps = {
+	onStatus: noop,
+};
+
+export default compose([
+	withSelect((select) => {
+		return {
+			getPreviewDevice: select('kadenceblocks/data').getPreviewDeviceType(),
+		};
+	}),
+])(SimpleWebfontLoader);
