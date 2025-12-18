@@ -47,6 +47,14 @@
 		"react": ">=17 <19",
 		"react-dom": ">=17 <19"
 	},
+	"peerDependenciesMeta": {
+		"@kadence/helpers": {
+			"optional": true
+		},
+		"@kadence/icons": {
+			"optional": true
+		}
+	},
 	"devDependencies": {
 		"@babel/cli": "^7.26.0",
 		"@babel/core": "^7.26.0",
