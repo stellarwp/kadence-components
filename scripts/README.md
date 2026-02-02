@@ -2,6 +2,16 @@
 
 This directory contains utility scripts for building and managing the Kadence Components library.
 
+## Directory Structure
+
+```
+scripts/
+├── helpers/          # Shared utility functions used across scripts
+├── npm/              # NPM-related automation scripts
+│   └── internals/    # Internal helper scripts for NPM tasks
+└── webpack/          # Custom Webpack plugins and build utilities
+```
+
 ## Overview
 
 ### NPM Scripts (`npm/`)
