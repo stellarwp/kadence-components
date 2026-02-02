@@ -8,27 +8,39 @@ const { rootDir, getBaseDir, getPackages, toAbsolutePath, clearBaseDirHint } = r
 
 const cliRoot = parseRootArg( process.argv.slice( 2 ) );
 const baseDir = cliRoot ? toAbsolutePath( cliRoot ) : getBaseDir();
-const packages = getPackages( baseDir );
+unlinkAllPackages( () => {
+	console.log(
+		`Finished unlinking Kadence packages. Run "npm install" to reinstall the registry versions if you need to switch back.`
+	);
 
-packages.forEach( ( pkg ) => {
-	console.log( `Unlinking ${ pkg.name } from the plugin` );
-	run( 'npm', [ 'unlink', pkg.name ], rootDir, { allowFailure: true } );
-
-	const manifestPath = path.join( pkg.dir, 'package.json' );
-	if ( ! fs.existsSync( manifestPath ) ) {
-		console.warn( `[skip] ${ pkg.name } source not found at ${ pkg.dir }` );
-		return;
-	}
-
-	console.log( `Removing global npm link for ${ pkg.name }` );
-	run( 'npm', [ 'unlink' ], pkg.dir, { allowFailure: true } );
+	clearBaseDirHint();
 } );
 
-console.log(
-	`Finished unlinking Kadence packages. Run "npm install" to reinstall the registry versions if you need to switch back.`
-);
+function unlinkAllPackages( callback ) {
+	const packages = getPackages( baseDir );
+	const packageNames = packages.map( ( pkg ) => pkg.name );
+	const existingPackageNames = packages
+		.filter( ( pkg ) => fs.existsSync( path.join( pkg.dir, 'package.json' ) ) )
+		.map( ( pkg ) => pkg.name );
 
-clearBaseDirHint();
+	if ( packageNames.length ) {
+		console.log( `Unlinking ${ packageNames.length } packages from the plugin` );
+		run( 'npm', [ 'unlink', ...packageNames ], rootDir, { allowFailure: true } );
+	}
+
+	if ( existingPackageNames.length ) {
+		console.log( `Removing global npm links for ${ existingPackageNames.length } packages` );
+		run( 'npm', [ 'unlink', '-g', ...existingPackageNames ], rootDir, { allowFailure: true } );
+	} else if ( packageNames.length ) {
+		packageNames.forEach( ( pkgName ) => {
+			console.warn( `[skip] ${ pkgName } source not found under ${ baseDir }` );
+		} );
+	}
+
+	if ( typeof callback === 'function' ) {
+		callback();
+	}
+}
 
 function run( cmd, args, cwd, { allowFailure = false, env } = {} ) {
 	const mergedEnv = env ? { ...process.env, ...env } : process.env;

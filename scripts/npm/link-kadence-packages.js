@@ -23,6 +23,9 @@ async function main() {
 	let existingPackages = getExistingPackages( packages );
 	const npmEnv = {
 		npm_config_legacy_peer_deps: 'true',
+		npm_config_audit: 'false',
+		npm_config_fund: 'false',
+		npm_config_loglevel: 'error',
 	};
 
 	if ( ! existingPackages.length ) {
@@ -62,9 +65,8 @@ async function main() {
 			run( 'npm', [ 'install' ], pkg.dir, { env: npmEnv } );
 		}
 
-		console.log( `Linking ${ pkg.name } from ${ pkg.dir }` );
+		console.log( `Creating global link for ${ pkg.name } from ${ pkg.dir }` );
 		run( 'npm', [ 'link' ], pkg.dir, { env: npmEnv } );
-		run( 'npm', [ 'link', pkg.name ], rootDir, { env: npmEnv } );
 		linked.push( pkg.name );
 	} );
 
@@ -73,7 +75,10 @@ async function main() {
 			`No Kadence packages were linked. Clone them under ${ baseDir } or set --root / KADENCE_PACKAGES_ROOT before running this command.`
 		);
 	} else {
-		console.log( `Linked packages: ${ linked.join( ', ' ) }` );
+		console.log( 'Linking packages into this project...' );
+		run('npm', ['link', ...linked], rootDir, { env: npmEnv });
+
+		console.log( `Linked packages into project: ${ linked.join( ', ' ) }` );
 	}
 }
 
