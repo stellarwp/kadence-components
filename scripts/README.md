@@ -9,18 +9,19 @@ This directory contains utility scripts for building and managing the Kadence Co
 NPM scripts automate common tasks like managing dependencies, copying assets, and linking packages during development.
 
 **Available scripts:**
-- `copy-assets.js` - Copies static assets to the distribution folder
 - `kadence-packages.js` - Manages Kadence package configurations
 - `link-kadence-packages.js` - Links local Kadence packages for development
 - `unlink-kadence-packages.js` - Unlinks local Kadence packages
 
+**Internal scripts (`npm/internals/`)**
+- `copy-assets.js` - Copies static assets to the distribution folder (used by `npm run copy:assets`)
 
 **Running Scripts Directly**
 
 You can execute scripts directly using Node:
 
 ```bash
-node scripts/npm/copy-assets.js
+node scripts/npm/internals/copy-assets.js
 node scripts/npm/link-kadence-packages.js
 node scripts/npm/unlink-kadence-packages.js
 ```

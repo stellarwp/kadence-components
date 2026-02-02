@@ -19,6 +19,8 @@
 	"files": [
 		"dist",
 		"src",
+		"scripts",
+		"!scripts/**/internals",
 		"README.md",
 		"LICENSE"
 	],
@@ -27,7 +29,7 @@
 		"lint-js-fix": "wp-scripts lint-js --fix",
 		"prettier": "prettier . --write",
 		"clean": "rimraf dist",
-		"copy:assets": "node scripts/npm/copy-assets.js",
+		"copy:assets": "node scripts/npm/internals/copy-assets.js",
 		"build:esm": "babel src --out-dir dist/esm --env-name esm --extensions \".js,.jsx\" --source-maps",
 		"build:cjs": "babel src --out-dir dist/cjs --env-name cjs --extensions \".js,.jsx\" --source-maps",
 		"build": "npm run clean && npm run copy:assets && npm run build:esm && npm run build:cjs",
