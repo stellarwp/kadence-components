@@ -10,6 +10,7 @@
 			"require": "./dist/cjs/index.js",
 			"default": "./dist/esm/index.js"
 		},
+		"./scripts/*": "./scripts/*",
 		"./package.json": "./package.json"
 	},
 	"sideEffects": [
