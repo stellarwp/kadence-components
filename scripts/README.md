@@ -28,6 +28,19 @@ node scripts/npm/unlink-kadence-packages.js
 
 > **Tip:** For frequently used scripts, consider adding them to `package.json` under the `"scripts"` section for easier access via `npm run <command>`.
 
+**Quick Setup Tip**
+
+Add this script to your `package.json` for quick access to linking Kadence packages:
+
+```json
+"scripts": {
+    "link-kadence": "node node_modules/@kadence/components/scripts/npm/link-kadence-packages.js --root=/path-to-local-packages/",
+    "unlink-kadence": "node node_modules/@kadence/components/scripts/npm/unlink-kadence-packages.js "
+}
+```
+
+Then run: `npm run link-kadence`
+
 
 ### Webpack Scripts (`webpack/`)
 
