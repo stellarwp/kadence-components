@@ -8,7 +8,13 @@ const { rootDir, getBaseDir, getPackages, toAbsolutePath, clearBaseDirHint } = r
 
 const cliRoot = parseRootArg( process.argv.slice( 2 ) );
 const baseDir = cliRoot ? toAbsolutePath( cliRoot ) : getBaseDir();
+const packageJsonPath = path.join( rootDir, 'package.json' );
+const packageJsonBackupPath = path.join( rootDir, '.package.json.unlink-backup' );
+
+backupPackageJson();
 unlinkAllPackages( () => {
+	restorePackageJson();
+
 	console.log(
 		`Finished unlinking Kadence packages. Run "npm install" to reinstall the registry versions if you need to switch back.`
 	);
@@ -39,6 +45,31 @@ function unlinkAllPackages( callback ) {
 
 	if ( typeof callback === 'function' ) {
 		callback();
+	}
+}
+
+function backupPackageJson() {
+	if ( ! fs.existsSync( packageJsonPath ) ) {
+		return;
+	}
+
+	try {
+		fs.copyFileSync( packageJsonPath, packageJsonBackupPath );
+	} catch ( error ) {
+		console.warn( `[warn] Unable to back up package.json: ${ error.message }` );
+	}
+}
+
+function restorePackageJson() {
+	if ( ! fs.existsSync( packageJsonBackupPath ) ) {
+		return;
+	}
+
+	try {
+		fs.copyFileSync( packageJsonBackupPath, packageJsonPath );
+		fs.unlinkSync( packageJsonBackupPath );
+	} catch ( error ) {
+		console.warn( `[warn] Unable to restore package.json: ${ error.message }` );
 	}
 }
 
