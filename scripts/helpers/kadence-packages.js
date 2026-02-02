@@ -3,7 +3,7 @@
 const fs = require( 'fs' );
 const path = require( 'path' );
 
-const rootDir = findProjectRoot();
+const rootDir = process.cwd();
 const rootHintPath = path.join( rootDir, '.kadence-packages-root' );
 
 const manifests = [
@@ -91,16 +91,4 @@ function clearBaseDirHint() {
 	} catch ( error ) {
 		// ignore removal errors
 	}
-}
-
-function findProjectRoot( startDir = process.cwd() ) {
-    let current = startDir;
-    while ( current !== path.dirname( current ) ) {
-        if ( fs.existsSync( path.join( current, 'package.json' ) ) && !current.includes( 'node_modules' ) ) {
-            return current;
-        }
-
-        current = path.dirname( current );
-     }
-    return startDir;
 }
