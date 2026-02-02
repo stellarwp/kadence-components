@@ -4,8 +4,8 @@
 const { spawnSync } = require( 'child_process' );
 const fs = require( 'fs' );
 const path = require( 'path' );
-const readline = require( 'readline' );
 const { rootDir, getBaseDir, getPackages, toAbsolutePath, storeBaseDirHint } = require( '../helpers/kadence-packages' );
+const { isInteractive, prompt } = require( '../helpers/prompt' );
 
 ( async () => {
 	try {
@@ -153,7 +153,7 @@ function getExistingPackages( packages ) {
 }
 
 async function maybePromptForBaseDir( currentDir ) {
-	if ( ! process.stdin.isTTY || ! process.stdout.isTTY ) {
+	if ( ! isInteractive() ) {
 		return null;
 	}
 
@@ -169,20 +169,6 @@ async function maybePromptForBaseDir( currentDir ) {
 	}
 
 	return toAbsolutePath( value );
-}
-
-function prompt( question ) {
-	return new Promise( ( resolve ) => {
-		const rl = readline.createInterface( {
-			input: process.stdin,
-			output: process.stdout,
-		} );
-
-		rl.question( question, ( answer ) => {
-			rl.close();
-			resolve( answer );
-		} );
-	} );
 }
 
 function shouldInstallDependencies( dir, options ) {

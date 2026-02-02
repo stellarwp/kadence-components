@@ -5,6 +5,7 @@ const { spawnSync } = require( 'child_process' );
 const fs = require( 'fs' );
 const path = require( 'path' );
 const { rootDir, getBaseDir, getPackages, toAbsolutePath, clearBaseDirHint } = require( '../helpers/kadence-packages' );
+const { isInteractive, prompt } = require( '../helpers/prompt' );
 
 const cliRoot = parseRootArg( process.argv.slice( 2 ) );
 const baseDir = cliRoot ? toAbsolutePath( cliRoot ) : getBaseDir();
@@ -16,10 +17,24 @@ unlinkAllPackages( () => {
 	restorePackageJson();
 
 	console.log(
-		`Finished unlinking Kadence packages. Run "npm install" to reinstall the registry versions if you need to switch back.`
+		`Finished unlinking Kadence packages.`
 	);
 
-	clearBaseDirHint();
+	if ( ! isInteractive() ) {
+		console.log( 'Run "npm install" to reinstall the registry versions if you need to switch back.' );
+		clearBaseDirHint();
+		return;
+	}
+
+	prompt( 'Do you want to run "npm install" now to restore original packages? (y/N): ' ).then( ( answer ) => {
+		if ( answer.trim().toLowerCase() === 'y' ) {
+			run( 'npm', [ 'install' ], rootDir );
+			console.log( 'npm install completed.' );
+		} else {
+			console.log( 'You can run "npm install" manually to restore the original packages.' );
+		}
+		clearBaseDirHint();
+	} );
 } );
 
 function unlinkAllPackages( callback ) {
@@ -30,7 +45,6 @@ function unlinkAllPackages( callback ) {
 		.map( ( pkg ) => pkg.name );
 
 	if ( packageNames.length ) {
-		console.log( `Unlinking ${ packageNames.length } packages from the plugin` );
 		run( 'npm', [ 'unlink', ...packageNames ], rootDir, { allowFailure: true } );
 	}
 
