@@ -5,7 +5,7 @@ const { spawnSync } = require( 'child_process' );
 const fs = require( 'fs' );
 const path = require( 'path' );
 const readline = require( 'readline' );
-const { rootDir, getBaseDir, getPackages, toAbsolutePath, storeBaseDirHint } = require( './kadence-packages' );
+const { rootDir, getBaseDir, getPackages, toAbsolutePath, storeBaseDirHint } = require( '../helpers/kadence-packages' );
 
 ( async () => {
 	try {

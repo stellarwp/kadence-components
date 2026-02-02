@@ -4,7 +4,7 @@
 const { spawnSync } = require( 'child_process' );
 const fs = require( 'fs' );
 const path = require( 'path' );
-const { rootDir, getBaseDir, getPackages, toAbsolutePath, clearBaseDirHint } = require( './kadence-packages' );
+const { rootDir, getBaseDir, getPackages, toAbsolutePath, clearBaseDirHint } = require( '../helpers/kadence-packages' );
 
 const cliRoot = parseRootArg( process.argv.slice( 2 ) );
 const baseDir = cliRoot ? toAbsolutePath( cliRoot ) : getBaseDir();
