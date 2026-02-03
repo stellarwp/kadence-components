@@ -53,8 +53,8 @@ Custom plugins and utilities for optimizing the webpack build.
 **Usage in webpack.config.js:**
 
 ```javascript
-const ReplaceTextDomainPlugin = require('./scripts/webpack/replace-text-domain-plugin.js');
-const StyleOnlyEntryPlugin = require('./scripts/webpack/style-only-entry-plugin.js');
+const ReplaceTextDomainPlugin = require('@kadence/components/scripts/webpack/replace-text-domain-plugin.js');
+const StyleOnlyEntryPlugin = require('@kadence/components/scripts/webpack/style-only-entry-plugin.js');
 
 module.exports = {
     // ... webpack configuration
