@@ -59,7 +59,10 @@ const StyleOnlyEntryPlugin = require('./scripts/webpack/style-only-entry-plugin.
 module.exports = {
     // ... webpack configuration
     plugins: [
-        new ReplaceTextDomainPlugin({ domain: 'your-text-domain' }),
+        new ReplaceTextDomainPlugin( {
+            placeholder: TEXT_DOMAIN_PLACEHOLDER,
+            value: TEXT_DOMAIN,
+        } );
         new StyleOnlyEntryPlugin(),
     ]
 };
