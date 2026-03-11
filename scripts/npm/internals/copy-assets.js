@@ -2,7 +2,7 @@ const fs = require( 'fs' );
 const fsExtra = require( 'fs-extra' );
 const path = require( 'path' );
 
-const rootDir = path.resolve( __dirname, '..' );
+const rootDir = path.resolve( __dirname, '../../../' );
 const srcDir = path.join( rootDir, 'src' );
 const distDir = path.join( rootDir, 'dist' );
 const destinations = [ 'esm', 'cjs' ];
