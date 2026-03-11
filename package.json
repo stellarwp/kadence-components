@@ -1,6 +1,6 @@
 {
 	"name": "@kadence/components",
-	"version": "1.1.4",
+	"version": "1.1.6",
 	"description": "Shared Kadence UI components for WordPress block plugins.",
 	"main": "dist/cjs/index.js",
 	"module": "dist/esm/index.js",
