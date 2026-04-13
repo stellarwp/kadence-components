@@ -43,9 +43,7 @@
 .kadence-single-border-control-wrap .components-base-control {
 	margin-bottom: 0;
 }
-.kadence-single-border-control-wrap
-	> .kadence-single-unit-control
-	.components-unit-control-wrapper {
+.kadence-single-border-control-wrap > .kadence-single-unit-control .components-unit-control-wrapper {
 	width: 100%;
 }
 .kadence-single-border-control-wrap > .kadence-single-unit-control {
@@ -61,7 +59,8 @@
 	}
 }
 
-.kadence-single-border-control-wrap
+.kadence-border-control
+	.kadence-single-border-control-wrap
 	.kadence-measure-control-select.components-unit-control__select {
 	-webkit-appearance: none;
 	-moz-appearance: none;
@@ -92,7 +91,7 @@
 	}
 }
 
-.kadence-single-border-control-wrap .components-dropdown-menu__toggle {
+.kadence-border-control .kadence-single-border-control-wrap .components-dropdown-menu__toggle {
 	min-width: auto;
 	height: 30px;
 	border-radius: 0px;
@@ -112,26 +111,24 @@
 	cursor: pointer;
 }
 
-.kadence-single-border-control-wrap .border-control-style-select {
+.kadence-border-control .kadence-single-border-control-wrap .border-control-style-select {
 	display: block;
 }
 .kadence-border-control .components-base-control.kadence-single-border-control {
 	margin-bottom: 0;
 }
 
-.kadence-single-border-control-wrap .components-dropdown-menu__toggle svg {
+.kadence-border-control .kadence-single-border-control-wrap .components-dropdown-menu__toggle svg {
 	width: 12px;
 }
 .border-control-style-select__popover .components-menu-item__button .components-menu-item__item {
 	display: none;
 }
-.border-control-style-select__popover
-	.components-menu-item__button
-	.components-menu-items__item-icon.has-icon-right {
+.border-control-style-select__popover .components-menu-item__button .components-menu-items__item-icon.has-icon-right {
 	margin: 0;
 	display: block;
 }
-.kadence-single-border-control-wrap .kadence-single-unit-control {
+.kadence-border-control .kadence-single-border-control-wrap .kadence-single-unit-control {
 	border: 0;
 	border-radius: 0px;
 	.components-input-control__backdrop {
