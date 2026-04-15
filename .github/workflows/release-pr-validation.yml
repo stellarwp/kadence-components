@@ -1,0 +1,85 @@
+name: Release PR Validation
+run-name: '[Release PR] Validate ${{ github.head_ref }}'
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - edited
+      - ready_for_review
+
+jobs:
+  validate-release-version:
+    name: Validate release package version
+    if: startsWith(github.head_ref, 'release/')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Derive release version from PR branch
+        id: release-version
+        shell: bash
+        run: |
+          release_version="${GITHUB_HEAD_REF#release/}"
+          release_version="${release_version#v}"
+
+          if [[ -z "$release_version" ]]; then
+            echo "Unable to derive a release version from branch '$GITHUB_HEAD_REF'." >&2
+            exit 1
+          fi
+
+          echo "release_version=$release_version" >> "$GITHUB_OUTPUT"
+
+      - name: Validate package versions
+        env:
+          RELEASE_VERSION: ${{ steps.release-version.outputs.release_version }}
+        run: |
+          node <<'NODE'
+          const fs = require( 'fs' );
+
+          const releaseVersion = process.env.RELEASE_VERSION;
+          const packageJson = JSON.parse( fs.readFileSync( 'package.json', 'utf8' ) );
+          const packageLock = JSON.parse( fs.readFileSync( 'package-lock.json', 'utf8' ) );
+
+          const checks = [
+            {
+              label: 'package.json version',
+              actual: packageJson.version,
+            },
+            {
+              label: 'package-lock.json version',
+              actual: packageLock.version,
+            },
+            {
+              label: 'package-lock.json packages[""].version',
+              actual: packageLock.packages?.['']?.version,
+            },
+          ];
+
+          const mismatches = checks.filter( ( check ) => check.actual !== releaseVersion );
+
+          if ( mismatches.length > 0 ) {
+            console.error( `Release PR version mismatch. Expected ${ releaseVersion }.` );
+
+            for ( const mismatch of mismatches ) {
+              console.error(
+                `- ${ mismatch.label } is ${ mismatch.actual ?? 'missing' }`
+              );
+            }
+
+            process.exit( 1 );
+          }
+
+          console.log( `Validated release version ${ releaseVersion } in package.json and package-lock.json.` );
+          NODE
