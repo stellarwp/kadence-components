@@ -1,0 +1,84 @@
+name: Release PR Validation
+run-name: '[Release PR] Validate ${{ github.head_ref }}'
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  validate-release-version:
+    name: Validate release package version
+    if: startsWith(github.head_ref, 'release/')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Derive release version from PR branch
+        id: release-version
+        shell: bash
+        run: |
+          release_version="${GITHUB_HEAD_REF#release/}"
+          release_version="${release_version#v}"
+
+          if [[ -z "$release_version" ]]; then
+            echo "Unable to derive a release version from branch '$GITHUB_HEAD_REF'." >&2
+            exit 1
+          fi
+
+          echo "release_version=$release_version" >> "$GITHUB_OUTPUT"
+
+      - name: Validate package versions
+        env:
+          RELEASE_VERSION: ${{ steps.release-version.outputs.release_version }}
+        run: |
+          node <<'NODE'
+          const fs = require( 'fs' );
+
+          const releaseVersion = process.env.RELEASE_VERSION;
+          const packageJson = JSON.parse( fs.readFileSync( 'package.json', 'utf8' ) );
+          const packageLock = JSON.parse( fs.readFileSync( 'package-lock.json', 'utf8' ) );
+
+          const checks = [
+            {
+              label: 'package.json',
+              actual: packageJson.version,
+            },
+            {
+              label: 'package-lock.json',
+              actual: packageLock.version,
+            },
+          ];
+
+          const mismatches = checks.filter( ( check ) => check.actual !== releaseVersion );
+
+          if ( mismatches.length > 0 ) {
+            const mismatchLines = mismatches.map(
+              ( mismatch ) =>
+                `- ${ mismatch.label }: ${ mismatch.actual ?? 'missing' }`
+            );
+
+            console.error(
+              '::error title=Release PR version mismatch::' +
+                `Release branch ${ process.env.GITHUB_HEAD_REF } expects version ${ releaseVersion }.`
+            );
+            console.error( 'Release version validation failed.' );
+            console.error( `Expected from branch: ${ releaseVersion }` );
+            console.error( 'Found:' );
+            console.error( mismatchLines.join( '\n' ) );
+            console.error(
+              'Update package.json and regenerate package-lock.json before merging this release PR.'
+            );
+
+            process.exit( 1 );
+          }
+
+          console.log( `Validated release version ${ releaseVersion } in package.json and package-lock.json.` );
+          NODE
