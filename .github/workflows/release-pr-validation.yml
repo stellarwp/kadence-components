@@ -5,12 +5,6 @@ on:
   pull_request:
     branches:
       - main
-    types:
-      - opened
-      - reopened
-      - synchronize
-      - edited
-      - ready_for_review
 
 jobs:
   validate-release-version:
@@ -54,29 +48,34 @@ jobs:
 
           const checks = [
             {
-              label: 'package.json version',
+              label: 'package.json',
               actual: packageJson.version,
             },
             {
-              label: 'package-lock.json version',
+              label: 'package-lock.json',
               actual: packageLock.version,
-            },
-            {
-              label: 'package-lock.json packages[""].version',
-              actual: packageLock.packages?.['']?.version,
             },
           ];
 
           const mismatches = checks.filter( ( check ) => check.actual !== releaseVersion );
 
           if ( mismatches.length > 0 ) {
-            console.error( `Release PR version mismatch. Expected ${ releaseVersion }.` );
+            const mismatchLines = mismatches.map(
+              ( mismatch ) =>
+                `- ${ mismatch.label }: ${ mismatch.actual ?? 'missing' }`
+            );
 
-            for ( const mismatch of mismatches ) {
-              console.error(
-                `- ${ mismatch.label } is ${ mismatch.actual ?? 'missing' }`
-              );
-            }
+            console.error(
+              '::error title=Release PR version mismatch::' +
+                `Release branch ${ process.env.GITHUB_HEAD_REF } expects version ${ releaseVersion }.`
+            );
+            console.error( 'Release version validation failed.' );
+            console.error( `Expected from branch: ${ releaseVersion }` );
+            console.error( 'Found:' );
+            console.error( mismatchLines.join( '\n' ) );
+            console.error(
+              'Update package.json and regenerate package-lock.json before merging this release PR.'
+            );
 
             process.exit( 1 );
           }
