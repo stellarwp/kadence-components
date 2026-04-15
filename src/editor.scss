@@ -3,7 +3,7 @@ svg {
 	--kadence-color-white: #fff;
 }
 .block-editor-list-view-leaf.is-selected .block-editor-list-view-block-contents svg,
-.components-button.is-pressed .block-editor-block-icon svg {
+.components-button.is-pressed .block-editor-block-icon svg, .components-button.is-primary svg {
 	--kadence-color: currentColor;
 	--kadence-color-white: var(--wp-admin-theme-color);
 }
@@ -41,7 +41,7 @@ svg {
 	margin-bottom: 0;
 }
 
-.kadence-range-control-inner .components-range-control.kadence-range-control-range {
+.kadence-range-control-inner div.components-range-control.kadence-range-control-range {
 	flex-grow: 1;
 	margin-bottom: 0;
 }

@@ -13,7 +13,7 @@ const packageJsonPath = path.join( rootDir, 'package.json' );
 const packageJsonBackupPath = path.join( rootDir, '.package.json.unlink-backup' );
 
 backupPackageJson();
-unlinkAllPackages( () => {
+unlinkAllPackagesAndPeers(() => {
 	restorePackageJson();
 
 	console.log(
@@ -35,29 +35,51 @@ unlinkAllPackages( () => {
 		}
 		clearBaseDirHint();
 	} );
-} );
+});
 
-function unlinkAllPackages( callback ) {
-	const packages = getPackages( baseDir );
-	const packageNames = packages.map( ( pkg ) => pkg.name );
-	const existingPackageNames = packages
-		.filter( ( pkg ) => fs.existsSync( path.join( pkg.dir, 'package.json' ) ) )
-		.map( ( pkg ) => pkg.name );
 
-	if ( packageNames.length ) {
-		run( 'npm', [ 'unlink', ...packageNames ], rootDir, { allowFailure: true } );
+function unlinkAllPackagesAndPeers(callback) {
+	const packages = getPackages(baseDir);
+	const packageNames = packages.map((pkg) => pkg.name);
+	const existingPackages = packages.filter((pkg) => fs.existsSync(path.join(pkg.dir, 'package.json')));
+	const existingPackageNames = existingPackages.map((pkg) => pkg.name);
+
+	// Unlink main packages from project root
+	if (packageNames.length) {
+		run('npm', ['unlink', ...packageNames], rootDir, { allowFailure: true });
 	}
 
-	if ( existingPackageNames.length ) {
-		console.log( `Removing global npm links for ${ existingPackageNames.length } packages` );
-		run( 'npm', [ 'unlink', '-g', ...existingPackageNames ], rootDir, { allowFailure: true } );
-	} else if ( packageNames.length ) {
-		packageNames.forEach( ( pkgName ) => {
-			console.warn( `[skip] ${ pkgName } source not found under ${ baseDir }` );
-		} );
+	// Unlink global links
+	if (existingPackageNames.length) {
+		console.log(`Removing global npm links for ${existingPackageNames.length} packages`);
+		run('npm', ['unlink', '-g', ...existingPackageNames], rootDir, { allowFailure: true });
+	} else if (packageNames.length) {
+		packageNames.forEach((pkgName) => {
+			console.warn(`[skip] ${pkgName} source not found under ${baseDir}`);
+		});
 	}
 
-	if ( typeof callback === 'function' ) {
+	// Unlink peer dependencies from each package
+	existingPackages.forEach((pkg) => {
+		const manifestPath = path.join(pkg.dir, 'package.json');
+		let manifest;
+		try {
+			manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+		} catch (error) {
+			console.warn(`[skip] Could not read package.json for ${pkg.name} at ${pkg.dir}`);
+			return;
+		}
+		const peerDeps = manifest.peerDependencies || {};
+		const localPeerDeps = Object.keys(peerDeps).filter(
+			(dep) => packageNames.includes(dep) && dep !== pkg.name
+		);
+		if (localPeerDeps.length) {
+			console.log(`Unlinking local Kadence peers from ${pkg.name}: ${localPeerDeps.join(', ')}`);
+			run('npm', ['unlink', ...localPeerDeps], pkg.dir, { allowFailure: true });
+		}
+	});
+
+	if (typeof callback === 'function') {
 		callback();
 	}
 }

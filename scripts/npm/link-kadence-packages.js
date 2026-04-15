@@ -75,11 +75,58 @@ async function main() {
 			`No Kadence packages were linked. Clone them under ${ baseDir } or set --root / KADENCE_PACKAGES_ROOT before running this command.`
 		);
 	} else {
+		linkLinkedPackagesToEachOther( packages, linked, npmEnv );
+
 		console.log( 'Linking packages into this project...' );
 		run('npm', ['link', ...linked], rootDir, { env: npmEnv });
 
 		console.log( `Linked packages into project: ${ linked.join( ', ' ) }` );
 	}
+}
+
+function linkLinkedPackagesToEachOther( packages, linkedPackageNames, npmEnv ) {
+	const linkedPackageSet = new Set( linkedPackageNames );
+
+	packages.forEach( ( pkg ) => {
+		if ( ! linkedPackageSet.has( pkg.name ) ) {
+			return;
+		}
+
+		const linkTargets = getLocalKadencePeerLinks( pkg.dir, pkg.name, linkedPackageSet );
+		if ( ! linkTargets.length ) {
+			return;
+		}
+
+		console.log( `Linking local Kadence peers into ${ pkg.name }: ${ linkTargets.join( ', ' ) }` );
+		run( 'npm', [ 'link', ...linkTargets ], pkg.dir, { env: npmEnv } );
+	} );
+}
+
+function getLocalKadencePeerLinks( packageDir, packageName, linkedPackageSet ) {
+	const manifestPath = path.join( packageDir, 'package.json' );
+
+	if ( ! fs.existsSync( manifestPath ) ) {
+		return [];
+	}
+
+	let manifest;
+	try {
+		manifest = JSON.parse( fs.readFileSync( manifestPath, 'utf8' ) );
+	} catch ( error ) {
+		console.warn( `[skip] Could not read package.json for ${ packageName } at ${ packageDir }` );
+		return [];
+	}
+
+	const linkTargets = new Set();
+	const peerDependencies = manifest.peerDependencies || {};
+
+	Object.keys( peerDependencies ).forEach( ( depName ) => {
+		if ( linkedPackageSet.has( depName ) && depName !== packageName ) {
+			linkTargets.add( depName );
+		}
+	} );
+
+	return Array.from( linkTargets );
 }
 
 function run( cmd, args, cwd, { env, allowFailure = false } = {} ) {
