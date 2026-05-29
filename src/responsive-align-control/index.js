@@ -12,7 +12,17 @@ import { __ } from '@wordpress/i18n';
 import { map } from 'lodash';
 import { capitalizeFirstLetter } from '@kadence/helpers';
 
-import { arrowUp, arrowLeft, arrowRight, arrowDown } from '@wordpress/icons';
+import {
+	arrowUp,
+	arrowLeft,
+	arrowRight,
+	arrowDown,
+	justifyLeft,
+	justifyCenter,
+	justifyRight,
+	justifySpaceBetween,
+	justifyStretch,
+} from '@wordpress/icons';
 
 import { Dashicon, Button, ButtonGroup, SVG, Path } from '@wordpress/components';
 import { AlignmentToolbar, JustifyToolbar, BlockVerticalAlignmentToolbar } from '@wordpress/blockEditor';
@@ -100,6 +110,7 @@ export default function ResponsiveAlignControls({
 	value,
 	isCollapsed = false,
 	type = 'textAlign',
+	reverse = false,
 }) {
 	const [deviceType, setDeviceType] = useState('Desktop');
 	const theDevice = useSelect((select) => {
@@ -165,6 +176,207 @@ export default function ResponsiveAlignControls({
 				align: 'stretch',
 			},
 		];
+	} else if (type === 'orientation-column') {
+		alignmentControls = [
+			{
+				icon: arrowDown,
+				title: __('Vertical Direction', '__KADENCE__TEXT__DOMAIN__'),
+				align: 'vertical',
+			},
+			{
+				icon: arrowRight,
+				title: __('Horizontal Direction', '__KADENCE__TEXT__DOMAIN__'),
+				align: 'horizontal',
+			},
+			{
+				icon: arrowUp,
+				title: __('Vertical Reverse', '__KADENCE__TEXT__DOMAIN__'),
+				align: 'vertical-reverse',
+			},
+			{
+				icon: arrowLeft,
+				title: __('Horizontal Reverse', '__KADENCE__TEXT__DOMAIN__'),
+				align: 'horizontal-reverse',
+			},
+		];
+	} else if (type === 'justify-align') {
+		alignmentControls = reverse
+			? [
+					{
+						icon: justifyRight,
+						title: __('Start', '__KADENCE__TEXT__DOMAIN__'),
+						align: 'flex-start',
+					},
+					{
+						icon: justifyCenter,
+						title: __('Center', '__KADENCE__TEXT__DOMAIN__'),
+						align: 'center',
+					},
+					{
+						icon: justifyLeft,
+						title: __('End', '__KADENCE__TEXT__DOMAIN__'),
+						align: 'flex-end',
+					},
+					{
+						icon: justifyStretch,
+						title: __('Stretch', '__KADENCE__TEXT__DOMAIN__'),
+						align: 'stretch',
+					},
+				]
+			: [
+					{
+						icon: justifyLeft,
+						title: __('Start', '__KADENCE__TEXT__DOMAIN__'),
+						align: 'flex-start',
+					},
+					{
+						icon: justifyCenter,
+						title: __('Center', '__KADENCE__TEXT__DOMAIN__'),
+						align: 'center',
+					},
+					{
+						icon: justifyRight,
+						title: __('End', '__KADENCE__TEXT__DOMAIN__'),
+						align: 'flex-end',
+					},
+					{
+						icon: justifyStretch,
+						title: __('Stretch', '__KADENCE__TEXT__DOMAIN__'),
+						align: 'stretch',
+					},
+				];
+	} else if (type === 'justify-column') {
+		alignmentControls = reverse
+			? [
+					{
+						icon: justifyRight,
+						title: __('Start', '__KADENCE__TEXT__DOMAIN__'),
+						align: 'flex-start',
+					},
+					{
+						icon: justifyCenter,
+						title: __('Center', '__KADENCE__TEXT__DOMAIN__'),
+						align: 'center',
+					},
+					{
+						icon: justifyLeft,
+						title: __('End', '__KADENCE__TEXT__DOMAIN__'),
+						align: 'flex-end',
+					},
+					{
+						icon: justifySpaceBetween,
+						title: __('Space Between', '__KADENCE__TEXT__DOMAIN__'),
+						align: 'space-between',
+					},
+					{
+						icon: spaceAround,
+						title: __('Space Around', '__KADENCE__TEXT__DOMAIN__'),
+						align: 'space-around',
+					},
+					{
+						icon: spaceEvenly,
+						title: __('Space Evenly', '__KADENCE__TEXT__DOMAIN__'),
+						align: 'space-evenly',
+					},
+				]
+			: [
+					{
+						icon: justifyLeft,
+						title: __('Start', '__KADENCE__TEXT__DOMAIN__'),
+						align: 'flex-start',
+					},
+					{
+						icon: justifyCenter,
+						title: __('Center', '__KADENCE__TEXT__DOMAIN__'),
+						align: 'center',
+					},
+					{
+						icon: justifyRight,
+						title: __('End', '__KADENCE__TEXT__DOMAIN__'),
+						align: 'flex-end',
+					},
+					{
+						icon: justifySpaceBetween,
+						title: __('Space Between', '__KADENCE__TEXT__DOMAIN__'),
+						align: 'space-between',
+					},
+					{
+						icon: spaceAround,
+						title: __('Space Around', '__KADENCE__TEXT__DOMAIN__'),
+						align: 'space-around',
+					},
+					{
+						icon: spaceEvenly,
+						title: __('Space Evenly', '__KADENCE__TEXT__DOMAIN__'),
+						align: 'space-evenly',
+					},
+				];
+	} else if (type === 'justify-vertical') {
+		alignmentControls = reverse
+			? [
+					{
+						icon: alignBottom,
+						title: __('Bottom', '__KADENCE__TEXT__DOMAIN__'),
+						align: 'top',
+					},
+					{
+						icon: alignCenter,
+						title: __('Middle', '__KADENCE__TEXT__DOMAIN__'),
+						align: 'middle',
+					},
+					{
+						icon: alignTop,
+						title: __('Top', '__KADENCE__TEXT__DOMAIN__'),
+						align: 'bottom',
+					},
+					{
+						icon: verticalSpaceBetween,
+						title: __('Space Between', '__KADENCE__TEXT__DOMAIN__'),
+						align: 'space-between',
+					},
+					{
+						icon: verticalSpaceAround,
+						title: __('Space Around', '__KADENCE__TEXT__DOMAIN__'),
+						align: 'space-around',
+					},
+					{
+						icon: verticalSpaceEvenly,
+						title: __('Space Evenly', '__KADENCE__TEXT__DOMAIN__'),
+						align: 'space-evenly',
+					},
+				]
+			: [
+					{
+						icon: alignTop,
+						title: __('Top', '__KADENCE__TEXT__DOMAIN__'),
+						align: 'top',
+					},
+					{
+						icon: alignCenter,
+						title: __('Middle', '__KADENCE__TEXT__DOMAIN__'),
+						align: 'middle',
+					},
+					{
+						icon: alignBottom,
+						title: __('Bottom', '__KADENCE__TEXT__DOMAIN__'),
+						align: 'bottom',
+					},
+					{
+						icon: verticalSpaceBetween,
+						title: __('Space Between', '__KADENCE__TEXT__DOMAIN__'),
+						align: 'space-between',
+					},
+					{
+						icon: verticalSpaceAround,
+						title: __('Space Around', '__KADENCE__TEXT__DOMAIN__'),
+						align: 'space-around',
+					},
+					{
+						icon: verticalSpaceEvenly,
+						title: __('Space Evenly', '__KADENCE__TEXT__DOMAIN__'),
+						align: 'space-evenly',
+					},
+				];
 	}
 	const devices = [
 		{
@@ -211,7 +423,9 @@ export default function ResponsiveAlignControls({
 	);
 	return [
 		onChange && onChangeTablet && onChangeMobile && (
-			<div className={'components-base-control kb-sidebar-alignment kb-responsive-align-control'}>
+			<div
+				className={`components-base-control kb-sidebar-alignment kb-responsive-align-control kb-responsive-align-${type}`}
+			>
 				<div className="kadence-title-bar">
 					{label && <span className="kadence-control-title">{label}</span>}
 					<ButtonGroup className="kb-measure-responsive-options" aria-label={__('Device', '__KADENCE__TEXT__DOMAIN__')}>
