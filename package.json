@@ -22,6 +22,7 @@
 		"src",
 		"scripts",
 		"!scripts/**/internals",
+		"!src/**/__tests__",
 		"README.md",
 		"LICENSE"
 	],
