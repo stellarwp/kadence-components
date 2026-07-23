@@ -85,6 +85,8 @@ export default function BorderControl({
 	unlinkIcon = linkOff,
 	styles = ['solid', 'dashed', 'dotted', 'double'],
 	reset,
+	tokens,
+	onUnlinkToken,
 }) {
 	const instanceId = useInstanceId(BorderControl);
 	const [theControl, setTheControl] = useState(control);
@@ -187,6 +189,8 @@ export default function BorderControl({
 								onUnit={(unit) => onChangeUnit(unit)}
 								defaultValue={defaultValue.top}
 								allowReset={false}
+								tokens={tokens}
+								onUnlink={onUnlinkToken ? () => onUnlinkToken(null) : undefined}
 							/>
 						</>
 					)}
@@ -238,6 +242,8 @@ export default function BorderControl({
 								onUnit={(unit) => onChangeUnit(unit)}
 								defaultValue={defaultValue.top}
 								allowReset={false}
+								tokens={tokens}
+								onUnlink={onUnlinkToken ? () => onUnlinkToken(0) : undefined}
 							/>
 							<SingleBorderControl
 								value={currentObject?.left || ['', '', '']}
@@ -252,6 +258,8 @@ export default function BorderControl({
 								onUnit={(unit) => onChangeUnit(unit)}
 								defaultValue={defaultValue.left}
 								allowReset={false}
+								tokens={tokens}
+								onUnlink={onUnlinkToken ? () => onUnlinkToken(3) : undefined}
 							/>
 							<SingleBorderControl
 								value={currentObject?.right || ['', '', '']}
@@ -266,6 +274,8 @@ export default function BorderControl({
 								onUnit={(unit) => onChangeUnit(unit)}
 								defaultValue={defaultValue.right}
 								allowReset={false}
+								tokens={tokens}
+								onUnlink={onUnlinkToken ? () => onUnlinkToken(1) : undefined}
 							/>
 							<SingleBorderControl
 								value={currentObject?.bottom || ['', '', '']}
@@ -280,6 +290,8 @@ export default function BorderControl({
 								onUnit={(unit) => onChangeUnit(unit)}
 								defaultValue={defaultValue.bottom}
 								allowReset={false}
+								tokens={tokens}
+								onUnlink={onUnlinkToken ? () => onUnlinkToken(2) : undefined}
 							/>
 						</div>
 					)}

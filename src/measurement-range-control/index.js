@@ -50,6 +50,7 @@ import {
 import { undo, settings, link, linkOff } from '@wordpress/icons';
 import { OPTIONS_MAP } from './constants';
 import { isCustomOption, getOptionIndex, getOptionFromSize, getOptionSize } from './utils';
+import { TokenChip, TokenPickerButton, isTokenAlias } from '../common/token-alias';
 
 /**
  * Build the Measure controls
@@ -88,6 +89,9 @@ export default function MeasureRangeControl({
 	onMouseOver,
 	onMouseOut,
 	allowAuto = false,
+	tokens,
+	onSelectToken,
+	onUnlinkToken,
 }) {
 	const measureIcons = {
 		first: isBorderRadius ? topLeftIcon : firstIcon,
@@ -197,167 +201,211 @@ export default function MeasureRangeControl({
 								isTertiary={realControl !== 'individual' ? false : true}
 							/>
 						)}
+						<TokenPickerButton
+							tokens={tokens}
+							onSelect={onSelectToken ? (alias) => onSelectToken(alias, null) : undefined}
+							isActive={Array.isArray(value) && value.every(isTokenAlias)}
+						/>
 					</Flex>
 				)}
 				<div className={'kadence-controls-content'}>
-					{realControl !== 'individual' && (
-						<>
-							<SingleMeasureRangeControl
-								value={value ? value[0] : ''}
-								onChange={(newVal) => onChange([newVal, newVal, newVal, newVal])}
-								className={'kb-measure-input-all-inputs'}
-								min={min}
-								max={max}
-								options={options}
-								step={step}
-								help={help}
-								unit={unit}
-								units={units}
-								onUnit={onUnit}
-								defaultValue={defaultValue[0]}
-								placeholder={placeholder?.[0] ? placeholder?.[0] : ''}
-								allowReset={false}
-								disableCustomSizes={true}
-								setCustomControl={realSetIsCustom}
-								customControl={realIsCustomControl}
-								isPopover={false}
-								isSingle={true}
-								onMouseOver={onMouseOver}
-								onMouseOut={onMouseOut}
-								allowAuto={allowAuto}
+					{realControl !== 'individual' &&
+						(value && isTokenAlias(value[0]) ? (
+							<TokenChip
+								value={value[0]}
+								tokens={tokens}
+								onUnlink={onUnlinkToken ? () => onUnlinkToken(null) : undefined}
 							/>
-						</>
-					)}
+						) : (
+							<>
+								<SingleMeasureRangeControl
+									value={value ? value[0] : ''}
+									onChange={(newVal) => onChange([newVal, newVal, newVal, newVal])}
+									className={'kb-measure-input-all-inputs'}
+									min={min}
+									max={max}
+									options={options}
+									step={step}
+									help={help}
+									unit={unit}
+									units={units}
+									onUnit={onUnit}
+									defaultValue={defaultValue[0]}
+									placeholder={placeholder?.[0] ? placeholder?.[0] : ''}
+									allowReset={false}
+									disableCustomSizes={true}
+									setCustomControl={realSetIsCustom}
+									customControl={realIsCustomControl}
+									isPopover={false}
+									isSingle={true}
+									onMouseOver={onMouseOver}
+									onMouseOut={onMouseOut}
+									allowAuto={allowAuto}
+								/>
+							</>
+						))}
 					{realControl === 'individual' && (
 						<>
-							<SingleMeasureRangeControl
-								parentLabel={parentLabel ? parentLabel : label}
-								label={__('Top', '__KADENCE__TEXT__DOMAIN__')}
-								className={'kb-measure-box-top'}
-								value={value ? value[0] : ''}
-								onChange={(newVal) => {
-									onChange([
-										newVal,
-										value && undefined !== value[1] ? value[1] : '',
-										value && undefined !== value[2] ? value[2] : '',
-										value && undefined !== value[3] ? value[3] : '',
-									]);
-								}}
-								min={min}
-								max={max}
-								options={options}
-								step={step}
-								help={help}
-								unit={unit}
-								units={units}
-								onUnit={onUnit}
-								defaultValue={defaultValue[0]}
-								placeholder={placeholder?.[0] ? placeholder?.[0] : ''}
-								allowReset={false}
-								disableCustomSizes={true}
-								setCustomControl={realSetIsCustom}
-								customControl={realIsCustomControl}
-								isPopover={true}
-								onMouseOver={onMouseOver}
-								onMouseOut={onMouseOut}
-								allowAuto={allowAuto}
-							/>
-							<SingleMeasureRangeControl
-								parentLabel={parentLabel ? parentLabel : label}
-								label={__('Right', '__KADENCE__TEXT__DOMAIN__')}
-								className={'kb-measure-box-right'}
-								value={value ? value[1] : ''}
-								onChange={(newVal) =>
-									onChange([
-										value && undefined !== value[0] ? value[0] : '',
-										newVal,
-										value && undefined !== value[2] ? value[2] : '',
-										value && undefined !== value[3] ? value[3] : '',
-									])
-								}
-								min={min}
-								max={max}
-								options={options}
-								step={step}
-								help={help}
-								unit={unit}
-								units={units}
-								onUnit={onUnit}
-								defaultValue={defaultValue[1]}
-								placeholder={placeholder?.[1] ? placeholder?.[1] : ''}
-								allowReset={false}
-								disableCustomSizes={true}
-								setCustomControl={realSetIsCustom}
-								customControl={realIsCustomControl}
-								isPopover={true}
-								onMouseOver={onMouseOver}
-								onMouseOut={onMouseOut}
-								allowAuto={allowAuto}
-							/>
-							<SingleMeasureRangeControl
-								parentLabel={parentLabel ? parentLabel : label}
-								label={__('Bottom', '__KADENCE__TEXT__DOMAIN__')}
-								className={'kb-measure-box-bottom'}
-								value={value ? value[2] : ''}
-								onChange={(newVal) =>
-									onChange([
-										value && undefined !== value[0] ? value[0] : '',
-										value && undefined !== value[1] ? value[1] : '',
-										newVal,
-										value && undefined !== value[3] ? value[3] : '',
-									])
-								}
-								min={min}
-								max={max}
-								options={options}
-								step={step}
-								help={help}
-								unit={unit}
-								units={units}
-								onUnit={onUnit}
-								defaultValue={defaultValue[2]}
-								placeholder={placeholder?.[2] ? placeholder?.[2] : ''}
-								allowReset={false}
-								disableCustomSizes={true}
-								setCustomControl={realSetIsCustom}
-								customControl={realIsCustomControl}
-								isPopover={true}
-								onMouseOver={onMouseOver}
-								onMouseOut={onMouseOut}
-								allowAuto={allowAuto}
-							/>
-							<SingleMeasureRangeControl
-								parentLabel={parentLabel ? parentLabel : label}
-								label={__('Left', '__KADENCE__TEXT__DOMAIN__')}
-								className={'kb-measure-box-left'}
-								value={value ? value[3] : ''}
-								onChange={(newVal) =>
-									onChange([
-										value && undefined !== value[0] ? value[0] : '',
-										value && undefined !== value[1] ? value[1] : '',
-										value && undefined !== value[2] ? value[2] : '',
-										newVal,
-									])
-								}
-								min={min}
-								max={max}
-								options={options}
-								step={step}
-								help={help}
-								unit={unit}
-								units={units}
-								onUnit={onUnit}
-								defaultValue={defaultValue[3]}
-								placeholder={placeholder?.[3] ? placeholder?.[3] : ''}
-								allowReset={false}
-								disableCustomSizes={true}
-								setCustomControl={realSetIsCustom}
-								customControl={realIsCustomControl}
-								isPopover={true}
-								onMouseOver={onMouseOver}
-								onMouseOut={onMouseOut}
-								allowAuto={allowAuto}
-							/>
+							{value && isTokenAlias(value[0]) ? (
+								<TokenChip
+									value={value[0]}
+									tokens={tokens}
+									onUnlink={onUnlinkToken ? () => onUnlinkToken(0) : undefined}
+								/>
+							) : (
+								<SingleMeasureRangeControl
+									parentLabel={parentLabel ? parentLabel : label}
+									label={__('Top', '__KADENCE__TEXT__DOMAIN__')}
+									className={'kb-measure-box-top'}
+									value={value ? value[0] : ''}
+									onChange={(newVal) => {
+										onChange([
+											newVal,
+											value && undefined !== value[1] ? value[1] : '',
+											value && undefined !== value[2] ? value[2] : '',
+											value && undefined !== value[3] ? value[3] : '',
+										]);
+									}}
+									min={min}
+									max={max}
+									options={options}
+									step={step}
+									help={help}
+									unit={unit}
+									units={units}
+									onUnit={onUnit}
+									defaultValue={defaultValue[0]}
+									placeholder={placeholder?.[0] ? placeholder?.[0] : ''}
+									allowReset={false}
+									disableCustomSizes={true}
+									setCustomControl={realSetIsCustom}
+									customControl={realIsCustomControl}
+									isPopover={true}
+									onMouseOver={onMouseOver}
+									onMouseOut={onMouseOut}
+									allowAuto={allowAuto}
+								/>
+							)}
+							{value && isTokenAlias(value[1]) ? (
+								<TokenChip
+									value={value[1]}
+									tokens={tokens}
+									onUnlink={onUnlinkToken ? () => onUnlinkToken(1) : undefined}
+								/>
+							) : (
+								<SingleMeasureRangeControl
+									parentLabel={parentLabel ? parentLabel : label}
+									label={__('Right', '__KADENCE__TEXT__DOMAIN__')}
+									className={'kb-measure-box-right'}
+									value={value ? value[1] : ''}
+									onChange={(newVal) =>
+										onChange([
+											value && undefined !== value[0] ? value[0] : '',
+											newVal,
+											value && undefined !== value[2] ? value[2] : '',
+											value && undefined !== value[3] ? value[3] : '',
+										])
+									}
+									min={min}
+									max={max}
+									options={options}
+									step={step}
+									help={help}
+									unit={unit}
+									units={units}
+									onUnit={onUnit}
+									defaultValue={defaultValue[1]}
+									placeholder={placeholder?.[1] ? placeholder?.[1] : ''}
+									allowReset={false}
+									disableCustomSizes={true}
+									setCustomControl={realSetIsCustom}
+									customControl={realIsCustomControl}
+									isPopover={true}
+									onMouseOver={onMouseOver}
+									onMouseOut={onMouseOut}
+									allowAuto={allowAuto}
+								/>
+							)}
+							{value && isTokenAlias(value[2]) ? (
+								<TokenChip
+									value={value[2]}
+									tokens={tokens}
+									onUnlink={onUnlinkToken ? () => onUnlinkToken(2) : undefined}
+								/>
+							) : (
+								<SingleMeasureRangeControl
+									parentLabel={parentLabel ? parentLabel : label}
+									label={__('Bottom', '__KADENCE__TEXT__DOMAIN__')}
+									className={'kb-measure-box-bottom'}
+									value={value ? value[2] : ''}
+									onChange={(newVal) =>
+										onChange([
+											value && undefined !== value[0] ? value[0] : '',
+											value && undefined !== value[1] ? value[1] : '',
+											newVal,
+											value && undefined !== value[3] ? value[3] : '',
+										])
+									}
+									min={min}
+									max={max}
+									options={options}
+									step={step}
+									help={help}
+									unit={unit}
+									units={units}
+									onUnit={onUnit}
+									defaultValue={defaultValue[2]}
+									placeholder={placeholder?.[2] ? placeholder?.[2] : ''}
+									allowReset={false}
+									disableCustomSizes={true}
+									setCustomControl={realSetIsCustom}
+									customControl={realIsCustomControl}
+									isPopover={true}
+									onMouseOver={onMouseOver}
+									onMouseOut={onMouseOut}
+									allowAuto={allowAuto}
+								/>
+							)}
+							{value && isTokenAlias(value[3]) ? (
+								<TokenChip
+									value={value[3]}
+									tokens={tokens}
+									onUnlink={onUnlinkToken ? () => onUnlinkToken(3) : undefined}
+								/>
+							) : (
+								<SingleMeasureRangeControl
+									parentLabel={parentLabel ? parentLabel : label}
+									label={__('Left', '__KADENCE__TEXT__DOMAIN__')}
+									className={'kb-measure-box-left'}
+									value={value ? value[3] : ''}
+									onChange={(newVal) =>
+										onChange([
+											value && undefined !== value[0] ? value[0] : '',
+											value && undefined !== value[1] ? value[1] : '',
+											value && undefined !== value[2] ? value[2] : '',
+											newVal,
+										])
+									}
+									min={min}
+									max={max}
+									options={options}
+									step={step}
+									help={help}
+									unit={unit}
+									units={units}
+									onUnit={onUnit}
+									defaultValue={defaultValue[3]}
+									placeholder={placeholder?.[3] ? placeholder?.[3] : ''}
+									allowReset={false}
+									disableCustomSizes={true}
+									setCustomControl={realSetIsCustom}
+									customControl={realIsCustomControl}
+									isPopover={true}
+									onMouseOver={onMouseOver}
+									onMouseOut={onMouseOut}
+									allowAuto={allowAuto}
+								/>
+							)}
 							{realIsCustomControl && (
 								<div className={'kadence-units kadence-measure-control-select-wrapper'}>
 									<select

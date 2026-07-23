@@ -19,6 +19,7 @@ import { undo, settings, link, linkOff } from '@wordpress/icons';
 import { useInstanceId } from '@wordpress/compose';
 import { Dashicon, Button, ButtonGroup } from '@wordpress/components';
 import { outlineTopIcon, outlineRightIcon, outlineBottomIcon, outlineLeftIcon } from '@kadence/icons';
+import { TokenPickerButton, isTokenAlias } from '../../common/token-alias';
 /**
  * Build the Measure controls
  * @returns {object} Measure settings.
@@ -64,6 +65,9 @@ export default function ResponsiveBorderControl({
 	},
 	reset = true,
 	defaultLinked = true,
+	tokens,
+	onSelectToken,
+	onUnlinkToken,
 }) {
 	const instanceId = useInstanceId(ResponsiveBorderControl);
 	const measureIcons = {
@@ -184,6 +188,8 @@ export default function ResponsiveBorderControl({
 			fourthIcon={fourthIcon}
 			linkIcon={linkIcon}
 			unlinkIcon={unlinkIcon}
+			tokens={tokens}
+			onUnlinkToken={onUnlinkToken}
 		/>
 	);
 	output.Tablet = (
@@ -202,6 +208,8 @@ export default function ResponsiveBorderControl({
 			fourthIcon={fourthIcon}
 			linkIcon={linkIcon}
 			unlinkIcon={unlinkIcon}
+			tokens={tokens}
+			onUnlinkToken={onUnlinkToken}
 		/>
 	);
 	output.Desktop = (
@@ -220,6 +228,8 @@ export default function ResponsiveBorderControl({
 			fourthIcon={fourthIcon}
 			linkIcon={linkIcon}
 			unlinkIcon={unlinkIcon}
+			tokens={tokens}
+			onUnlinkToken={onUnlinkToken}
 		/>
 	);
 	let currentDefault = deskDefault;
@@ -282,6 +292,11 @@ export default function ResponsiveBorderControl({
 							isTertiary={realControl !== 'individual' ? false : true}
 						/>
 					)}
+					<TokenPickerButton
+						tokens={tokens}
+						onSelect={onSelectToken ? (alias) => onSelectToken(alias, null) : undefined}
+						isActive={['top', 'right', 'bottom', 'left'].every((side) => isTokenAlias(liveValue?.[side]?.[2]))}
+					/>
 				</div>
 				<div className="kb-responsive-border-control-inner">
 					{output[deviceType] ? output[deviceType] : output.Desktop}

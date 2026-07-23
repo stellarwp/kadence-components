@@ -43,6 +43,7 @@ import {
 	radiusLinkedIcon,
 	radiusIndividualIcon,
 } from '@kadence/icons';
+import { TokenChip, isTokenAlias } from '../../common/token-alias';
 
 /**
  * Build the Measure controls
@@ -73,6 +74,9 @@ export default function MeasurementControls({
 	className = '',
 	reset,
 	preset = '',
+	tokens,
+	onSelectToken,
+	onUnlinkToken,
 }) {
 	const measureIcons = {
 		first: isBorderRadius ? topLeftIcon : firstIcon,
@@ -151,121 +155,160 @@ export default function MeasurementControls({
 						</div>
 					)}
 					<div className="kadence-controls-content">
-						{realControl !== 'individual' && (
-							<RangeControl
-								value={measurement ? measurement[0] : ''}
-								onChange={(value) => onChange([value, value, value, value])}
-								min={min}
-								max={max}
-								step={step}
-							/>
-						)}
+						{realControl !== 'individual' &&
+							(measurement && isTokenAlias(measurement[0]) ? (
+								<TokenChip
+									value={measurement[0]}
+									tokens={tokens}
+									onUnlink={onUnlinkToken ? () => onUnlinkToken(null) : undefined}
+								/>
+							) : (
+								<RangeControl
+									value={measurement ? measurement[0] : ''}
+									onChange={(value) => onChange([value, value, value, value])}
+									min={min}
+									max={max}
+									step={step}
+								/>
+							))}
 						{realControl === 'individual' && (
 							<Fragment>
-								<MeasurementSingleControl
-									placement="top"
-									label={__('Top', '__KADENCE__TEXT__DOMAIN__')}
-									measurement={measurement ? measurement[0] : ''}
-									onChange={(value) =>
-										onChange([
-											value ? Number(value) : value,
-											measurement && undefined !== measurement[1] && '' !== measurement[1]
-												? measurement[1]
-												: zero,
-											measurement && undefined !== measurement[2] && '' !== measurement[2]
-												? measurement[2]
-												: zero,
-											measurement && undefined !== measurement[3] && '' !== measurement[3]
-												? measurement[3]
-												: zero,
-										])
-									}
-									min={min}
-									max={max}
-									step={step}
-									icon={measureIcons.first}
-									unit={unit}
-									allowEmpty={allowEmpty}
-									preset={preset}
-								/>
-								<MeasurementSingleControl
-									placement="right"
-									label={__('Right', '__KADENCE__TEXT__DOMAIN__')}
-									measurement={measurement ? measurement[1] : ''}
-									onChange={(value) =>
-										onChange([
-											measurement && undefined !== measurement[0] && '' !== measurement[0]
-												? measurement[0]
-												: zero,
-											value ? Number(value) : value,
-											measurement && undefined !== measurement[2] && '' !== measurement[2]
-												? measurement[2]
-												: zero,
-											measurement && undefined !== measurement[3] && '' !== measurement[3]
-												? measurement[3]
-												: zero,
-										])
-									}
-									min={min}
-									max={max}
-									step={step}
-									icon={measureIcons.second}
-									unit={unit}
-									allowEmpty={allowEmpty}
-									preset={preset}
-								/>
-								<MeasurementSingleControl
-									placement="bottom"
-									label={__('Bottom', '__KADENCE__TEXT__DOMAIN__')}
-									measurement={measurement ? measurement[2] : ''}
-									onChange={(value) =>
-										onChange([
-											measurement && undefined !== measurement[0] && '' !== measurement[0]
-												? measurement[0]
-												: zero,
-											measurement && undefined !== measurement[1] && '' !== measurement[1]
-												? measurement[1]
-												: zero,
-											value ? Number(value) : value,
-											measurement && undefined !== measurement[3] && '' !== measurement[3]
-												? measurement[3]
-												: zero,
-										])
-									}
-									min={min}
-									max={max}
-									step={step}
-									icon={measureIcons.third}
-									unit={unit}
-									allowEmpty={allowEmpty}
-									preset={preset}
-								/>
-								<MeasurementSingleControl
-									placement="left"
-									label={__('Left', '__KADENCE__TEXT__DOMAIN__')}
-									measurement={measurement ? measurement[3] : ''}
-									onChange={(value) =>
-										onChange([
-											measurement && undefined !== measurement[0] && '' !== measurement[0]
-												? measurement[0]
-												: zero,
-											measurement && undefined !== measurement[1] && '' !== measurement[1]
-												? measurement[1]
-												: zero,
-											measurement && undefined !== measurement[2] && '' !== measurement[2]
-												? measurement[2]
-												: zero,
-											value ? Number(value) : value,
-										])
-									}
-									min={min}
-									max={max}
-									step={step}
-									icon={measureIcons.fourth}
-									unit={unit}
-									allowEmpty={allowEmpty}
-									preset={preset}
-								/>
+								{measurement && isTokenAlias(measurement[0]) ? (
+									<TokenChip
+										value={measurement[0]}
+										tokens={tokens}
+										onUnlink={onUnlinkToken ? () => onUnlinkToken(0) : undefined}
+									/>
+								) : (
+									<MeasurementSingleControl
+										placement="top"
+										label={__('Top', '__KADENCE__TEXT__DOMAIN__')}
+										measurement={measurement ? measurement[0] : ''}
+										onChange={(value) =>
+											onChange([
+												value ? Number(value) : value,
+												measurement && undefined !== measurement[1] && '' !== measurement[1]
+													? measurement[1]
+													: zero,
+												measurement && undefined !== measurement[2] && '' !== measurement[2]
+													? measurement[2]
+													: zero,
+												measurement && undefined !== measurement[3] && '' !== measurement[3]
+													? measurement[3]
+													: zero,
+											])
+										}
+										min={min}
+										max={max}
+										step={step}
+										icon={measureIcons.first}
+										unit={unit}
+										allowEmpty={allowEmpty}
+										preset={preset}
+									/>
+								)}
+								{measurement && isTokenAlias(measurement[1]) ? (
+									<TokenChip
+										value={measurement[1]}
+										tokens={tokens}
+										onUnlink={onUnlinkToken ? () => onUnlinkToken(1) : undefined}
+									/>
+								) : (
+									<MeasurementSingleControl
+										placement="right"
+										label={__('Right', '__KADENCE__TEXT__DOMAIN__')}
+										measurement={measurement ? measurement[1] : ''}
+										onChange={(value) =>
+											onChange([
+												measurement && undefined !== measurement[0] && '' !== measurement[0]
+													? measurement[0]
+													: zero,
+												value ? Number(value) : value,
+												measurement && undefined !== measurement[2] && '' !== measurement[2]
+													? measurement[2]
+													: zero,
+												measurement && undefined !== measurement[3] && '' !== measurement[3]
+													? measurement[3]
+													: zero,
+											])
+										}
+										min={min}
+										max={max}
+										step={step}
+										icon={measureIcons.second}
+										unit={unit}
+										allowEmpty={allowEmpty}
+										preset={preset}
+									/>
+								)}
+								{measurement && isTokenAlias(measurement[2]) ? (
+									<TokenChip
+										value={measurement[2]}
+										tokens={tokens}
+										onUnlink={onUnlinkToken ? () => onUnlinkToken(2) : undefined}
+									/>
+								) : (
+									<MeasurementSingleControl
+										placement="bottom"
+										label={__('Bottom', '__KADENCE__TEXT__DOMAIN__')}
+										measurement={measurement ? measurement[2] : ''}
+										onChange={(value) =>
+											onChange([
+												measurement && undefined !== measurement[0] && '' !== measurement[0]
+													? measurement[0]
+													: zero,
+												measurement && undefined !== measurement[1] && '' !== measurement[1]
+													? measurement[1]
+													: zero,
+												value ? Number(value) : value,
+												measurement && undefined !== measurement[3] && '' !== measurement[3]
+													? measurement[3]
+													: zero,
+											])
+										}
+										min={min}
+										max={max}
+										step={step}
+										icon={measureIcons.third}
+										unit={unit}
+										allowEmpty={allowEmpty}
+										preset={preset}
+									/>
+								)}
+								{measurement && isTokenAlias(measurement[3]) ? (
+									<TokenChip
+										value={measurement[3]}
+										tokens={tokens}
+										onUnlink={onUnlinkToken ? () => onUnlinkToken(3) : undefined}
+									/>
+								) : (
+									<MeasurementSingleControl
+										placement="left"
+										label={__('Left', '__KADENCE__TEXT__DOMAIN__')}
+										measurement={measurement ? measurement[3] : ''}
+										onChange={(value) =>
+											onChange([
+												measurement && undefined !== measurement[0] && '' !== measurement[0]
+													? measurement[0]
+													: zero,
+												measurement && undefined !== measurement[1] && '' !== measurement[1]
+													? measurement[1]
+													: zero,
+												measurement && undefined !== measurement[2] && '' !== measurement[2]
+													? measurement[2]
+													: zero,
+												value ? Number(value) : value,
+											])
+										}
+										min={min}
+										max={max}
+										step={step}
+										icon={measureIcons.fourth}
+										unit={unit}
+										allowEmpty={allowEmpty}
+										preset={preset}
+									/>
+								)}
 							</Fragment>
 						)}
 						{(onUnit || showUnit) && (

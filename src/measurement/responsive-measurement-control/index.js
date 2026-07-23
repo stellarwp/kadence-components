@@ -22,6 +22,7 @@ import {
 	individualIcon,
 	linkedIcon,
 } from '@kadence/icons';
+import { TokenPickerButton, isTokenAlias } from '../../common/token-alias';
 /**
  * Build the Measure controls
  * @returns {object} Measure settings.
@@ -54,6 +55,9 @@ export default function ResponsiveMeasurementControls({
 	linkIcon = link,
 	unlinkIcon = linkOff,
 	reset = true,
+	tokens,
+	onSelectToken,
+	onUnlinkToken,
 }) {
 	const ref = useRef();
 	const [localControl, setLocalControl] = useState(control);
@@ -130,6 +134,9 @@ export default function ResponsiveMeasurementControls({
 			fourthIcon={fourthIcon}
 			linkIcon={linkIcon}
 			unlinkIcon={unlinkIcon}
+			tokens={tokens}
+			onSelectToken={onSelectToken}
+			onUnlinkToken={onUnlinkToken}
 		/>
 	);
 	output.Tablet = (
@@ -156,6 +163,9 @@ export default function ResponsiveMeasurementControls({
 			fourthIcon={fourthIcon}
 			linkIcon={linkIcon}
 			unlinkIcon={unlinkIcon}
+			tokens={tokens}
+			onSelectToken={onSelectToken}
+			onUnlinkToken={onUnlinkToken}
 		/>
 	);
 	output.Desktop = (
@@ -183,6 +193,9 @@ export default function ResponsiveMeasurementControls({
 			fourthIcon={fourthIcon}
 			linkIcon={linkIcon}
 			unlinkIcon={unlinkIcon}
+			tokens={tokens}
+			onSelectToken={onSelectToken}
+			onUnlinkToken={onUnlinkToken}
 		/>
 	);
 	return [
@@ -239,6 +252,11 @@ export default function ResponsiveMeasurementControls({
 							isTertiary={realControl !== 'individual' ? false : true}
 						/>
 					)}
+					<TokenPickerButton
+						tokens={tokens}
+						onSelect={onSelectToken ? (alias) => onSelectToken(alias, null) : undefined}
+						isActive={Array.isArray(liveValue) && liveValue.every(isTokenAlias)}
+					/>
 				</div>
 				<div className="kb-responsive-measure-control-inner">
 					{output[deviceType] ? output[deviceType] : output.Desktop}

@@ -32,6 +32,7 @@ import {
 } from '@kadence/icons';
 import { OPTIONS_MAP } from './constants';
 import { isCustomOption, getOptionIndex, getOptionFromSize, getOptionSize } from './utils';
+import { TokenPickerButton, isTokenAlias } from '../common/token-alias';
 /**
  * Build the Measure controls
  * @returns {object} Measure settings.
@@ -71,6 +72,9 @@ export default function ResponsiveMeasureRangeControl({
 	onMouseOver,
 	onMouseOut,
 	allowAuto = false,
+	tokens,
+	onSelectToken,
+	onUnlinkToken,
 }) {
 	const ref = useRef();
 	const measureIcons = {
@@ -244,6 +248,9 @@ export default function ResponsiveMeasureRangeControl({
 			onMouseOver={onMouseOver}
 			onMouseOut={onMouseOut}
 			allowAuto={allowAuto}
+			tokens={tokens}
+			onSelectToken={onSelectToken}
+			onUnlinkToken={onUnlinkToken}
 		/>
 	);
 	output.Tablet = (
@@ -278,6 +285,9 @@ export default function ResponsiveMeasureRangeControl({
 			onMouseOver={onMouseOver}
 			onMouseOut={onMouseOut}
 			allowAuto={allowAuto}
+			tokens={tokens}
+			onSelectToken={onSelectToken}
+			onUnlinkToken={onUnlinkToken}
 		/>
 	);
 	output.Desktop = (
@@ -311,6 +321,9 @@ export default function ResponsiveMeasureRangeControl({
 			onMouseOver={onMouseOver}
 			onMouseOut={onMouseOut}
 			allowAuto={allowAuto}
+			tokens={tokens}
+			onSelectToken={onSelectToken}
+			onUnlinkToken={onUnlinkToken}
 		/>
 	);
 	let currentDefault = deskDefault;
@@ -392,6 +405,13 @@ export default function ResponsiveMeasureRangeControl({
 							onClick={() => realSetOnControl(realControl !== 'individual' ? 'individual' : 'linked')}
 							isPressed={realControl !== 'individual' ? true : false}
 							isTertiary={realControl !== 'individual' ? false : true}
+						/>
+					)}
+					{!subLabel && (
+						<TokenPickerButton
+							tokens={tokens}
+							onSelect={onSelectToken ? (alias) => onSelectToken(alias, null) : undefined}
+							isActive={Array.isArray(liveValue) && liveValue.every(isTokenAlias)}
 						/>
 					)}
 				</Flex>
