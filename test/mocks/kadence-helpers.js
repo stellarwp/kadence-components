@@ -10,4 +10,5 @@ module.exports = {
 	objectSameFill: () => true,
 	clearNonMatchingValues: (current, next) => next,
 	KadenceColorOutput: (color) => color,
+	hexToRGBA: (hex, opacity) => `rgba(${hex},${opacity})`,
 };

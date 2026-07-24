@@ -8,6 +8,7 @@
  */
 import PopColorControl from '../pop-color-control';
 import KadenceRadioButtons from '../common/radio-buttons';
+import { controlActions } from '../common/control-extensions';
 
 /**
  * Internal block libraries
@@ -24,7 +25,21 @@ import './editor.scss';
 import { shadowPresetNone } from '@kadence/icons';
 
 /**
- * Build the BoxShadow controls
+ * Build the BoxShadow controls.
+ *
+ * Exposes two neutral extension seams so a consumer can decorate the control without this package
+ * knowing what the decoration is. The header actions seam (`controlActions`) lets a consumer render
+ * extra affordances beside the label (e.g. a whole-shadow picker or a read-only chip), and the generic
+ * `readOnly` flag renders every sub-input (preset row, color, X/Y/blur/spread, inset) disabled when the
+ * value is driven externally, so partial edits can't fight it. `overrideValue` is an opaque blob the
+ * control forwards into the actions seam; `context` is the opaque site identifier the consuming block
+ * passes in. With nothing registered and `readOnly` false, rendering and behavior are byte-identical.
+ *
+ * @param {Object}    props
+ * @param {*}         [props.overrideValue] Opaque value forwarded to the header actions seam (unused by this package).
+ * @param {boolean}   [props.readOnly]      When true, every sub-input renders disabled (value is driven externally).
+ * @param {Object}    [props.context]       Opaque site identifier forwarded to the extension seams.
+ *
  * @returns {object} BoxShadow settings.
  */
 class BoxShadowControl extends Component {
@@ -72,7 +87,16 @@ class BoxShadowControl extends Component {
 			'top-left-solid': {hOffset: -15, vOffset: -15, blur: 0, spread: 0, inset: false},
 		};
 
+		const { overrideValue, readOnly, context } = this.props;
+
 		const applyPreset = (value) => {
+			// A preset writes five scalars at once, which would silently fight an active token.
+			// The `kt-inner-sub-section--token-driven` styling only blocks pointer input, so guard
+			// the write itself too — a keyboard-activated or programmatic click must not corrupt
+			// state while the token is authoritative.
+			if (readOnly) {
+				return;
+			}
 			Promise.resolve()
 				.then(() => this.props.onHOffsetChange(presetSettings[value].hOffset))
 				.then(() => this.props.onVOffsetChange(presetSettings[value].vOffset))
@@ -86,6 +110,7 @@ class BoxShadowControl extends Component {
 				{ this.props.label && (
 					<div className="kt-box-shadow-label">
 						<h2 className="kt-beside-color-label">{ this.props.label }</h2>
+						{ controlActions( { control: 'boxShadow', value: overrideValue, readOnly, context } ) }
 						{ this.props.onEnableChange && (
 							<ToggleControl
 								checked={ this.props.enable }
@@ -95,7 +120,7 @@ class BoxShadowControl extends Component {
 					</div>
 				) }
 				{ this.props.enable && (
-					<div className="kt-inner-sub-section">
+					<div className={ 'kt-inner-sub-section' + ( readOnly ? ' kt-inner-sub-section--token-driven' : '' ) }>
 						<KadenceRadioButtons
 							value={0}
 							options={presetOptions}
@@ -112,10 +137,10 @@ class BoxShadowControl extends Component {
 								<PopColorControl
 									value={ ( this.props.color ? this.props.color : this.props.colorDefault ) }
 									default={ this.props.colorDefault }
-									onChange={ value => this.props.onColorChange( value ) }
+									onChange={ value => ! readOnly && this.props.onColorChange( value ) }
 									opacityValue={ this.props.opacity }
-									onOpacityChange={ value => this.props.onOpacityChange( value ) }
-									onArrayChange={ this.props.onArrayChange ? ( color, opacity ) => this.props.onArrayChange( color, opacity ) : undefined }
+									onOpacityChange={ value => ! readOnly && this.props.onOpacityChange( value ) }
+									onArrayChange={ this.props.onArrayChange ? ( color, opacity ) => ! readOnly && this.props.onArrayChange( color, opacity ) : undefined }
 								/>
 							</div>
 							<div className="kt-box-x-settings kt-box-shadow-subset">
@@ -129,6 +154,7 @@ class BoxShadowControl extends Component {
 											max={ 200 }
 											step={ 1 }
 											type="number"
+											disabled={ !!readOnly }
 											className="components-text-control__input"
 										/>
 									</div>
@@ -145,6 +171,7 @@ class BoxShadowControl extends Component {
 											max={ 200 }
 											step={ 1 }
 											type="number"
+											disabled={ !!readOnly }
 											className="components-text-control__input"
 										/>
 									</div>
@@ -161,6 +188,7 @@ class BoxShadowControl extends Component {
 											max={ 200 }
 											step={ 1 }
 											type="number"
+											disabled={ !!readOnly }
 											className="components-text-control__input"
 										/>
 									</div>
@@ -177,6 +205,7 @@ class BoxShadowControl extends Component {
 											max={ 200 }
 											step={ 1 }
 											type="number"
+											disabled={ !!readOnly }
 											className="components-text-control__input"
 										/>
 									</div>
@@ -188,6 +217,7 @@ class BoxShadowControl extends Component {
 								<ToggleControl
 									label={ __( 'Inset' ) }
 									checked={ this.props.inset }
+									disabled={ !!readOnly }
 									onChange={ value => this.props.onInsetChange( value ) }
 								/>
 							</div>
