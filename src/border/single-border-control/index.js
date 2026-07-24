@@ -44,7 +44,7 @@ import {
 	MenuGroup,
 	MenuItem,
 } from '@wordpress/components';
-import { TokenChip, isTokenAlias } from '../../common/token-alias';
+import { controlEditor } from '../../common/control-extensions';
 /**
  * Build the Border controls
  * @returns {object} Border Control.
@@ -62,8 +62,7 @@ export default function SingleBorderControl({
 	units = ['px', 'em', 'rem'],
 	styles = ['solid', 'dashed', 'dotted', 'double'],
 	defaultLinked = true,
-	tokens,
-	onUnlink,
+	context,
 }) {
 	const instanceId = useInstanceId(SingleBorderControl);
 	const onChangeStyle = (style) => {
@@ -207,9 +206,7 @@ export default function SingleBorderControl({
 						)}
 					</DropdownMenu>
 					<div className={'kadence-controls-content kadence-single-unit-control'}>
-						{isTokenAlias(currentSize) ? (
-							<TokenChip value={currentSize} tokens={tokens} onUnlink={onUnlink} />
-						) : (
+						{controlEditor(
 							<UnitControl
 								min={min}
 								max={max}
@@ -218,7 +215,8 @@ export default function SingleBorderControl({
 								value={currentSize}
 								disableUnits={true}
 								onChange={(newVal) => onChangeSize(newVal)}
-							/>
+							/>,
+							{ control: 'singleBorder', value: currentSize, onChange: onChangeSize, context }
 						)}
 						<div className={'kadence-measure-control-select-wrapper'}>
 							<select

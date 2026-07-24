@@ -19,7 +19,7 @@ import { undo, settings, link, linkOff } from '@wordpress/icons';
 import { useInstanceId } from '@wordpress/compose';
 import { Dashicon, Button, ButtonGroup } from '@wordpress/components';
 import { outlineTopIcon, outlineRightIcon, outlineBottomIcon, outlineLeftIcon } from '@kadence/icons';
-import { TokenPickerButton, isTokenAlias } from '../../common/token-alias';
+import { controlActions } from '../../common/control-extensions';
 /**
  * Build the Measure controls
  * @returns {object} Measure settings.
@@ -65,9 +65,7 @@ export default function ResponsiveBorderControl({
 	},
 	reset = true,
 	defaultLinked = true,
-	tokens,
-	onSelectToken,
-	onUnlinkToken,
+	context,
 }) {
 	const instanceId = useInstanceId(ResponsiveBorderControl);
 	const measureIcons = {
@@ -159,6 +157,10 @@ export default function ResponsiveBorderControl({
 	} else if (deviceType === 'Mobile') {
 		liveValue = mobileValue?.[0] ? mobileValue[0] : mobileDefault;
 	}
+	// The write handler for whichever device is live, so a header action injected through the seam
+	// targets the value the user is actually looking at.
+	const activeOnChange =
+		deviceType === 'Tablet' ? onChangeTablet : deviceType === 'Mobile' ? onChangeMobile : onChange;
 	const onReset = () => {
 		if (deviceType === 'Tablet') {
 			onChangeTablet([tabletDefault]);
@@ -188,8 +190,7 @@ export default function ResponsiveBorderControl({
 			fourthIcon={fourthIcon}
 			linkIcon={linkIcon}
 			unlinkIcon={unlinkIcon}
-			tokens={tokens}
-			onUnlinkToken={onUnlinkToken}
+			context={context}
 		/>
 	);
 	output.Tablet = (
@@ -208,8 +209,7 @@ export default function ResponsiveBorderControl({
 			fourthIcon={fourthIcon}
 			linkIcon={linkIcon}
 			unlinkIcon={unlinkIcon}
-			tokens={tokens}
-			onUnlinkToken={onUnlinkToken}
+			context={context}
 		/>
 	);
 	output.Desktop = (
@@ -228,8 +228,7 @@ export default function ResponsiveBorderControl({
 			fourthIcon={fourthIcon}
 			linkIcon={linkIcon}
 			unlinkIcon={unlinkIcon}
-			tokens={tokens}
-			onUnlinkToken={onUnlinkToken}
+			context={context}
 		/>
 	);
 	let currentDefault = deskDefault;
@@ -292,11 +291,12 @@ export default function ResponsiveBorderControl({
 							isTertiary={realControl !== 'individual' ? false : true}
 						/>
 					)}
-					<TokenPickerButton
-						tokens={tokens}
-						onSelect={onSelectToken ? (alias) => onSelectToken(alias, null) : undefined}
-						isActive={['top', 'right', 'bottom', 'left'].every((side) => isTokenAlias(liveValue?.[side]?.[2]))}
-					/>
+					{controlActions({
+						control: 'border',
+						value: liveValue,
+						onChange: activeOnChange,
+						context,
+					})}
 				</div>
 				<div className="kb-responsive-border-control-inner">
 					{output[deviceType] ? output[deviceType] : output.Desktop}

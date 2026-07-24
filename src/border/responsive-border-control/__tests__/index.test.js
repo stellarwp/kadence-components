@@ -1,10 +1,11 @@
 /**
- * Tests for `ResponsiveBorderControl`: the header token-picker affordance (width-only semantics)
- * and prop threading down to the width slot, plus the byte-identical baseline required when the
- * new props are absent.
+ * Tests for ResponsiveBorderControl's token-agnostic extension seams: it injects header actions through
+ * the actions filter and forwards its opaque `context` down to the nested width-slot editor seam, with no
+ * token vocabulary of its own.
  */
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { createReduxStore, register } from '@wordpress/data';
+import { addFilter, removeFilter } from '@wordpress/hooks';
 import ResponsiveBorderControl from '../index';
 
 register(
@@ -19,21 +20,13 @@ register(
 	})
 );
 
-const tokens = [{ id: 'width.thin', alias: '{width.thin}', label: 'Thin Width', value: '1px', type: 'dimension' }];
+const EDITOR_HOOK = 'kadence.components.control.editor';
+const ACTIONS_HOOK = 'kadence.components.control.actions';
+const NS = 'test/seam';
 
 const numericValue = [
 	{
 		top: ['#000000', 'solid', 1],
-		right: ['#000000', 'solid', 1],
-		bottom: ['#000000', 'solid', 1],
-		left: ['#000000', 'solid', 1],
-		unit: 'px',
-	},
-];
-
-const aliasedValue = [
-	{
-		top: ['#000000', 'solid', '{width.thin}'],
 		right: ['#000000', 'solid', 1],
 		bottom: ['#000000', 'solid', 1],
 		left: ['#000000', 'solid', 1],
@@ -51,38 +44,34 @@ const baseProps = {
 	onChangeMobile: jest.fn(),
 };
 
-describe('ResponsiveBorderControl baseline (no alias props)', () => {
-	it('renders no token picker button when tokens is absent', () => {
-		render(<ResponsiveBorderControl {...baseProps} />);
-		expect(screen.queryByLabelText('Use design token')).not.toBeInTheDocument();
-	});
-
-	it('renders no token chip for numeric widths', () => {
-		render(<ResponsiveBorderControl {...baseProps} />);
-		expect(document.querySelector('.kadence-token-chip')).not.toBeInTheDocument();
-	});
+afterEach(() => {
+	removeFilter(EDITOR_HOOK, NS);
+	removeFilter(ACTIONS_HOOK, NS);
 });
 
-describe('ResponsiveBorderControl pick (width-only semantics)', () => {
-	it('renders the header picker and fires onSelectToken with alias + null', () => {
-		const onSelectToken = jest.fn();
-		render(<ResponsiveBorderControl {...baseProps} tokens={tokens} onSelectToken={onSelectToken} />);
-		fireEvent.click(screen.getByLabelText('Use design token'));
-		fireEvent.click(screen.getByText('Thin Width'));
-		expect(onSelectToken).toHaveBeenCalledWith('{width.thin}', null);
-	});
-});
-
-describe('ResponsiveBorderControl width chip swap', () => {
-	it('renders a chip for the aliased width and leaves other sides untouched', () => {
-		render(<ResponsiveBorderControl {...baseProps} value={aliasedValue} tokens={tokens} />);
-		expect(screen.getByText('Thin Width')).toBeInTheDocument();
+describe('ResponsiveBorderControl extension seams', () => {
+	it('injects a header action through the actions filter', () => {
+		addFilter(ACTIONS_HOOK, NS, (actions) => [
+			...actions,
+			<button key="a" type="button">
+				injected-action
+			</button>,
+		]);
+		render(<ResponsiveBorderControl {...baseProps} />);
+		expect(screen.getByText('injected-action')).toBeInTheDocument();
 	});
 
-	it('fires onUnlinkToken with the side index from the width chip', () => {
-		const onUnlinkToken = jest.fn();
-		render(<ResponsiveBorderControl {...baseProps} value={aliasedValue} tokens={tokens} onUnlinkToken={onUnlinkToken} />);
-		fireEvent.click(screen.getByLabelText('Unlink token'));
-		expect(onUnlinkToken).toHaveBeenCalledWith(0);
+	it('forwards its opaque context down to the nested width-slot editor seam', () => {
+		const seen = [];
+		addFilter(EDITOR_HOOK, NS, (editor, ctx) => {
+			seen.push(ctx);
+			return editor;
+		});
+
+		render(<ResponsiveBorderControl {...baseProps} context={{ blockName: 'kadence/singlebtn', attribute: 'border' }} />);
+
+		const borderSite = seen.find((ctx) => ctx.control === 'singleBorder');
+		expect(borderSite).toBeTruthy();
+		expect(borderSite).toMatchObject({ context: { blockName: 'kadence/singlebtn', attribute: 'border' } });
 	});
 });

@@ -1,61 +1,53 @@
 /**
- * Tests for `SingleBorderControl`: the width-slot chip swap (color/style stay untouched), plus
- * the byte-identical baseline required when the new props are absent.
+ * Tests for SingleBorderControl's token-agnostic extension seam: the width slot renders its own unit
+ * control by default, and a consumer can replace just that slot through the
+ * `kadence.components.control.editor` filter (color/style stay untouched), receiving only neutral context.
  */
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import { addFilter, removeFilter } from '@wordpress/hooks';
 import SingleBorderControl from '../index';
 
-const tokens = [{ id: 'width.thin', alias: '{width.thin}', label: 'Thin Width', value: '1px', type: 'dimension' }];
+const EDITOR_HOOK = 'kadence.components.control.editor';
+const NS = 'test/seam';
 
-describe('SingleBorderControl baseline (no alias props)', () => {
-	it('renders the width unit control and no token chip for a numeric width', () => {
+afterEach(() => {
+	removeFilter(EDITOR_HOOK, NS);
+});
+
+describe('SingleBorderControl extension seam', () => {
+	it('renders the width unit control by default', () => {
 		render(<SingleBorderControl value={['#000000', 'solid', 2]} onChange={jest.fn()} onUnit={jest.fn()} />);
-		expect(document.querySelector('.kadence-token-chip')).not.toBeInTheDocument();
 		expect(document.querySelector('.components-unit-control')).toBeInTheDocument();
-	});
-});
-
-describe('SingleBorderControl display', () => {
-	it('renders a token chip in place of the width control when the width is aliased', () => {
-		render(
-			<SingleBorderControl value={['#000000', 'solid', '{width.thin}']} onChange={jest.fn()} onUnit={jest.fn()} tokens={tokens} />
-		);
-		expect(screen.getByText('Thin Width')).toBeInTheDocument();
+		expect(screen.queryByTestId('override')).not.toBeInTheDocument();
 	});
 
-	it('leaves the color and style editors untouched when the width is aliased', () => {
-		render(
-			<SingleBorderControl value={['#000000', 'solid', '{width.thin}']} onChange={jest.fn()} onUnit={jest.fn()} tokens={tokens} />
-		);
-		expect(screen.getByLabelText('Border Style')).toBeInTheDocument();
-	});
+	it('lets a consumer replace the width editor, receiving only neutral context', () => {
+		const seen = [];
+		addFilter(EDITOR_HOOK, NS, (editor, ctx) => {
+			seen.push(ctx);
+			return <div data-testid="override">overridden</div>;
+		});
 
-	it('falls back to the dot-path label when the entry is missing', () => {
-		render(<SingleBorderControl value={['#000000', 'solid', '{unknown.width}']} onChange={jest.fn()} onUnit={jest.fn()} />);
-		expect(screen.getByText('unknown.width')).toBeInTheDocument();
-	});
-});
-
-describe('SingleBorderControl unlink', () => {
-	it('fires onUnlink when the chip unlink button is pressed', () => {
-		const onUnlink = jest.fn();
 		render(
 			<SingleBorderControl
-				value={['#000000', 'solid', '{width.thin}']}
+				value={['#000000', 'solid', '2']}
 				onChange={jest.fn()}
 				onUnit={jest.fn()}
-				tokens={tokens}
-				onUnlink={onUnlink}
+				context={{ blockName: 'kadence/singlebtn', attribute: 'borderWidth' }}
 			/>
 		);
-		fireEvent.click(screen.getByLabelText('Unlink token'));
-		expect(onUnlink).toHaveBeenCalledWith();
+
+		expect(screen.getByTestId('override')).toBeInTheDocument();
+		expect(seen[0]).toMatchObject({
+			control: 'singleBorder',
+			value: '2',
+			context: { blockName: 'kadence/singlebtn', attribute: 'borderWidth' },
+		});
 	});
 
-	it('hides the unlink button when onUnlink is absent', () => {
-		render(
-			<SingleBorderControl value={['#000000', 'solid', '{width.thin}']} onChange={jest.fn()} onUnit={jest.fn()} tokens={tokens} />
-		);
-		expect(screen.queryByLabelText('Unlink token')).not.toBeInTheDocument();
+	it('leaves the color and style editors untouched when the width slot is overridden', () => {
+		addFilter(EDITOR_HOOK, NS, () => <div data-testid="override">overridden</div>);
+		render(<SingleBorderControl value={['#000000', 'solid', '2']} onChange={jest.fn()} onUnit={jest.fn()} />);
+		expect(screen.getByLabelText('Border Style')).toBeInTheDocument();
 	});
 });
