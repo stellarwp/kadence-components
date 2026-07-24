@@ -18,6 +18,7 @@ const eslintConfig = {
 		history: 'readonly',
 		location: 'readonly',
 		IntersectionObserver: 'readonly',
+		ResizeObserver: 'readonly',
 		kadenceFormAnalyticsParams: 'readonly',
 		Element: 'readonly',
 		kadence_blocks_params_fa: 'readonly',
