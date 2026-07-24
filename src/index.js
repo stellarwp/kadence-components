@@ -69,7 +69,6 @@ export { default as KadencePanelButton } from './panel-button';
 export { default as SelectPostsModal } from './select-posts-modal';
 export { default as SelectPostFromPostType } from './select-post-from-post-type';
 export { default as Tooltip } from './tooltip';
-export { isTokenAlias, TokenChip, TokenPickerButton } from './common/token-alias';
 
 /* Panels */
 export { default as ColorGroup } from './panels/color-group';
