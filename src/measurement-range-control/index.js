@@ -50,7 +50,7 @@ import {
 import { undo, settings, link, linkOff } from '@wordpress/icons';
 import { OPTIONS_MAP } from './constants';
 import { isCustomOption, getOptionIndex, getOptionFromSize, getOptionSize } from './utils';
-import { TokenChip, TokenPickerButton, isTokenAlias } from '../common/token-alias';
+import { controlEditor, controlActions } from '../common/control-extensions';
 
 /**
  * Build the Measure controls
@@ -89,9 +89,7 @@ export default function MeasureRangeControl({
 	onMouseOver,
 	onMouseOut,
 	allowAuto = false,
-	tokens,
-	onSelectToken,
-	onUnlinkToken,
+	context,
 }) {
 	const measureIcons = {
 		first: isBorderRadius ? topLeftIcon : firstIcon,
@@ -201,58 +199,41 @@ export default function MeasureRangeControl({
 								isTertiary={realControl !== 'individual' ? false : true}
 							/>
 						)}
-						<TokenPickerButton
-							tokens={tokens}
-							onSelect={onSelectToken ? (alias) => onSelectToken(alias, null) : undefined}
-							isActive={Array.isArray(value) && value.every(isTokenAlias)}
-						/>
+						{controlActions({ control: 'measureRange', value, onChange, context })}
 					</Flex>
 				)}
 				<div className={'kadence-controls-content'}>
 					{realControl !== 'individual' &&
-						(value && isTokenAlias(value[0]) ? (
-							<TokenChip
-								value={value[0]}
-								tokens={tokens}
-								onUnlink={onUnlinkToken ? () => onUnlinkToken(null) : undefined}
-							/>
-						) : (
-							<>
-								<SingleMeasureRangeControl
-									value={value ? value[0] : ''}
-									onChange={(newVal) => onChange([newVal, newVal, newVal, newVal])}
-									className={'kb-measure-input-all-inputs'}
-									min={min}
-									max={max}
-									options={options}
-									step={step}
-									help={help}
-									unit={unit}
-									units={units}
-									onUnit={onUnit}
-									defaultValue={defaultValue[0]}
-									placeholder={placeholder?.[0] ? placeholder?.[0] : ''}
-									allowReset={false}
-									disableCustomSizes={true}
-									setCustomControl={realSetIsCustom}
-									customControl={realIsCustomControl}
-									isPopover={false}
-									isSingle={true}
-									onMouseOver={onMouseOver}
-									onMouseOut={onMouseOut}
-									allowAuto={allowAuto}
-								/>
-							</>
-						))}
+						controlEditor(
+							<SingleMeasureRangeControl
+								value={value ? value[0] : ''}
+								onChange={(newVal) => onChange([newVal, newVal, newVal, newVal])}
+								className={'kb-measure-input-all-inputs'}
+								min={min}
+								max={max}
+								options={options}
+								step={step}
+								help={help}
+								unit={unit}
+								units={units}
+								onUnit={onUnit}
+								defaultValue={defaultValue[0]}
+								placeholder={placeholder?.[0] ? placeholder?.[0] : ''}
+								allowReset={false}
+								disableCustomSizes={true}
+								setCustomControl={realSetIsCustom}
+								customControl={realIsCustomControl}
+								isPopover={false}
+								isSingle={true}
+								onMouseOver={onMouseOver}
+								onMouseOut={onMouseOut}
+								allowAuto={allowAuto}
+							/>,
+							{ control: 'measureRange', index: null, value, onChange, context }
+						)}
 					{realControl === 'individual' && (
 						<>
-							{value && isTokenAlias(value[0]) ? (
-								<TokenChip
-									value={value[0]}
-									tokens={tokens}
-									onUnlink={onUnlinkToken ? () => onUnlinkToken(0) : undefined}
-								/>
-							) : (
+							{controlEditor(
 								<SingleMeasureRangeControl
 									parentLabel={parentLabel ? parentLabel : label}
 									label={__('Top', '__KADENCE__TEXT__DOMAIN__')}
@@ -284,15 +265,10 @@ export default function MeasureRangeControl({
 									onMouseOver={onMouseOver}
 									onMouseOut={onMouseOut}
 									allowAuto={allowAuto}
-								/>
+								/>,
+								{ control: 'measureRange', index: 0, value, onChange, context }
 							)}
-							{value && isTokenAlias(value[1]) ? (
-								<TokenChip
-									value={value[1]}
-									tokens={tokens}
-									onUnlink={onUnlinkToken ? () => onUnlinkToken(1) : undefined}
-								/>
-							) : (
+							{controlEditor(
 								<SingleMeasureRangeControl
 									parentLabel={parentLabel ? parentLabel : label}
 									label={__('Right', '__KADENCE__TEXT__DOMAIN__')}
@@ -324,15 +300,10 @@ export default function MeasureRangeControl({
 									onMouseOver={onMouseOver}
 									onMouseOut={onMouseOut}
 									allowAuto={allowAuto}
-								/>
+								/>,
+								{ control: 'measureRange', index: 1, value, onChange, context }
 							)}
-							{value && isTokenAlias(value[2]) ? (
-								<TokenChip
-									value={value[2]}
-									tokens={tokens}
-									onUnlink={onUnlinkToken ? () => onUnlinkToken(2) : undefined}
-								/>
-							) : (
+							{controlEditor(
 								<SingleMeasureRangeControl
 									parentLabel={parentLabel ? parentLabel : label}
 									label={__('Bottom', '__KADENCE__TEXT__DOMAIN__')}
@@ -364,15 +335,10 @@ export default function MeasureRangeControl({
 									onMouseOver={onMouseOver}
 									onMouseOut={onMouseOut}
 									allowAuto={allowAuto}
-								/>
+								/>,
+								{ control: 'measureRange', index: 2, value, onChange, context }
 							)}
-							{value && isTokenAlias(value[3]) ? (
-								<TokenChip
-									value={value[3]}
-									tokens={tokens}
-									onUnlink={onUnlinkToken ? () => onUnlinkToken(3) : undefined}
-								/>
-							) : (
+							{controlEditor(
 								<SingleMeasureRangeControl
 									parentLabel={parentLabel ? parentLabel : label}
 									label={__('Left', '__KADENCE__TEXT__DOMAIN__')}
@@ -404,7 +370,8 @@ export default function MeasureRangeControl({
 									onMouseOver={onMouseOver}
 									onMouseOut={onMouseOut}
 									allowAuto={allowAuto}
-								/>
+								/>,
+								{ control: 'measureRange', index: 3, value, onChange, context }
 							)}
 							{realIsCustomControl && (
 								<div className={'kadence-units kadence-measure-control-select-wrapper'}>

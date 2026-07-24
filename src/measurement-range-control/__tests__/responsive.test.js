@@ -1,10 +1,11 @@
 /**
- * Tests for `ResponsiveMeasureRangeControl`: the header token-picker affordance and prop
- * threading down to the per-device `MeasureRangeControl`, plus the byte-identical baseline
- * required when the new props are absent.
+ * Tests for `ResponsiveMeasureRangeControl`'s token-agnostic extension seams: it renders the per-device
+ * control with no injected UI by default, injects header actions through the actions filter, and forwards
+ * its opaque `context` down to the nested control's editor seam.
  */
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { createReduxStore, register } from '@wordpress/data';
+import { addFilter, removeFilter } from '@wordpress/hooks';
 import ResponsiveMeasureRangeControl from '../responsive';
 
 register(
@@ -19,7 +20,9 @@ register(
 	})
 );
 
-const tokens = [{ id: 'radius.button', alias: '{radius.button}', label: 'Button Radius', value: '0.5rem', type: 'dimension' }];
+const EDITOR_HOOK = 'kadence.components.control.editor';
+const ACTIONS_HOOK = 'kadence.components.control.actions';
+const NS = 'test/seam';
 
 const baseProps = {
 	label: 'Padding',
@@ -31,57 +34,42 @@ const baseProps = {
 	onChangeMobile: jest.fn(),
 };
 
-describe('ResponsiveMeasureRangeControl baseline (no alias props)', () => {
-	it('renders no token picker button when tokens is absent', () => {
-		render(<ResponsiveMeasureRangeControl {...baseProps} />);
-		expect(screen.queryByLabelText('Use design token')).not.toBeInTheDocument();
-	});
-
-	it('renders no token chip for numeric/preset values', () => {
-		render(<ResponsiveMeasureRangeControl {...baseProps} />);
-		expect(document.querySelector('.kadence-token-chip')).not.toBeInTheDocument();
-	});
+afterEach(() => {
+	removeFilter(EDITOR_HOOK, NS);
+	removeFilter(ACTIONS_HOOK, NS);
 });
 
-describe('ResponsiveMeasureRangeControl pick', () => {
-	it('renders the header picker and fires onSelectToken with alias + null', () => {
-		const onSelectToken = jest.fn();
-		render(<ResponsiveMeasureRangeControl {...baseProps} tokens={tokens} onSelectToken={onSelectToken} />);
-		fireEvent.click(screen.getByLabelText('Use design token'));
-		fireEvent.click(screen.getByText('Button Radius'));
-		expect(onSelectToken).toHaveBeenCalledWith('{radius.button}', null);
+describe('ResponsiveMeasureRangeControl extension seams', () => {
+	it('renders the per-device control and no injected actions by default', () => {
+		render(<ResponsiveMeasureRangeControl {...baseProps} />);
+		expect(document.querySelector('.measure-desktop-size')).toBeInTheDocument();
+		expect(screen.queryByText('injected-action')).not.toBeInTheDocument();
 	});
 
-	it('does not render the picker button without tokens', () => {
-		render(<ResponsiveMeasureRangeControl {...baseProps} onSelectToken={jest.fn()} />);
-		expect(screen.queryByLabelText('Use design token')).not.toBeInTheDocument();
-	});
-});
-
-describe('ResponsiveMeasureRangeControl prop threading', () => {
-	it('renders a chip for the live device when the value is aliased', () => {
-		render(
-			<ResponsiveMeasureRangeControl
-				{...baseProps}
-				value={['{radius.button}', '0', '0', '0']}
-				tokens={tokens}
-				onSelectToken={jest.fn()}
-			/>
-		);
-		expect(screen.getByText('Button Radius')).toBeInTheDocument();
+	it('injects a header action through the actions filter', () => {
+		addFilter(ACTIONS_HOOK, NS, (actions) => [
+			...actions,
+			<button key="a" type="button">
+				injected-action
+			</button>,
+		]);
+		render(<ResponsiveMeasureRangeControl {...baseProps} />);
+		expect(screen.getByText('injected-action')).toBeInTheDocument();
 	});
 
-	it('fires onUnlinkToken with the side index from the nested chip', () => {
-		const onUnlinkToken = jest.fn();
-		render(
-			<ResponsiveMeasureRangeControl
-				{...baseProps}
-				value={['{radius.button}', '0', '0', '0']}
-				tokens={tokens}
-				onUnlinkToken={onUnlinkToken}
-			/>
-		);
-		fireEvent.click(screen.getByLabelText('Unlink token'));
-		expect(onUnlinkToken).toHaveBeenCalledWith(0);
+	it('forwards its opaque context down to the nested control editor seam', () => {
+		const seen = [];
+		addFilter(EDITOR_HOOK, NS, (editor, ctx) => {
+			seen.push(ctx);
+			return editor;
+		});
+
+		render(<ResponsiveMeasureRangeControl {...baseProps} context={{ blockName: 'kadence/singlebtn', attribute: 'borderRadius' }} />);
+
+		expect(seen.length).toBeGreaterThan(0);
+		expect(seen[0]).toMatchObject({
+			control: 'measureRange',
+			context: { blockName: 'kadence/singlebtn', attribute: 'borderRadius' },
+		});
 	});
 });
