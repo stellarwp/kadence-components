@@ -43,7 +43,7 @@ import {
 	radiusLinkedIcon,
 	radiusIndividualIcon,
 } from '@kadence/icons';
-import { TokenChip, isTokenAlias } from '../../common/token-alias';
+import { controlEditor } from '../../common/control-extensions';
 
 /**
  * Build the Measure controls
@@ -74,9 +74,7 @@ export default function MeasurementControls({
 	className = '',
 	reset,
 	preset = '',
-	tokens,
-	onSelectToken,
-	onUnlinkToken,
+	context,
 }) {
 	const measureIcons = {
 		first: isBorderRadius ? topLeftIcon : firstIcon,
@@ -156,30 +154,19 @@ export default function MeasurementControls({
 					)}
 					<div className="kadence-controls-content">
 						{realControl !== 'individual' &&
-							(measurement && isTokenAlias(measurement[0]) ? (
-								<TokenChip
-									value={measurement[0]}
-									tokens={tokens}
-									onUnlink={onUnlinkToken ? () => onUnlinkToken(null) : undefined}
-								/>
-							) : (
+							controlEditor(
 								<RangeControl
 									value={measurement ? measurement[0] : ''}
 									onChange={(value) => onChange([value, value, value, value])}
 									min={min}
 									max={max}
 									step={step}
-								/>
-							))}
+								/>,
+								{ control: 'measure', index: null, value: measurement, onChange, context }
+							)}
 						{realControl === 'individual' && (
 							<Fragment>
-								{measurement && isTokenAlias(measurement[0]) ? (
-									<TokenChip
-										value={measurement[0]}
-										tokens={tokens}
-										onUnlink={onUnlinkToken ? () => onUnlinkToken(0) : undefined}
-									/>
-								) : (
+								{controlEditor(
 									<MeasurementSingleControl
 										placement="top"
 										label={__('Top', '__KADENCE__TEXT__DOMAIN__')}
@@ -205,15 +192,10 @@ export default function MeasurementControls({
 										unit={unit}
 										allowEmpty={allowEmpty}
 										preset={preset}
-									/>
+									/>,
+									{ control: 'measure', index: 0, value: measurement, onChange, context }
 								)}
-								{measurement && isTokenAlias(measurement[1]) ? (
-									<TokenChip
-										value={measurement[1]}
-										tokens={tokens}
-										onUnlink={onUnlinkToken ? () => onUnlinkToken(1) : undefined}
-									/>
-								) : (
+								{controlEditor(
 									<MeasurementSingleControl
 										placement="right"
 										label={__('Right', '__KADENCE__TEXT__DOMAIN__')}
@@ -239,15 +221,10 @@ export default function MeasurementControls({
 										unit={unit}
 										allowEmpty={allowEmpty}
 										preset={preset}
-									/>
+									/>,
+									{ control: 'measure', index: 1, value: measurement, onChange, context }
 								)}
-								{measurement && isTokenAlias(measurement[2]) ? (
-									<TokenChip
-										value={measurement[2]}
-										tokens={tokens}
-										onUnlink={onUnlinkToken ? () => onUnlinkToken(2) : undefined}
-									/>
-								) : (
+								{controlEditor(
 									<MeasurementSingleControl
 										placement="bottom"
 										label={__('Bottom', '__KADENCE__TEXT__DOMAIN__')}
@@ -273,15 +250,10 @@ export default function MeasurementControls({
 										unit={unit}
 										allowEmpty={allowEmpty}
 										preset={preset}
-									/>
+									/>,
+									{ control: 'measure', index: 2, value: measurement, onChange, context }
 								)}
-								{measurement && isTokenAlias(measurement[3]) ? (
-									<TokenChip
-										value={measurement[3]}
-										tokens={tokens}
-										onUnlink={onUnlinkToken ? () => onUnlinkToken(3) : undefined}
-									/>
-								) : (
+								{controlEditor(
 									<MeasurementSingleControl
 										placement="left"
 										label={__('Left', '__KADENCE__TEXT__DOMAIN__')}
@@ -307,7 +279,8 @@ export default function MeasurementControls({
 										unit={unit}
 										allowEmpty={allowEmpty}
 										preset={preset}
-									/>
+									/>,
+									{ control: 'measure', index: 3, value: measurement, onChange, context }
 								)}
 							</Fragment>
 						)}

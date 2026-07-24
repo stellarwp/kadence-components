@@ -22,7 +22,7 @@ import {
 	individualIcon,
 	linkedIcon,
 } from '@kadence/icons';
-import { TokenPickerButton, isTokenAlias } from '../../common/token-alias';
+import { controlActions } from '../../common/control-extensions';
 /**
  * Build the Measure controls
  * @returns {object} Measure settings.
@@ -55,9 +55,7 @@ export default function ResponsiveMeasurementControls({
 	linkIcon = link,
 	unlinkIcon = linkOff,
 	reset = true,
-	tokens,
-	onSelectToken,
-	onUnlinkToken,
+	context,
 }) {
 	const ref = useRef();
 	const [localControl, setLocalControl] = useState(control);
@@ -100,6 +98,10 @@ export default function ResponsiveMeasurementControls({
 	} else if (deviceType === 'Mobile') {
 		liveValue = mobileValue ? mobileValue : ['', '', '', ''];
 	}
+	// The write handler for whichever device is live, so a header action injected through the seam
+	// targets the value the user is actually looking at.
+	const activeOnChange =
+		deviceType === 'Tablet' ? onChangeTablet : deviceType === 'Mobile' ? onChangeMobile : onChange;
 	const onReset = () => {
 		if (deviceType === 'Tablet') {
 			onChangeTablet(['', '', '', '']);
@@ -134,9 +136,7 @@ export default function ResponsiveMeasurementControls({
 			fourthIcon={fourthIcon}
 			linkIcon={linkIcon}
 			unlinkIcon={unlinkIcon}
-			tokens={tokens}
-			onSelectToken={onSelectToken}
-			onUnlinkToken={onUnlinkToken}
+			context={context}
 		/>
 	);
 	output.Tablet = (
@@ -163,9 +163,7 @@ export default function ResponsiveMeasurementControls({
 			fourthIcon={fourthIcon}
 			linkIcon={linkIcon}
 			unlinkIcon={unlinkIcon}
-			tokens={tokens}
-			onSelectToken={onSelectToken}
-			onUnlinkToken={onUnlinkToken}
+			context={context}
 		/>
 	);
 	output.Desktop = (
@@ -193,9 +191,7 @@ export default function ResponsiveMeasurementControls({
 			fourthIcon={fourthIcon}
 			linkIcon={linkIcon}
 			unlinkIcon={unlinkIcon}
-			tokens={tokens}
-			onSelectToken={onSelectToken}
-			onUnlinkToken={onUnlinkToken}
+			context={context}
 		/>
 	);
 	return [
@@ -252,11 +248,12 @@ export default function ResponsiveMeasurementControls({
 							isTertiary={realControl !== 'individual' ? false : true}
 						/>
 					)}
-					<TokenPickerButton
-						tokens={tokens}
-						onSelect={onSelectToken ? (alias) => onSelectToken(alias, null) : undefined}
-						isActive={Array.isArray(liveValue) && liveValue.every(isTokenAlias)}
-					/>
+					{controlActions({
+						control: 'measure',
+						value: liveValue,
+						onChange: activeOnChange,
+						context,
+					})}
 				</div>
 				<div className="kb-responsive-measure-control-inner">
 					{output[deviceType] ? output[deviceType] : output.Desktop}

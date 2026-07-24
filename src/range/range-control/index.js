@@ -7,7 +7,7 @@
  * Internal block libraries
  */
 import { RangeControl as CoreRangeControl } from '@wordpress/components';
-import { TokenChip, TokenPickerButton, isTokenAlias } from '../../common/token-alias';
+import { controlEditor, controlActions } from '../../common/control-extensions';
 
 /**
  * Build the Measure controls
@@ -27,28 +27,16 @@ export default function RangeControl({
 	onUnit,
 	showUnit = false,
 	units = ['px', 'em', 'rem'],
-	tokens,
-	onSelectToken,
-	onUnlinkToken,
+	context,
 }) {
 	return [
 		onChange && (
 			<div className={`components-base-control kadence-range-control${className ? ' ' + className : ''}`}>
 				{label && <label className="components-base-control__label">{label}</label>}
-				<TokenPickerButton
-					tokens={tokens}
-					onSelect={onSelectToken ? (alias) => onSelectToken(alias) : undefined}
-					isActive={isTokenAlias(value)}
-				/>
+				{controlActions({ control: 'range', value, onChange, context })}
 				<div className={'kadence-controls-content'}>
 					<div className={'kadence-range-control-inner'}>
-						{isTokenAlias(value) ? (
-							<TokenChip
-								value={value}
-								tokens={tokens}
-								onUnlink={onUnlinkToken ? () => onUnlinkToken() : undefined}
-							/>
-						) : (
+						{controlEditor(
 							<CoreRangeControl
 								className={'kadence-range-control-range'}
 								beforeIcon={beforeIcon}
@@ -59,7 +47,8 @@ export default function RangeControl({
 								step={step}
 								help={help}
 								allowReset={true}
-							/>
+							/>,
+							{ control: 'range', value, onChange, context }
 						)}
 					</div>
 					{(onUnit || showUnit) && (

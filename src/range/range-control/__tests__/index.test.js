@@ -1,60 +1,55 @@
 /**
- * Tests for `RangeControl`: the picker beside the label and the chip that replaces the slider
- * row for a scalar aliased value, plus the byte-identical baseline required when the new props
- * are absent.
+ * Tests for RangeControl's token-agnostic extension seams: it renders its own editor and no injected
+ * actions by default, and a consumer can replace the editor or inject header actions through the
+ * `kadence.components.control.*` filters, receiving only neutral context.
  */
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import { addFilter, removeFilter } from '@wordpress/hooks';
 import RangeControl from '../index';
 
-const tokens = [{ id: 'spacing.md', alias: '{spacing.md}', label: 'Medium Spacing', value: '1rem', type: 'dimension' }];
+const EDITOR_HOOK = 'kadence.components.control.editor';
+const ACTIONS_HOOK = 'kadence.components.control.actions';
+const NS = 'test/seam';
 
-describe('RangeControl baseline (no alias props)', () => {
-	it('renders the core slider and no token picker/chip when tokens is absent', () => {
-		render(<RangeControl label="Gap" value={4} onChange={jest.fn()} />);
-		expect(screen.queryByLabelText('Use design token')).not.toBeInTheDocument();
+afterEach(() => {
+	removeFilter(EDITOR_HOOK, NS);
+	removeFilter(ACTIONS_HOOK, NS);
+});
+
+describe('RangeControl extension seams', () => {
+	it('renders its own editor and no injected actions by default', () => {
+		render(<RangeControl label="Width" value="10" onChange={jest.fn()} />);
 		expect(document.querySelector('.kadence-range-control-range')).toBeInTheDocument();
-		expect(document.querySelector('.kadence-token-chip')).not.toBeInTheDocument();
+		expect(screen.queryByText('injected-action')).not.toBeInTheDocument();
 	});
 
-	it('preserves today\'s onChange behavior', () => {
-		const onChange = jest.fn();
-		render(<RangeControl label="Gap" value={4} onChange={onChange} />);
-		fireEvent.change(screen.getByRole('slider'), { target: { value: '10' } });
-		expect(onChange).toHaveBeenCalledWith(10);
-	});
-});
+	it('lets a consumer replace the editor, receiving only neutral context', () => {
+		const seen = [];
+		addFilter(EDITOR_HOOK, NS, (editor, ctx) => {
+			seen.push(ctx);
+			return <div data-testid="override">overridden</div>;
+		});
 
-describe('RangeControl display', () => {
-	it('renders a token chip instead of the slider row when the value is an alias', () => {
-		render(<RangeControl label="Gap" value="{spacing.md}" onChange={jest.fn()} tokens={tokens} />);
-		expect(screen.getByText('Medium Spacing')).toBeInTheDocument();
-		expect(document.querySelector('.kadence-range-control-range')).not.toBeInTheDocument();
-	});
+		render(<RangeControl label="Width" value="10" onChange={jest.fn()} context={{ blockName: 'kadence/singlebtn', attribute: 'width' }} />);
 
-	it('falls back to the dot-path label when the entry is missing', () => {
-		render(<RangeControl label="Gap" value="{unknown.spacing}" onChange={jest.fn()} />);
-		expect(screen.getByText('unknown.spacing')).toBeInTheDocument();
-	});
-});
-
-describe('RangeControl pick/unlink', () => {
-	it('fires onSelectToken with just the alias (scalar controls omit side)', () => {
-		const onSelectToken = jest.fn();
-		render(<RangeControl label="Gap" value={4} onChange={jest.fn()} tokens={tokens} onSelectToken={onSelectToken} />);
-		fireEvent.click(screen.getByLabelText('Use design token'));
-		fireEvent.click(screen.getByText('Medium Spacing'));
-		expect(onSelectToken).toHaveBeenCalledWith('{spacing.md}');
+		expect(screen.getByTestId('override')).toBeInTheDocument();
+		expect(seen[0]).toMatchObject({
+			control: 'range',
+			value: '10',
+			context: { blockName: 'kadence/singlebtn', attribute: 'width' },
+		});
 	});
 
-	it('fires onUnlinkToken with no arguments when the chip is unlinked', () => {
-		const onUnlinkToken = jest.fn();
-		render(<RangeControl label="Gap" value="{spacing.md}" onChange={jest.fn()} tokens={tokens} onUnlinkToken={onUnlinkToken} />);
-		fireEvent.click(screen.getByLabelText('Unlink token'));
-		expect(onUnlinkToken).toHaveBeenCalledWith();
-	});
+	it('renders header actions a consumer injects through the actions filter', () => {
+		addFilter(ACTIONS_HOOK, NS, (actions) => [
+			...actions,
+			<button key="a" type="button">
+				injected-action
+			</button>,
+		]);
 
-	it('does not render the picker button without tokens', () => {
-		render(<RangeControl label="Gap" value={4} onChange={jest.fn()} onSelectToken={jest.fn()} />);
-		expect(screen.queryByLabelText('Use design token')).not.toBeInTheDocument();
+		render(<RangeControl label="Width" value="10" onChange={jest.fn()} />);
+
+		expect(screen.getByText('injected-action')).toBeInTheDocument();
 	});
 });

@@ -1,16 +1,13 @@
 /**
- * Tests for `ResponsiveMeasurementControls`: the header token-picker affordance and prop
- * threading down to the per-device `MeasurementControls`, plus the byte-identical baseline
- * required when the new props are absent.
+ * Tests for ResponsiveMeasurementControl's token-agnostic extension seams: it injects header actions
+ * through the actions filter and forwards its opaque `context` down to the per-device control's editor
+ * seam, with no token vocabulary of its own.
  */
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { createReduxStore, register } from '@wordpress/data';
-import ResponsiveMeasurementControls from '../index';
+import { addFilter, removeFilter } from '@wordpress/hooks';
+import ResponsiveMeasurementControl from '../index';
 
-// The control reads the live device from the `kadenceblocks/data` store (registered by the
-// consuming app, e.g. kadence-blocks). Register a minimal stand-in so `useSelect` resolves without
-// throwing; the control only ever reads `getPreviewDeviceType()` and dispatches
-// `setPreviewDeviceType()` in these tests.
 register(
 	createReduxStore('kadenceblocks/data', {
 		reducer: (state = {}) => state,
@@ -23,75 +20,50 @@ register(
 	})
 );
 
-const tokens = [{ id: 'radius.button', alias: '{radius.button}', label: 'Button Radius', value: '0.5rem', type: 'dimension' }];
+const EDITOR_HOOK = 'kadence.components.control.editor';
+const ACTIONS_HOOK = 'kadence.components.control.actions';
+const NS = 'test/seam';
 
 const baseProps = {
-	label: 'Border Radius',
-	value: [1, 2, 3, 4],
-	tabletValue: [1, 2, 3, 4],
-	mobileValue: [1, 2, 3, 4],
+	label: 'Padding',
+	value: ['0', '0', '0', '0'],
+	tabletValue: ['0', '0', '0', '0'],
+	mobileValue: ['0', '0', '0', '0'],
 	onChange: jest.fn(),
 	onChangeTablet: jest.fn(),
 	onChangeMobile: jest.fn(),
 };
 
-describe('ResponsiveMeasurementControls baseline (no alias props)', () => {
-	it('renders no token picker button when tokens is absent', () => {
-		render(<ResponsiveMeasurementControls {...baseProps} />);
-		expect(screen.queryByLabelText('Use design token')).not.toBeInTheDocument();
-	});
-
-	it('renders four numeric inputs for the desktop device with no token chip', () => {
-		render(<ResponsiveMeasurementControls {...baseProps} />);
-		expect(screen.getAllByRole('spinbutton')).toHaveLength(4);
-		expect(document.querySelector('.kadence-token-chip')).not.toBeInTheDocument();
-	});
+afterEach(() => {
+	removeFilter(EDITOR_HOOK, NS);
+	removeFilter(ACTIONS_HOOK, NS);
 });
 
-describe('ResponsiveMeasurementControls pick', () => {
-	it('renders the header picker button when tokens and onSelectToken are provided', () => {
-		render(<ResponsiveMeasurementControls {...baseProps} tokens={tokens} onSelectToken={jest.fn()} />);
-		expect(screen.getByLabelText('Use design token')).toBeInTheDocument();
+describe('ResponsiveMeasurementControl extension seams', () => {
+	it('injects a header action through the actions filter', () => {
+		addFilter(ACTIONS_HOOK, NS, (actions) => [
+			...actions,
+			<button key="a" type="button">
+				injected-action
+			</button>,
+		]);
+		render(<ResponsiveMeasurementControl {...baseProps} />);
+		expect(screen.getByText('injected-action')).toBeInTheDocument();
 	});
 
-	it('fires onSelectToken with the alias and null (whole-control semantics) when an entry is chosen', () => {
-		const onSelectToken = jest.fn();
-		render(<ResponsiveMeasurementControls {...baseProps} tokens={tokens} onSelectToken={onSelectToken} />);
-		fireEvent.click(screen.getByLabelText('Use design token'));
-		fireEvent.click(screen.getByText('Button Radius'));
-		expect(onSelectToken).toHaveBeenCalledWith('{radius.button}', null);
-	});
+	it('forwards its opaque context down to the nested control editor seam', () => {
+		const seen = [];
+		addFilter(EDITOR_HOOK, NS, (editor, ctx) => {
+			seen.push(ctx);
+			return editor;
+		});
 
-	it('does not render the picker button without onSelectToken even if tokens are provided', () => {
-		render(<ResponsiveMeasurementControls {...baseProps} tokens={tokens} />);
-		expect(screen.queryByLabelText('Use design token')).not.toBeInTheDocument();
-	});
-});
+		render(<ResponsiveMeasurementControl {...baseProps} context={{ blockName: 'kadence/singlebtn', attribute: 'padding' }} />);
 
-describe('ResponsiveMeasurementControls prop threading', () => {
-	it('renders a chip for the live device when the value is aliased', () => {
-		render(
-			<ResponsiveMeasurementControls
-				{...baseProps}
-				value={['{radius.button}', 2, 3, 4]}
-				tokens={tokens}
-				onSelectToken={jest.fn()}
-			/>
-		);
-		expect(screen.getByText('Button Radius')).toBeInTheDocument();
-	});
-
-	it('fires onUnlinkToken with the side index from the nested chip', () => {
-		const onUnlinkToken = jest.fn();
-		render(
-			<ResponsiveMeasurementControls
-				{...baseProps}
-				value={['{radius.button}', 2, 3, 4]}
-				tokens={tokens}
-				onUnlinkToken={onUnlinkToken}
-			/>
-		);
-		fireEvent.click(screen.getByLabelText('Unlink token'));
-		expect(onUnlinkToken).toHaveBeenCalledWith(0);
+		expect(seen.length).toBeGreaterThan(0);
+		expect(seen[0]).toMatchObject({
+			control: 'measure',
+			context: { blockName: 'kadence/singlebtn', attribute: 'padding' },
+		});
 	});
 });
