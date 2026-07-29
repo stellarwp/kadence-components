@@ -33,7 +33,7 @@ export default function RangeControl({
 		onChange && (
 			<div className={`components-base-control kadence-range-control${className ? ' ' + className : ''}`}>
 				{label && <label className="components-base-control__label">{label}</label>}
-				{controlActions({ control: 'range', value, onChange, context })}
+				{controlActions({ control: 'range', index: null, value, onChange, context })}
 				<div className={'kadence-controls-content'}>
 					<div className={'kadence-range-control-inner'}>
 						{controlEditor(
@@ -48,7 +48,7 @@ export default function RangeControl({
 								help={help}
 								allowReset={true}
 							/>,
-							{ control: 'range', value, onChange, context }
+							{ control: 'range', index: null, value, onChange, context }
 						)}
 					</div>
 					{(onUnit || showUnit) && (

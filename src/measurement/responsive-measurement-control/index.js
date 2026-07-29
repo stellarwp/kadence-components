@@ -250,6 +250,7 @@ export default function ResponsiveMeasurementControls({
 					)}
 					{controlActions({
 						control: 'measure',
+						index: null,
 						value: liveValue,
 						onChange: activeOnChange,
 						context,

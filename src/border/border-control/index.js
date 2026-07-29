@@ -178,6 +178,7 @@ export default function BorderControl({
 							<SingleBorderControl
 								value={currentObject?.top || ['', '', '']}
 								onChange={(newVal) => onChangeAll(newVal)}
+								index={null}
 								min={min}
 								max={max}
 								step={step}
@@ -230,6 +231,7 @@ export default function BorderControl({
 							<SingleBorderControl
 								value={currentObject?.top || ['', '', '']}
 								onChange={(newVal) => onChangeSide(newVal, 'top')}
+								index={0}
 								min={min}
 								max={max}
 								step={step}
@@ -245,6 +247,7 @@ export default function BorderControl({
 							<SingleBorderControl
 								value={currentObject?.left || ['', '', '']}
 								onChange={(newVal) => onChangeSide(newVal, 'left')}
+								index={3}
 								min={min}
 								max={max}
 								step={step}
@@ -260,6 +263,7 @@ export default function BorderControl({
 							<SingleBorderControl
 								value={currentObject?.right || ['', '', '']}
 								onChange={(newVal) => onChangeSide(newVal, 'right')}
+								index={1}
 								min={min}
 								max={max}
 								step={step}
@@ -275,6 +279,7 @@ export default function BorderControl({
 							<SingleBorderControl
 								value={currentObject?.bottom || ['', '', '']}
 								onChange={(newVal) => onChangeSide(newVal, 'bottom')}
+								index={2}
 								min={min}
 								max={max}
 								step={step}

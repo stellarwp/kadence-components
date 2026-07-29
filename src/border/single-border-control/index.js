@@ -62,6 +62,7 @@ export default function SingleBorderControl({
 	units = ['px', 'em', 'rem'],
 	styles = ['solid', 'dashed', 'dotted', 'double'],
 	defaultLinked = true,
+	index = null,
 	context,
 }) {
 	const instanceId = useInstanceId(SingleBorderControl);
@@ -216,7 +217,7 @@ export default function SingleBorderControl({
 								disableUnits={true}
 								onChange={(newVal) => onChangeSize(newVal)}
 							/>,
-							{ control: 'singleBorder', value: currentSize, onChange: onChangeSize, context }
+							{ control: 'singleBorder', index, value: currentSize, onChange: onChangeSize, context }
 						)}
 						<div className={'kadence-measure-control-select-wrapper'}>
 							<select
