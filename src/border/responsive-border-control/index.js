@@ -299,6 +299,7 @@ export default function ResponsiveBorderControl({
 					)}
 					{controlActions({
 						control: 'border',
+						index: null,
 						value: liveValue,
 						onChange: activeOnChange,
 						context,

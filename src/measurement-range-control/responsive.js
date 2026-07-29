@@ -406,6 +406,7 @@ export default function ResponsiveMeasureRangeControl({
 					{!subLabel &&
 						controlActions({
 							control: 'measureRange',
+							index: null,
 							value: liveValue,
 							onChange: activeOnChange,
 							context,

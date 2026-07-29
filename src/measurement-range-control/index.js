@@ -199,7 +199,7 @@ export default function MeasureRangeControl({
 								isTertiary={realControl !== 'individual' ? false : true}
 							/>
 						)}
-						{controlActions({ control: 'measureRange', value, onChange, context })}
+						{controlActions({ control: 'measureRange', index: null, value, onChange, context })}
 					</Flex>
 				)}
 				<div className={'kadence-controls-content'}>
