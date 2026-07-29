@@ -13,6 +13,11 @@
  *   block passes in so the listener can identify the site.
  * - `controlActions( ctx )` — an array of extra header-action nodes to render beside the control label.
  *   Empty by default.
+ *
+ * Shape contract: in every `ctx`, `value` and `onChange` speak the same shape. Whatever a listener reads
+ * from `ctx.value` is exactly what it may hand back to `ctx.onChange` — a control that stores its value
+ * in some other shape internally (e.g. wrapped in a single-element array) adapts on its own side. So a
+ * listener can filter `control.editor` and `control.actions` for the same control without reshaping.
  */
 
 /**

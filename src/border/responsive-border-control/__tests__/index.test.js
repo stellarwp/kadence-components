@@ -61,6 +61,24 @@ describe('ResponsiveBorderControl extension seams', () => {
 		expect(screen.getByText('injected-action')).toBeInTheDocument();
 	});
 
+	it('hands the actions seam a value and an onChange that speak the same shape', () => {
+		const onChange = jest.fn();
+		let seen;
+		addFilter(ACTIONS_HOOK, NS, (actions, ctx) => {
+			seen = ctx;
+			return actions;
+		});
+
+		render(<ResponsiveBorderControl {...baseProps} onChange={onChange} />);
+
+		// The seam reads the unwrapped object, not the single-element array the attribute stores.
+		expect(seen.value).toEqual(numericValue[0]);
+
+		// And writing that same shape back re-wraps it for the attribute.
+		seen.onChange({ ...numericValue[0], unit: 'em' });
+		expect(onChange).toHaveBeenCalledWith([{ ...numericValue[0], unit: 'em' }]);
+	});
+
 	it('forwards its opaque context down to the nested width-slot editor seam', () => {
 		const seen = [];
 		addFilter(EDITOR_HOOK, NS, (editor, ctx) => {

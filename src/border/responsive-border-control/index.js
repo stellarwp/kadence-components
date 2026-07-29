@@ -158,9 +158,15 @@ export default function ResponsiveBorderControl({
 		liveValue = mobileValue?.[0] ? mobileValue[0] : mobileDefault;
 	}
 	// The write handler for whichever device is live, so a header action injected through the seam
-	// targets the value the user is actually looking at.
-	const activeOnChange =
-		deviceType === 'Tablet' ? onChangeTablet : deviceType === 'Mobile' ? onChangeMobile : onChange;
+	// targets the value the user is actually looking at. The seam always speaks the same shape it
+	// reads: it hands back a plain `{ top, right, bottom, left, unit }` object like `liveValue`, and
+	// this adapter re-wraps it into the single-element array the device attribute stores.
+	const activeOnChange = (nextValue) => {
+		const deviceOnChange =
+			deviceType === 'Tablet' ? onChangeTablet : deviceType === 'Mobile' ? onChangeMobile : onChange;
+
+		deviceOnChange([nextValue]);
+	};
 	const onReset = () => {
 		if (deviceType === 'Tablet') {
 			onChangeTablet([tabletDefault]);
