@@ -7,6 +7,7 @@
  * Internal block libraries
  */
 import { RangeControl as CoreRangeControl } from '@wordpress/components';
+import { controlEditor, controlActions } from '../../common/control-extensions';
 
 /**
  * Build the Measure controls
@@ -26,24 +27,29 @@ export default function RangeControl({
 	onUnit,
 	showUnit = false,
 	units = ['px', 'em', 'rem'],
+	context,
 }) {
 	return [
 		onChange && (
 			<div className={`components-base-control kadence-range-control${className ? ' ' + className : ''}`}>
 				{label && <label className="components-base-control__label">{label}</label>}
+				{controlActions({ control: 'range', index: null, value, onChange, context })}
 				<div className={'kadence-controls-content'}>
 					<div className={'kadence-range-control-inner'}>
-						<CoreRangeControl
-							className={'kadence-range-control-range'}
-							beforeIcon={beforeIcon}
-							value={value}
-							onChange={(newVal) => onChange(newVal)}
-							min={min}
-							max={max}
-							step={step}
-							help={help}
-							allowReset={true}
-						/>
+						{controlEditor(
+							<CoreRangeControl
+								className={'kadence-range-control-range'}
+								beforeIcon={beforeIcon}
+								value={value}
+								onChange={(newVal) => onChange(newVal)}
+								min={min}
+								max={max}
+								step={step}
+								help={help}
+								allowReset={true}
+							/>,
+							{ control: 'range', index: null, value, onChange, context }
+						)}
 					</div>
 					{(onUnit || showUnit) && (
 						<div className={'kadence-units kadence-measure-control-select-wrapper'}>
