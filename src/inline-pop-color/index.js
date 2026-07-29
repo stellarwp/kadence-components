@@ -7,7 +7,7 @@
  * Import Icons
  */
 import ColorPicker from '../color-picker';
-import { hexToRGBA } from '@kadence/helpers';
+import { hexToRGBA, KadenceColorOutput } from '@kadence/helpers';
 import { map } from 'lodash';
 import { useSetting } from '@wordpress/block-editor';
 import { useState, useMemo } from '@wordpress/element';
@@ -183,6 +183,9 @@ export default function InlinePopColorControl({
 				break;
 		}
 	}
+	// Delegate final resolution to @kadence/helpers: a swatch value that is a token reference or a
+	// palette slug becomes a renderable CSS color, a literal (hex/rgba/var) is returned unchanged.
+	previewColorString = KadenceColorOutput(previewColorString);
 	const onChangeState = (tempColor, tempPalette) => {
 		let newColor;
 		let opacity = 100 === opacityUnit ? 100 : 1;
@@ -348,7 +351,7 @@ export default function InlinePopColorControl({
 					{colors && (
 						<div className="kadence-pop-color-palette-swatches">
 							{map(colors, ({ color, slug, name }) => {
-								const style = { color };
+								const style = { color: KadenceColorOutput(color) };
 								const palette = slug.replace('theme-', '');
 								const isActive =
 									palette === value || (!slug.startsWith('theme-palette') && value === color);
