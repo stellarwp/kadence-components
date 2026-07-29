@@ -32,7 +32,8 @@
  * @typedef {Object} ControlContext
  *
  * @property {string}      control  Which control is asking — the discriminator a listener switches on.
- *                                  One of: `measure`, `measureRange`, `range`, `border`, `singleBorder`.
+ *                                  One of: `measure`, `measureRange`, `range`, `border`, `singleBorder`,
+ *                                  `boxShadow`.
  * @property {number|null} index    Which side this site edits: `0`-`3` for an individual side (top,
  *                                  right, bottom, left in that order), or `null` when the site addresses
  *                                  the value as a whole (a linked control, or a control with no sides).
