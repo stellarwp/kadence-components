@@ -42,6 +42,7 @@ export default function SinglePopColorControl({
 	onClassChange,
 	onArrayChange = null,
 	disableCustomColors = false,
+	disabled = false,
 }) {
 	const [isVisible, setIsVisible] = useState(false);
 	const [currentColor, setCurrentColor] = useState('');
@@ -318,6 +319,7 @@ export default function SinglePopColorControl({
 					onClick={toggleVisible}
 					showTooltip={true}
 					label={label}
+					disabled={disabled}
 				>
 					<ColorIndicator className="kadence-pop-color-indicate" colorValue={previewColorString} />
 					{value && value.startsWith('palette') && (
@@ -331,6 +333,7 @@ export default function SinglePopColorControl({
 					onClick={toggleVisible}
 					showTooltip={true}
 					label={label}
+					disabled={disabled}
 				>
 					<ColorIndicator className="kadence-pop-color-indicate" colorValue={previewColorString} />
 					{value && value.startsWith('palette') && (

@@ -27,18 +27,22 @@ import { shadowPresetNone } from '@kadence/icons';
 /**
  * Build the BoxShadow controls.
  *
- * Exposes two neutral extension seams so a consumer can decorate the control without this package
- * knowing what the decoration is. The header actions seam (`controlActions`) lets a consumer render
- * extra affordances beside the label (e.g. a whole-shadow picker or a read-only chip), and the generic
- * `readOnly` flag renders every sub-input (preset row, color, X/Y/blur/spread, inset) disabled when the
- * value is driven externally, so partial edits can't fight it. `overrideValue` is an opaque blob the
- * control forwards into the actions seam; `context` is the opaque site identifier the consuming block
- * passes in. With nothing registered and `readOnly` false, rendering and behavior are byte-identical.
+ * Exposes the shared neutral extension seam so a consumer can decorate the control without this package
+ * knowing what the decoration is. The header actions seam (`controlActions`) lets a consumer render extra
+ * affordances beside the label (e.g. a whole-shadow picker or a read-only chip). This control spreads its
+ * value across seven props and seven handlers, so it composes both into the single `value` / `onChange`
+ * pair the seam contract requires — see `ControlContext` in `common/control-extensions`.
  *
- * @param {Object}    props
- * @param {*}         [props.overrideValue] Opaque value forwarded to the header actions seam (unused by this package).
- * @param {boolean}   [props.readOnly]      When true, every sub-input renders disabled (value is driven externally).
- * @param {Object}    [props.context]       Opaque site identifier forwarded to the extension seams.
+ * The generic `readOnly` flag renders every sub-input truly `disabled` (preset row, color, X/Y/blur/spread,
+ * inset) when the value is driven externally, so partial edits can't fight it. `disabled` is the single
+ * mechanism — no CSS pointer-event trapping and no handler-level guards — which keeps the state visible to
+ * assistive tech. The enable toggle stays live so the shadow can always be turned off.
+ *
+ * With nothing registered and `readOnly` false, rendering and behavior are byte-identical.
+ *
+ * @param {Object}  props
+ * @param {boolean} [props.readOnly] When true, every sub-input renders disabled (value is driven externally).
+ * @param {Object}  [props.context]  Opaque site identifier forwarded to the extension seam.
  *
  * @returns {object} BoxShadow settings.
  */
@@ -87,30 +91,51 @@ class BoxShadowControl extends Component {
 			'top-left-solid': {hOffset: -15, vOffset: -15, blur: 0, spread: 0, inset: false},
 		};
 
-		const { overrideValue, readOnly, context } = this.props;
+		const { readOnly, context } = this.props;
 
-		const applyPreset = (value) => {
-			// A preset writes five scalars at once, which would silently fight an active token.
-			// The `kt-inner-sub-section--token-driven` styling only blocks pointer input, so guard
-			// the write itself too — a keyboard-activated or programmatic click must not corrupt
-			// state while the token is authoritative.
-			if (readOnly) {
-				return;
-			}
-			Promise.resolve()
-				.then(() => this.props.onHOffsetChange(presetSettings[value].hOffset))
-				.then(() => this.props.onVOffsetChange(presetSettings[value].vOffset))
-				.then(() => this.props.onBlurChange(presetSettings[value].blur))
-				.then(() => this.props.onSpreadChange(presetSettings[value].spread))
-				.then(() => this.props.onInsetChange(presetSettings[value].inset));
+		// The whole shadow as one object. The control stores it across seven props and seven handlers,
+		// but the seam contract is a single `value` / `onChange` pair, so compose both here rather than
+		// leaking this control's shape to a listener.
+		const shadowValue = {
+			color: this.props.color,
+			opacity: this.props.opacity,
+			hOffset: this.props.hOffset,
+			vOffset: this.props.vOffset,
+			blur: this.props.blur,
+			spread: this.props.spread,
+			inset: this.props.inset,
 		};
+
+		// Writes any subset of the shadow, one handler per key it carries. The writes are sequenced so
+		// each lands on the state the previous one produced — seven synchronous `setAttributes` calls
+		// off a single event would otherwise race on stale props.
+		const onShadowChange = (nextValue) => {
+			const handlers = {
+				color: this.props.onColorChange,
+				opacity: this.props.onOpacityChange,
+				hOffset: this.props.onHOffsetChange,
+				vOffset: this.props.onVOffsetChange,
+				blur: this.props.onBlurChange,
+				spread: this.props.onSpreadChange,
+				inset: this.props.onInsetChange,
+			};
+
+			return Object.keys(handlers)
+				.filter((key) => key in nextValue && handlers[key])
+				.reduce(
+					(chain, key) => chain.then(() => handlers[key](nextValue[key])),
+					Promise.resolve()
+				);
+		};
+
+		const applyPreset = (value) => onShadowChange(presetSettings[value]);
 
 		return (
 			<div className="components-base-control kt-box-shadow-container">
 				{ this.props.label && (
 					<div className="kt-box-shadow-label">
 						<h2 className="kt-beside-color-label">{ this.props.label }</h2>
-						{ controlActions( { control: 'boxShadow', value: overrideValue, readOnly, context } ) }
+						{ controlActions( { control: 'boxShadow', index: null, value: shadowValue, onChange: onShadowChange, context } ) }
 						{ this.props.onEnableChange && (
 							<ToggleControl
 								checked={ this.props.enable }
@@ -120,12 +145,13 @@ class BoxShadowControl extends Component {
 					</div>
 				) }
 				{ this.props.enable && (
-					<div className={ 'kt-inner-sub-section' + ( readOnly ? ' kt-inner-sub-section--token-driven' : '' ) }>
+					<div className={ 'kt-inner-sub-section' + ( readOnly ? ' kt-inner-sub-section--read-only' : '' ) }>
 						<KadenceRadioButtons
 							value={0}
 							options={presetOptions}
 							wrap={true}
 							hideLabel={true}
+							disabled={ !!readOnly }
 							className={'kadence-box-shadow-radio-btns'}
 							onChange={(value) => {
 								applyPreset(value);
@@ -137,10 +163,11 @@ class BoxShadowControl extends Component {
 								<PopColorControl
 									value={ ( this.props.color ? this.props.color : this.props.colorDefault ) }
 									default={ this.props.colorDefault }
-									onChange={ value => ! readOnly && this.props.onColorChange( value ) }
+									onChange={ value => this.props.onColorChange( value ) }
 									opacityValue={ this.props.opacity }
-									onOpacityChange={ value => ! readOnly && this.props.onOpacityChange( value ) }
-									onArrayChange={ this.props.onArrayChange ? ( color, opacity ) => ! readOnly && this.props.onArrayChange( color, opacity ) : undefined }
+									onOpacityChange={ value => this.props.onOpacityChange( value ) }
+									onArrayChange={ this.props.onArrayChange ? ( color, opacity ) => this.props.onArrayChange( color, opacity ) : undefined }
+									disabled={ !!readOnly }
 								/>
 							</div>
 							<div className="kt-box-x-settings kt-box-shadow-subset">

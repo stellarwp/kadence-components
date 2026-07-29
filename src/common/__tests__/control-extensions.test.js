@@ -14,6 +14,10 @@ import ResponsiveMeasurementControl from '../../measurement/responsive-measureme
 import ResponsiveBorderControl from '../../border/responsive-border-control';
 import ResponsiveMeasureRangeControl from '../../measurement-range-control/responsive';
 import RangeControl from '../../range/range-control';
+import BoxShadowControl from '../../box-shadow-control';
+
+// Stub the color popover so the control trees render without the real palette/custom-picker UI.
+jest.mock('../../pop-color-control', () => () => <div className="mock-pop-color-control" />);
 
 register(
 	createReduxStore('kadenceblocks/data', {
@@ -82,6 +86,34 @@ const CONTROLS = [
 	{
 		name: 'RangeControl',
 		element: <RangeControl label="Size" value={10} onChange={jest.fn()} context={CONTEXT} />,
+	},
+	{
+		// Stores its value across seven props and seven handlers, so it has to compose the contract's
+		// single value/onChange pair — the point of the contract is that a listener can't tell.
+		name: 'BoxShadowControl',
+		element: (
+			<BoxShadowControl
+				label="Box Shadow"
+				enable={true}
+				color="#000000"
+				colorDefault="#000000"
+				opacity={0.5}
+				spread={0}
+				blur={5}
+				hOffset={1}
+				vOffset={2}
+				inset={false}
+				onColorChange={jest.fn()}
+				onOpacityChange={jest.fn()}
+				onSpreadChange={jest.fn()}
+				onBlurChange={jest.fn()}
+				onHOffsetChange={jest.fn()}
+				onVOffsetChange={jest.fn()}
+				onInsetChange={jest.fn()}
+				onEnableChange={jest.fn()}
+				context={CONTEXT}
+			/>
+		),
 	},
 ];
 

@@ -21,8 +21,10 @@
 	margin-bottom: 15px;
 	margin-top: -12px;
 }
-.kt-inner-sub-section--token-driven {
-	pointer-events: none;
+/* Dims the section while its value is driven externally. Purely a visual cue — every sub-input inside
+   carries a real `disabled` attribute, so input is blocked accessibly rather than by trapping pointer
+   events (which leaves the control reachable by keyboard and silent to assistive tech). */
+.kt-inner-sub-section--read-only {
 	opacity: 0.5;
 }
 .kt-box-shadow-subset {
