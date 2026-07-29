@@ -11,6 +11,7 @@ import { hexToRGBA } from '@kadence/helpers';
 import { map } from 'lodash';
 import { useSetting } from '@wordpress/block-editor';
 import { useState, useMemo } from '@wordpress/element';
+import { applyFilters } from '@wordpress/hooks';
 
 /**
  * Internal block libraries
@@ -68,13 +69,33 @@ export default function InlinePopColorControl({
 			return [];
 		}
 
-		// If override is enabled, only show custom colors (kb-palette colors)
-		if (kadenceColors.override === true) {
-			return allColors.filter((color) => color.slug && color.slug.startsWith('kb-palette'));
-		}
+		// If override is enabled, only show custom colors (kb-palette colors).
+		// If override is disabled, show all colors (theme + custom).
+		const filtered =
+			kadenceColors.override === true
+				? allColors.filter((color) => color.slug && color.slug.startsWith('kb-palette'))
+				: allColors;
 
-		// If override is disabled, show all colors (theme + custom)
-		return allColors;
+		/**
+		 * Filters the color swatches shown by the control.
+		 *
+		 * Lets a consuming plugin augment or replace the swatch list without the
+		 * component knowing about the consumer's color model. With no listener
+		 * registered the built-in filtered list is returned unchanged, so the
+		 * change is strictly additive and cannot regress default behavior.
+		 *
+		 * @param {Array}  filtered The swatches after the built-in override filter.
+		 * @param {Object} context  { allColors, override } - the full unfiltered
+		 *                          palette and the current override flag.
+		 *
+		 * @since TBD
+		 *
+		 * @return {Array} The swatches to render.
+		 */
+		return applyFilters('kadence.components.popColorControl.colors', filtered, {
+			allColors,
+			override: kadenceColors.override,
+		});
 	}, [allColors, kadenceColors.override]);
 	if (reload) {
 		reloaded(true);
