@@ -186,6 +186,17 @@ export default function InlinePopColorControl({
 	// Delegate final resolution to @kadence/helpers: a swatch value that is a token reference or a
 	// palette slug becomes a renderable CSS color, a literal (hex/rgba/var) is returned unchanged.
 	previewColorString = KadenceColorOutput(previewColorString);
+	// The color picker needs a concrete color; a token/palette reference must be flattened to a literal
+	// (resolve to its CSS var, then read the computed value) or the picker falls back to black.
+	let pickerColor = KadenceColorOutput(currentColorString);
+	if (pickerColor && pickerColor.startsWith('var(')) {
+		const computedPickerColor = window
+			.getComputedStyle(document.documentElement)
+			.getPropertyValue(pickerColor.slice(4, -1).split(',')[0].trim());
+		if (computedPickerColor) {
+			pickerColor = computedPickerColor.trim();
+		}
+	}
 	const onChangeState = (tempColor, tempPalette) => {
 		let newColor;
 		let opacity = 100 === opacityUnit ? 100 : 1;
@@ -326,7 +337,7 @@ export default function InlinePopColorControl({
 				<div className="inline-color-popup-inner-wrap block-editor-block-toolbar">
 					{classSat === 'first' && (
 						<ColorPicker
-							color={currentColorString}
+							color={pickerColor}
 							onChange={(color) => onChangeState(color, '')}
 							onChangeComplete={(color) => {
 								onChangeComplete(color, '');
@@ -338,7 +349,7 @@ export default function InlinePopColorControl({
 					)}
 					{classSat !== 'first' && (
 						<ColorPicker
-							color={currentColorString}
+							color={pickerColor}
 							onChange={(color) => onChangeState(color, '')}
 							onChangeComplete={(color) => {
 								onChangeComplete(color, '');
