@@ -8,12 +8,12 @@
  */
 import ColorPicker from '../color-picker';
 import ColorIcons from '../color-icons';
+import { getKadenceColorConfig, getPopColorSwatches, toConcreteColor } from '../common/pop-color';
 import { hexToRGBA, KadenceColorOutput } from '@kadence/helpers';
 
 import { get, map } from 'lodash';
 import { useSetting } from '@wordpress/block-editor';
 import { useState, useMemo } from '@wordpress/element';
-import { applyFilters } from '@wordpress/hooks';
 /**
  * Internal block libraries
  */
@@ -51,52 +51,14 @@ export default function SinglePopColorControl({
 	const [isPalette, setIsPalette] = useState(value && value.startsWith('palette') ? true : false);
 	const allColors = useSetting('color.palette');
 
-	// Get Kadence Blocks color configuration
-	const kadenceColors = useMemo(() => {
-		if (typeof kadence_blocks_params !== 'undefined' && kadence_blocks_params.colors) {
-			try {
-				return JSON.parse(kadence_blocks_params.colors);
-			} catch (e) {
-				return { palette: [], override: false };
-			}
-		}
-		return { palette: [], override: false };
-	}, []);
+	// Get Kadence Blocks color configuration.
+	const kadenceColors = useMemo(() => getKadenceColorConfig(), []);
 
-	// Filter colors based on override setting
-	const colors = useMemo(() => {
-		if (!allColors || !Array.isArray(allColors)) {
-			return [];
-		}
-
-		// If override is enabled, only show custom colors (kb-palette colors).
-		// If override is disabled, show all colors (theme + custom).
-		const filtered =
-			kadenceColors.override === true
-				? allColors.filter((color) => color.slug && color.slug.startsWith('kb-palette'))
-				: allColors;
-
-		/**
-		 * Filters the color swatches shown by the control.
-		 *
-		 * Lets a consuming plugin augment or replace the swatch list without the
-		 * component knowing about the consumer's color model. With no listener
-		 * registered the built-in filtered list is returned unchanged, so the
-		 * change is strictly additive and cannot regress default behavior.
-		 *
-		 * @param {Array}  filtered The swatches after the built-in override filter.
-		 * @param {Object} context  { allColors, override } - the full unfiltered
-		 *                          palette and the current override flag.
-		 *
-		 * @since TBD
-		 *
-		 * @return {Array} The swatches to render.
-		 */
-		return applyFilters('kadence.components.popColorControl.colors', filtered, {
-			allColors,
-			override: kadenceColors.override,
-		});
-	}, [allColors, kadenceColors.override]);
+	// Filter colors based on the override setting, through the shared swatch-list seam.
+	const colors = useMemo(
+		() => getPopColorSwatches(allColors, kadenceColors.override),
+		[allColors, kadenceColors.override]
+	);
 	const toggleVisible = () => {
 		setIsVisible(true);
 	};
@@ -194,17 +156,8 @@ export default function SinglePopColorControl({
 	// Delegate final resolution to @kadence/helpers: a swatch value that is a token reference or a
 	// palette slug becomes a renderable CSS color, a literal (hex/rgba/var) is returned unchanged.
 	previewColorString = KadenceColorOutput(previewColorString);
-	// The color picker needs a concrete color; a token/palette reference must be flattened to a literal
-	// (resolve to its CSS var, then read the computed value) or the picker falls back to black.
-	let pickerColor = KadenceColorOutput(currentColorString);
-	if (pickerColor && pickerColor.startsWith('var(')) {
-		const computedPickerColor = window
-			.getComputedStyle(document.documentElement)
-			.getPropertyValue(pickerColor.slice(4, -1).split(',')[0].trim());
-		if (computedPickerColor) {
-			pickerColor = computedPickerColor.trim();
-		}
-	}
+	// The color picker needs a concrete color; flatten a token/palette reference to a literal.
+	const pickerColor = toConcreteColor(currentColorString);
 	const onChangeState = (tempColor, tempPalette) => {
 		let newColor;
 		let opacity = 100 === opacityUnit ? 100 : 1;
