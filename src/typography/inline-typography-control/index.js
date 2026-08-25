@@ -12,6 +12,7 @@
 //import fonts from './fonts';
 import { capitalizeFirstLetter } from '@kadence/helpers';
 import Select from 'react-select';
+import { controlEditor } from '../../common/control-extensions';
 import { map } from 'lodash';
 import './editor.scss';
 
@@ -172,9 +173,12 @@ class InlineTypographyControls extends Component {
 			[],
 			typographyOptions.map((option) => option.options)
 		);
-		const blockConfigObject = kadence_blocks_params.configuration
-			? JSON.parse(kadence_blocks_params.configuration)
-			: [];
+		// Guarded like every other read in this method: the global belongs to the consuming plugin, so
+		// the control must render standalone without it rather than throwing a ReferenceError.
+		const blockConfigObject =
+			typeof kadence_blocks_params !== 'undefined' && kadence_blocks_params.configuration
+				? JSON.parse(kadence_blocks_params.configuration)
+				: [];
 		if (
 			blockConfigObject['kadence/typography'] !== undefined &&
 			typeof blockConfigObject['kadence/typography'] === 'object'
@@ -347,6 +351,7 @@ class InlineTypographyControls extends Component {
 			mobileLineHeight,
 			onMobileLineHeight,
 			onMobileSize,
+			context,
 		} = this.props;
 		const {
 			controlSize,
@@ -521,6 +526,20 @@ class InlineTypographyControls extends Component {
 				}
 			}
 		};
+		// Mirror of the sidebar control's seam: plain family strings both ways, resolved to the
+		// control's own option first so every google/variant/weight/subset derivation stays in
+		// onTypoFontChange. See typography-control/index.js.
+		const onTypoFontPick = (family) => {
+			if (!family) {
+				onTypoFontClear();
+
+				return;
+			}
+
+			const matched = typographySelectOptions.find((option) => option.value === family);
+
+			onTypoFontChange(matched || { value: family, label: family, google: false });
+		};
 		const onTypoFontClear = () => {
 			if (onFontArrayChange) {
 				onFontArrayChange({
@@ -653,18 +672,21 @@ class InlineTypographyControls extends Component {
 								<Fragment>
 									<h2 className="kt-heading-fontfamily-title">{__('Font Family')}</h2>
 									<div className="typography-family-select-form-row block-editor-block-toolbar">
-										<Select
-											options={typographyOptions}
-											className="kt-inline-typography-select"
-											classNamePrefix="kt-typography"
-											value={fontFamilyValue}
-											isMulti={false}
-											isSearchable={true}
-											isClearable={true}
-											maxMenuHeight={200}
-											placeholder={__('Default')}
-											onChange={onTypoFontChange}
-										/>
+										{controlEditor(
+											<Select
+												options={typographyOptions}
+												className="kt-inline-typography-select"
+												classNamePrefix="kt-typography"
+												value={fontFamilyValue}
+												isMulti={false}
+												isSearchable={true}
+												isClearable={true}
+												maxMenuHeight={200}
+												placeholder={__('Default')}
+												onChange={onTypoFontChange}
+											/>,
+											{ control: 'fontFamily', index: null, value: fontFamily, onChange: onTypoFontPick, context }
+										)}
 									</div>
 								</Fragment>
 							)}
