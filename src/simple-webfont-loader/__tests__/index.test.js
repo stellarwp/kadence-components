@@ -70,6 +70,28 @@ describe('KadenceWebfontLoader', () => {
 		expect(loadedHrefs()).toHaveLength(1);
 	});
 
+	// A load pass only appends, so a block that switches families would otherwise keep the old one
+	// loaded for the rest of the session -- the opposite of loading only the font its props name.
+	it('drops the stylesheet a changed prop no longer names', () => {
+		const { rerender } = render(<SimpleWebfontLoader typography={[{ family: 'Inter' }]} />);
+
+		rerender(<SimpleWebfontLoader typography={[{ family: 'Roboto' }]} />);
+
+		expect(loadedHrefs()).toEqual(['https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap']);
+	});
+
+	// The face the canvas is painting with stays registered across the change: removing and
+	// re-appending it would flash the fallback for as long as the browser took to parse it again.
+	it('leaves a stylesheet the new props still name where it is', () => {
+		const { rerender } = render(<SimpleWebfontLoader typography={[{ family: 'Inter' }]} />);
+		const before = document.head.querySelector('link[rel="stylesheet"]');
+
+		rerender(<SimpleWebfontLoader typography={[{ family: 'Inter' }, { family: 'Roboto' }]} />);
+
+		expect(document.head.querySelector('link[rel="stylesheet"]')).toBe(before);
+		expect(loadedHrefs()).toHaveLength(2);
+	});
+
 	it('removes its stylesheets on unmount', () => {
 		const { unmount } = render(<SimpleWebfontLoader typography={[{ family: 'Inter' }]} />);
 

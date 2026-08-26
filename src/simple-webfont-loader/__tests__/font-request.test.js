@@ -58,6 +58,16 @@ describe('toFontRequest', () => {
 		});
 	});
 
+	// A handler that clears the variant may write null or a blank rather than dropping the key, and
+	// reading that as upright 400 would throw away the weight and style sitting beside it.
+	it.each([null, undefined, '', '   '])('falls back to the pair when variant is %p', (variant) => {
+		expect(toFontRequest({ family: 'Inter', variant, weight: '300', style: 'italic' })).toEqual({
+			family: 'Inter',
+			weight: '300',
+			italic: true,
+		});
+	});
+
 	it.each([null, undefined, '', ':700', { family: '' }, { family: '   ' }, 42])(
 		'returns null for %p, which names no family',
 		(font) => {
@@ -104,6 +114,17 @@ describe('fontRequests', () => {
 				url: 'https://fonts.googleapis.com/css2?family=Inter:wght@700&display=swap',
 			},
 		]);
+	});
+
+	// An empty typography array is a block naming no font, not a block declining to answer, so the
+	// legacy config must not fill in behind it.
+	it('lets an empty typography array win over a legacy config', () => {
+		const requests = fontRequests({
+			typography: [],
+			config: { google: { families: ['Inter'] } },
+		});
+
+		expect(requests).toEqual([]);
 	});
 
 	it('prefers typography when a caller somehow passes both', () => {

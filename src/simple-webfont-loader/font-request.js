@@ -63,7 +63,8 @@ export function parseVariant(variant) {
  *
  * A `typography` entry may carry `variant` or the `weight`/`style` pair, depending on which handler
  * last wrote it; `variant` wins because it is the one Google's own font list uses, and the pair is
- * read only to fill the gap when it is absent.
+ * read only to fill the gap when it is absent. Absent covers null and blank as well as missing: an
+ * entry that carries an empty `variant` beside a real `weight` is naming the pair, not upright 400.
  *
  * @param {string|Object} font A `config` family string, or a `typography` entry.
  *
@@ -88,8 +89,10 @@ export function toFontRequest(font) {
 		return null;
 	}
 
-	if (font.variant !== undefined && font.variant !== '') {
-		return { family, ...parseVariant(font.variant) };
+	const variant = String(font.variant ?? '').trim();
+
+	if (variant !== '') {
+		return { family, ...parseVariant(variant) };
 	}
 
 	const weight = String(font.weight ?? '').trim();
@@ -127,7 +130,9 @@ export function fontUrl(request) {
  * Every font a loader's props ask for, deduplicated, as `{ key, url }` pairs.
  *
  * `typography` wins over `config` when both are present: the ~19 call sites that pass `typography`
- * are the ones this exists for, and a caller passing both is describing one font twice.
+ * are the ones this exists for, and a caller passing both is describing one font twice. An empty
+ * `typography` array wins too — a block that names no font is asking for none, and falling through
+ * to `config` there would load a font it has stopped asking for.
  *
  * @param {Object}                props           The loader's props.
  * @param {Array}                 [props.typography] The block's typography attribute.
@@ -138,7 +143,7 @@ export function fontUrl(request) {
  * @return {Array<{key: string, url: string}>} The stylesheets to load, in order, without duplicates.
  */
 export function fontRequests({ typography, config } = {}) {
-	const source = Array.isArray(typography) && typography.length ? typography : config?.google?.families;
+	const source = Array.isArray(typography) ? typography : config?.google?.families;
 
 	if (!Array.isArray(source)) {
 		return [];

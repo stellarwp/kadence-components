@@ -76,6 +76,29 @@ class SimpleWebfontLoader extends Component {
 		this.linkElements.clear();
 	}
 
+	/**
+	 * Drop the stylesheets the props no longer name, and leave the rest where they are.
+	 *
+	 * A load pass only appends, so without this a block that switches from Inter to Roboto keeps
+	 * Inter loaded until it unmounts — the opposite of loading only the font its props name. The
+	 * stylesheets that survive the change are left untouched rather than removed and re-appended,
+	 * which would unregister a face the canvas is painting with and flash the fallback.
+	 *
+	 * @return {void}
+	 */
+	pruneFonts() {
+		const wanted = new Set(fontRequests(this.props).map(({ key }) => key));
+
+		this.linkElements.forEach((link, key) => {
+			if (wanted.has(key)) {
+				return;
+			}
+
+			link?.parentNode?.removeChild(link);
+			this.linkElements.delete(key);
+		});
+	}
+
 	componentDidMount() {
 		this.mounted = true;
 		this.setState({ device: this.props.getPreviewDevice });
@@ -96,6 +119,7 @@ class SimpleWebfontLoader extends Component {
 			this.setState({ device: getPreviewDevice });
 			this.loadFonts();
 		} else if (prevProps.config !== config || prevProps.typography !== typography) {
+			this.pruneFonts();
 			this.loadFonts();
 		}
 	}
