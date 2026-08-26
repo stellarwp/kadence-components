@@ -47,6 +47,8 @@
 		"react-select": "^5.10.2"
 	},
 	"peerDependencies": {
+		"@kadence/helpers": "*",
+		"@kadence/icons": "*",
 		"react": ">=17 <19",
 		"react-dom": ">=17 <19"
 	},
