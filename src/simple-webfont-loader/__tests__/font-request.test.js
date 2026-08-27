@@ -90,6 +90,20 @@ describe('fontUrl', () => {
 		);
 	});
 
+	// Every family Google publishes is alphanumeric and spaces, so this is not for them: `family` is
+	// whatever a block stored, and an `&` or a `#` would otherwise end the query string early.
+	it('encodes a family name that is not URL-safe', () => {
+		expect(fontUrl({ family: 'Ampersand & Hash #1', weight: '400', italic: false })).toBe(
+			'https://fonts.googleapis.com/css2?family=Ampersand+%26+Hash+%231:wght@400&display=swap'
+		);
+	});
+
+	// The previous URL builder substituted `+` for the space and then encoded it, which asked Google
+	// for a family with a literal plus in its name -- a 400 for every multi-word family.
+	it('does not encode the plus signs it substitutes for spaces', () => {
+		expect(fontUrl({ family: 'Abril Fatface', weight: '400', italic: false })).not.toContain('%2B');
+	});
+
 	it('joins a multi-word family with plus signs', () => {
 		expect(fontUrl({ family: 'Abril Fatface', weight: '400', italic: false })).toBe(
 			'https://fonts.googleapis.com/css2?family=Abril+Fatface:wght@400&display=swap'

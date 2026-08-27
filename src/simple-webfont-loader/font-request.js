@@ -113,6 +113,10 @@ export function toFontRequest(font) {
  * `display=swap` keeps text visible while the file downloads, which matters more in the editor than
  * on the front end: a canvas that blanks its text mid-edit reads as the editor breaking.
  *
+ * Only the family is encoded. The axes are css2's own syntax — `:` separates them from the family,
+ * `@` separates axis names from values — so encoding those would ask Google for a family whose name
+ * contains the punctuation rather than for the cut.
+ *
  * @param {{family: string, weight: string, italic: boolean}} request The font request.
  *
  * @since TBD
@@ -120,7 +124,13 @@ export function toFontRequest(font) {
  * @return {string} The stylesheet URL.
  */
 export function fontUrl(request) {
-	const family = request.family.replace(/ /g, '+');
+	// Encoded first, then the encoded space narrowed to the `+` css2's own documentation uses.
+	// Substituting before encoding is what the previous URL builder did, and it encoded that `+`
+	// straight back to %2B — asking for a family with a literal plus in its name, which is a 400 for
+	// every multi-word family. Every family Google publishes is alphanumeric and spaces, so the
+	// encoding is not for them: `family` is whatever a block stored, and a name carrying `&` or `#`
+	// would otherwise end the query string early and change what is requested.
+	const family = encodeURIComponent(request.family).replace(/%20/g, '+');
 	const axis = request.italic ? `ital,wght@1,${request.weight}` : `wght@${request.weight}`;
 
 	return `https://fonts.googleapis.com/css2?family=${family}:${axis}&display=swap`;
