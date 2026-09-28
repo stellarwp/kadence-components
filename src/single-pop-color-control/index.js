@@ -50,9 +50,9 @@ export default function SinglePopColorControl({
 
 	// A value changed from outside the control (undo, a reset, another control) replaces the one picked here.
 	useEffect(() => {
+		setIsPalette(value && value.startsWith('palette') ? true : false);
 		if (currentColor && currentColor !== value) {
 			setCurrentColor('');
-			setIsPalette(value && value.startsWith('palette') ? true : false);
 		}
 	}, [value]);
 	useEffect(() => {
