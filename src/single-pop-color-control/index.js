@@ -12,7 +12,7 @@ import { hexToRGBA } from '@kadence/helpers';
 
 import { get, map } from 'lodash';
 import { useSetting } from '@wordpress/block-editor';
-import { useState, useMemo } from '@wordpress/element';
+import { useEffect, useState, useMemo } from '@wordpress/element';
 /**
  * Internal block libraries
  */
@@ -47,6 +47,17 @@ export default function SinglePopColorControl({
 	const [currentColor, setCurrentColor] = useState('');
 	const [currentOpacity, setCurrentOpacity] = useState(opacityValue !== '' ? opacityValue : 1);
 	const [isPalette, setIsPalette] = useState(value && value.startsWith('palette') ? true : false);
+
+	// A value changed from outside the control (undo, a reset, another control) replaces the one picked here.
+	useEffect(() => {
+		if (currentColor && currentColor !== value) {
+			setCurrentColor('');
+			setIsPalette(value && value.startsWith('palette') ? true : false);
+		}
+	}, [value]);
+	useEffect(() => {
+		setCurrentOpacity(opacityValue !== '' ? opacityValue : 1);
+	}, [opacityValue]);
 	const allColors = useSetting('color.palette');
 
 	// Get Kadence Blocks color configuration
