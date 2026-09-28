@@ -75,22 +75,32 @@ function SiteStylesPointer({ blockSlug }) {
  *
  * @public
  */
-export default function KadenceBlockDefaults({
+export default function KadenceBlockDefaults(props) {
+	const [user, setUser] = useState(kadence_blocks_params.userrole ? kadence_blocks_params.userrole : 'admin');
+	if (user !== 'admin') {
+		return null;
+	}
+
+	if (usesSiteStyles(props.blockSlug)) {
+		return <SiteStylesPointer blockSlug={props.blockSlug} />;
+	}
+
+	return <BlockDefaultsPanel {...props} />;
+}
+
+/**
+ * The Save / Modify / Reset Block Defaults panel. Kept apart from KadenceBlockDefaults so
+ * its hooks always run in the same order, whichever panel that component returns.
+ *
+ * @param {object} props Same as KadenceBlockDefaults.
+ */
+function BlockDefaultsPanel({
 	attributes,
 	defaultAttributes = {},
 	blockSlug,
 	excludedAttrs = [],
 	preventMultiple = [],
 }) {
-	const [user, setUser] = useState(kadence_blocks_params.userrole ? kadence_blocks_params.userrole : 'admin');
-	if (user !== 'admin') {
-		return null;
-	}
-
-	if (usesSiteStyles(blockSlug)) {
-		return <SiteStylesPointer blockSlug={blockSlug} />;
-	}
-
 	const {createErrorNotice, createSuccessNotice} = useDispatch(noticesStore);
 
 	const [isOpenResetConfirm, setIsOpenResetConfirm] = useState(false);
