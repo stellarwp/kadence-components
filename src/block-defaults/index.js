@@ -1,7 +1,9 @@
-import { useEffect, useState } from '@wordpress/element';
+import { createInterpolateElement, useEffect, useState } from '@wordpress/element';
 import { useSelect, useDispatch, select, dispatch } from '@wordpress/data';
 import KadencePanelBody from '../panel-body/index.js';
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
+import { getBlockType } from '@wordpress/blocks';
+import { addQueryArgs } from '@wordpress/url';
 import { omit, head, get, isEqual } from 'lodash';
 import { store as noticesStore } from '@wordpress/notices';
 import { Button, Modal, __experimentalConfirmDialog as ConfirmDialog } from '@wordpress/components';
@@ -35,6 +37,12 @@ function usesSiteStyles(blockName) {
 function SiteStylesPointer({ blockSlug }) {
 	// kadence-blocks registers this store only where it mounts the panel: the Site Editor in FSE mode.
 	const canOpenPanel = !!select(SITE_STYLES_STORE);
+	const blockTitle = getBlockType(blockSlug)?.title || blockSlug;
+	// Relative to wp-admin, where both editors run. The block name is encoded once more inside `section`, as core does.
+	const stylesUrl = addQueryArgs('site-editor.php', {
+		p: '/styles',
+		section: '/blocks/' + encodeURIComponent(blockSlug),
+	});
 
 	return (
 		<KadencePanelBody
@@ -43,13 +51,24 @@ function SiteStylesPointer({ blockSlug }) {
 			panelName={`kb-${blockSlug}-defaults`}
 		>
 			{canOpenPanel
-				? __(
-						'Site styles replace Block Defaults for this block. They apply to every block of this type on the site, except where a block has its own setting.',
-						'__KADENCE__TEXT__DOMAIN__'
+				? sprintf(
+						/* translators: %1$s: block title, e.g. Single Button. */
+						__(
+							'Site styles replace Block Defaults for %1$s. They apply to every %1$s on the site, except where a block has its own setting.',
+							'__KADENCE__TEXT__DOMAIN__'
+						),
+						blockTitle
 				  )
-				: __(
-						'Site styles replace Block Defaults for this block. You can change them in the Site Editor, under Styles > Blocks.',
-						'__KADENCE__TEXT__DOMAIN__'
+				: createInterpolateElement(
+						sprintf(
+							/* translators: %1$s: block title, e.g. Single Button. */
+							__(
+								'Site styles replace Block Defaults for %1$s. You can change them in the Site Editor, under <a>Styles > Blocks > %1$s</a>.',
+								'__KADENCE__TEXT__DOMAIN__'
+							),
+							blockTitle
+						),
+						{ a: <a href={stylesUrl} /> }
 				  )}
 			{canOpenPanel && (
 				<>
