@@ -33,7 +33,8 @@ function usesSiteStyles(blockName) {
  * @return {Element} The panel.
  */
 function SiteStylesPointer({ blockSlug }) {
-	const canOpen = !!select(SITE_STYLES_STORE);
+	// kadence-blocks registers this store only where it mounts the panel: the Site Editor in FSE mode.
+	const canOpenPanel = !!select(SITE_STYLES_STORE);
 
 	return (
 		<KadencePanelBody
@@ -41,16 +42,16 @@ function SiteStylesPointer({ blockSlug }) {
 			initialOpen={false}
 			panelName={`kb-${blockSlug}-defaults`}
 		>
-			{canOpen
+			{canOpenPanel
 				? __(
-						'Default styles for this block type are its site styles, which every block without its own value follows.',
+						'Site styles replace Block Defaults for this block. They apply to every block of this type on the site, except where a block has its own setting.',
 						'__KADENCE__TEXT__DOMAIN__'
 				  )
 				: __(
-						'Default styles for this block type are set in the Site Editor, under Styles > Blocks.',
+						'Site styles replace Block Defaults for this block. You can change them in the Site Editor, under Styles > Blocks.',
 						'__KADENCE__TEXT__DOMAIN__'
 				  )}
-			{canOpen && (
+			{canOpenPanel && (
 				<>
 					<br />
 					<br />
