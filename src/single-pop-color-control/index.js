@@ -50,7 +50,6 @@ export default function SinglePopColorControl({
 
 	// A value changed from outside the control (undo, a reset, another control) replaces the one picked here.
 	useEffect(() => {
-		setIsPalette(value && value.startsWith('palette') ? true : false);
 		if (currentColor && currentColor !== value) {
 			setCurrentColor('');
 		}
@@ -111,9 +110,11 @@ export default function SinglePopColorControl({
 	};
 	const convertedOpacityValue = 100 === opacityUnit ? convertOpacity(currentOpacity) : currentOpacity;
 	const colorVal = currentColor ? currentColor : value;
-	const paletteIndex = isPalette && colors && colorVal ? colorVal.match(/\d+$/)?.[0] - 1 : null;
+	// Derived on every render from the value, unless a colour is being picked here: an effect would lag a render.
+	const usesPalette = currentColor ? isPalette : !!(value && value.startsWith('palette'));
+	const paletteIndex = usesPalette && colors && colorVal ? colorVal.match(/\d+$/)?.[0] - 1 : null;
 	let currentColorString = paletteIndex !== null && colors[paletteIndex] ? colors[paletteIndex].color : colorVal;
-	if (!isPalette && currentColorString && currentColorString.startsWith('var(')) {
+	if (!usesPalette && currentColorString && currentColorString.startsWith('var(')) {
 		currentColorString = window
 			.getComputedStyle(document.documentElement)
 			.getPropertyValue(value.replace('var(', '').split(',')[0].replace(')', ''));
@@ -137,7 +138,7 @@ export default function SinglePopColorControl({
 	// if ( '' !== currentColorString && this.props.onOpacityChange && ! this.state.isPalette ) {
 	// 	currentColorString = hexToRGBA( ( undefined === currentColorString ? '' : currentColorString ), ( convertedOpacityValue !== undefined && convertedOpacityValue !== '' ? convertedOpacityValue : 1 ) );
 	// }
-	if (onOpacityChange && !isPalette) {
+	if (onOpacityChange && !usesPalette) {
 		if (
 			Number(convertedOpacityValue !== undefined && convertedOpacityValue !== '' ? convertedOpacityValue : 1) !==
 			1
@@ -149,7 +150,7 @@ export default function SinglePopColorControl({
 		}
 	}
 	let previewColorString = currentColorString;
-	if (isPalette && colorVal) {
+	if (usesPalette && colorVal) {
 		switch (colorVal) {
 			case 'palette1':
 				previewColorString = 'var(--global-palette1,#2B6CB0)';
