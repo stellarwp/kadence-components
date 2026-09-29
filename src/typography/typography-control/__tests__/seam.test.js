@@ -13,7 +13,6 @@ import { addFilter, removeFilter } from '@wordpress/hooks';
 import TypographyControls from '../index';
 
 const EDITOR_HOOK = 'kadence.components.control.editor';
-const ACTIONS_HOOK = 'kadence.components.control.actions';
 const NS = 'test/seam';
 
 // Deliberately no consuming-plugin global: the control assembles an empty font list and renders,
@@ -38,7 +37,6 @@ function props(overrides = {}) {
 
 afterEach(() => {
 	removeFilter(EDITOR_HOOK, NS);
-	removeFilter(ACTIONS_HOOK, NS);
 });
 
 describe('TypographyControls font-family extension seam', () => {
@@ -120,36 +118,89 @@ describe('TypographyControls font-family extension seam', () => {
 	});
 });
 
-describe('TypographyControls font-family header actions seam', () => {
-	it('renders nothing extra beside the label by default', () => {
+describe('TypographyControls renderFontFamily prop', () => {
+	it('renders its own font-family row when the prop is absent', () => {
 		render(<TypographyControls {...props()} />);
 
-		expect(screen.queryByTestId('family-action')).not.toBeInTheDocument();
+		expect(screen.getByText('Font Family')).toBeInTheDocument();
+		expect(document.querySelector('.typography-family-select-form-row')).toBeInTheDocument();
 	});
 
-	it('lets a consumer add a node to the font-family header, receiving only neutral context', () => {
+	it('renders what the host returns in place of its own row, receiving neutral context', () => {
 		const seen = [];
+		const renderFontFamily = (args) => {
+			seen.push(args);
 
-		addFilter(ACTIONS_HOOK, NS, (actions, ctx) => {
-			if (ctx.control !== 'fontFamily') {
-				return actions;
-			}
+			return <div data-testid="host-row">host row</div>;
+		};
 
-			seen.push(ctx);
+		render(
+			<TypographyControls
+				{...props({ renderFontFamily, context: { blockName: 'kadence/advancedheading' } })}
+			/>
+		);
 
-			return [...actions, <span key="mark" data-testid="family-action" />];
-		});
-
-		render(<TypographyControls {...props({ context: { blockName: 'kadence/advancedheading' } })} />);
-
-		const header = screen.getByText('Font Family').closest('.kadence-title-bar');
-
-		expect(header).toContainElement(screen.getByTestId('family-action'));
+		expect(screen.getByTestId('host-row')).toBeInTheDocument();
+		expect(document.querySelector('.typography-family-select-form-row')).not.toBeInTheDocument();
 		expect(seen[0]).toMatchObject({
-			control: 'fontFamily',
-			index: null,
+			label: 'Font Family',
 			value: 'Inter',
 			context: { blockName: 'kadence/advancedheading' },
 		});
+	});
+
+	it('writes a plain family string back through the host row, with the same resolution as its own select', () => {
+		const onFontArrayChange = jest.fn();
+
+		render(
+			<TypographyControls
+				{...props({
+					onFontArrayChange,
+					renderFontFamily: ({ onChange }) => (
+						<button type="button" data-testid="host-pick" onClick={() => onChange('Abril Fatface')}>
+							pick
+						</button>
+					),
+				})}
+			/>
+		);
+
+		screen.getByTestId('host-pick').click();
+
+		expect(onFontArrayChange).toHaveBeenCalledWith(expect.objectContaining({ family: 'Abril Fatface' }));
+	});
+
+	it('keeps the weight select when the host renders the row', () => {
+		render(
+			<TypographyControls
+				{...props({
+					onFontWeight: jest.fn(),
+					renderFontFamily: () => <div data-testid="host-row" />,
+				})}
+			/>
+		);
+
+		expect(screen.getByText('Font Weight')).toBeInTheDocument();
+	});
+
+	it('gives the host a way to clear the family', () => {
+		const onFontArrayChange = jest.fn();
+
+		render(
+			<TypographyControls
+				{...props({
+					onFontArrayChange,
+					renderFontFamily: ({ onClear }) => (
+						<button type="button" data-testid="host-clear" onClick={onClear}>
+							clear
+						</button>
+					),
+				})}
+			/>
+		);
+
+		screen.getByTestId('host-clear').click();
+
+		expect(onFontArrayChange).toHaveBeenCalledWith(expect.objectContaining({ family: '', weight: 'inherit' }));
 	});
 });
