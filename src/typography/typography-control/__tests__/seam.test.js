@@ -13,6 +13,7 @@ import { addFilter, removeFilter } from '@wordpress/hooks';
 import TypographyControls from '../index';
 
 const EDITOR_HOOK = 'kadence.components.control.editor';
+const ACTIONS_HOOK = 'kadence.components.control.actions';
 const NS = 'test/seam';
 
 // Deliberately no consuming-plugin global: the control assembles an empty font list and renders,
@@ -37,6 +38,7 @@ function props(overrides = {}) {
 
 afterEach(() => {
 	removeFilter(EDITOR_HOOK, NS);
+	removeFilter(ACTIONS_HOOK, NS);
 });
 
 describe('TypographyControls font-family extension seam', () => {
@@ -115,5 +117,39 @@ describe('TypographyControls font-family extension seam', () => {
 		screen.getByTestId('clear').click();
 
 		expect(onFontArrayChange).toHaveBeenCalledWith(expect.objectContaining({ family: '', weight: 'inherit' }));
+	});
+});
+
+describe('TypographyControls font-family header actions seam', () => {
+	it('renders nothing extra beside the label by default', () => {
+		render(<TypographyControls {...props()} />);
+
+		expect(screen.queryByTestId('family-action')).not.toBeInTheDocument();
+	});
+
+	it('lets a consumer add a node to the font-family header, receiving only neutral context', () => {
+		const seen = [];
+
+		addFilter(ACTIONS_HOOK, NS, (actions, ctx) => {
+			if (ctx.control !== 'fontFamily') {
+				return actions;
+			}
+
+			seen.push(ctx);
+
+			return [...actions, <span key="mark" data-testid="family-action" />];
+		});
+
+		render(<TypographyControls {...props({ context: { blockName: 'kadence/advancedheading' } })} />);
+
+		const header = screen.getByText('Font Family').closest('.kadence-title-bar');
+
+		expect(header).toContainElement(screen.getByTestId('family-action'));
+		expect(seen[0]).toMatchObject({
+			control: 'fontFamily',
+			index: null,
+			value: 'Inter',
+			context: { blockName: 'kadence/advancedheading' },
+		});
 	});
 });

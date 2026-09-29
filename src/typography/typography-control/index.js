@@ -23,7 +23,7 @@ import TwoColumn from '../../panels/two-column';
 import TagSelect from '../../tag-select';
 
 import Select from 'react-select';
-import { controlEditor } from '../../common/control-extensions';
+import { controlEditor, controlActions } from '../../common/control-extensions';
 import { range, isEqual } from 'lodash';
 import HeadingLevelIcon from '../../heading-level-icon';
 
@@ -833,6 +833,13 @@ class TypographyControls extends Component {
 									<label className="kadence-control-title kadence-component__header__title">
 										{__('Font Family', '__KADENCE__TEXT__DOMAIN__')}
 									</label>
+									{controlActions({
+										control: 'fontFamily',
+										index: null,
+										value: fontFamily,
+										onChange: onTypoFontPick,
+										context,
+									})}
 								</div>
 								<div className="typography-family-select-form-row">
 									{controlEditor(
