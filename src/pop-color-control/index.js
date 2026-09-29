@@ -58,7 +58,7 @@ export default class extends Component {
 					{this.props.label && (
 						<label className="kadence-beside-label kadence-pop-color-label">{this.props.label}</label>
 					)}
-					{showClear && !this.props.hideClear && (
+					{showClear && !this.props.hideClear && !this.props.disabled && (
 						<Button
 							className="kadence-pop-color-clear"
 							type="button"
@@ -109,6 +109,7 @@ export default class extends Component {
 							defaultValue={defaultColor ? defaultColor : ''}
 							reload={this.state.reload}
 							reloaded={(value) => this.setState({ reload: false })}
+							disabled={this.props.disabled}
 						/>
 						{onChange2 && (
 							<SinglePopColorControl
@@ -137,6 +138,7 @@ export default class extends Component {
 								defaultValue={defaultColor2 ? defaultColor2 : ''}
 								reload={this.state.reload}
 								reloaded={(value) => this.setState({ reload: false })}
+								disabled={this.props.disabled}
 							/>
 						)}
 						{onChange3 && (
@@ -166,6 +168,7 @@ export default class extends Component {
 								defaultValue={defaultColor3 ? defaultColor3 : ''}
 								reload={this.state.reload}
 								reloaded={(value) => this.setState({ reload: false })}
+								disabled={this.props.disabled}
 							/>
 						)}
 					</div>

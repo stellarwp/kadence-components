@@ -1,14 +1,13 @@
 import { Button, Tooltip, ResizableBox } from '@wordpress/components';
-import { isRTL } from '@kadence/helpers';
+import { isRTL, getPreviewSize } from '@kadence/helpers';
 import classnames from 'classnames';
 import { debounce, throttle } from 'lodash';
 /**
  * Internal block libraries
  */
 import { __ } from '@wordpress/i18n';
-import { useState, useEffect, useRef } from '@wordpress/element';
+import { useState, useEffect, useRef, cloneElement } from '@wordpress/element';
 import { getPreviewGutterSize, getGutterTotal } from './utils';
-import { getPreviewSize } from '@kadence/helpers';
 
 const ContainerDimensions = ({ children }) => {
 	const [dimensions, setDimensions] = useState(null);
@@ -56,7 +55,7 @@ const ContainerDimensions = ({ children }) => {
 		return renderedChildren ? <div ref={parentRef}>{renderedChildren}</div> : null;
 	}
 
-	return React.cloneElement(children, {
+	return cloneElement(children, {
 		...dimensions,
 		ref: (node) => {
 			parentRef.current = node;

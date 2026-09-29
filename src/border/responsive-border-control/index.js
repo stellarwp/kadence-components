@@ -19,6 +19,7 @@ import { undo, settings, link, linkOff } from '@wordpress/icons';
 import { useInstanceId } from '@wordpress/compose';
 import { Dashicon, Button, ButtonGroup } from '@wordpress/components';
 import { outlineTopIcon, outlineRightIcon, outlineBottomIcon, outlineLeftIcon } from '@kadence/icons';
+import { controlActions } from '../../common/control-extensions';
 /**
  * Build the Measure controls
  * @returns {object} Measure settings.
@@ -64,6 +65,7 @@ export default function ResponsiveBorderControl({
 	},
 	reset = true,
 	defaultLinked = true,
+	context,
 }) {
 	const instanceId = useInstanceId(ResponsiveBorderControl);
 	const measureIcons = {
@@ -155,6 +157,16 @@ export default function ResponsiveBorderControl({
 	} else if (deviceType === 'Mobile') {
 		liveValue = mobileValue?.[0] ? mobileValue[0] : mobileDefault;
 	}
+	// The write handler for whichever device is live, so a header action injected through the seam
+	// targets the value the user is actually looking at. The seam always speaks the same shape it
+	// reads: it hands back a plain `{ top, right, bottom, left, unit }` object like `liveValue`, and
+	// this adapter re-wraps it into the single-element array the device attribute stores.
+	const activeOnChange = (nextValue) => {
+		const deviceOnChange =
+			deviceType === 'Tablet' ? onChangeTablet : deviceType === 'Mobile' ? onChangeMobile : onChange;
+
+		deviceOnChange([nextValue]);
+	};
 	const onReset = () => {
 		if (deviceType === 'Tablet') {
 			onChangeTablet([tabletDefault]);
@@ -184,6 +196,7 @@ export default function ResponsiveBorderControl({
 			fourthIcon={fourthIcon}
 			linkIcon={linkIcon}
 			unlinkIcon={unlinkIcon}
+			context={context}
 		/>
 	);
 	output.Tablet = (
@@ -202,6 +215,7 @@ export default function ResponsiveBorderControl({
 			fourthIcon={fourthIcon}
 			linkIcon={linkIcon}
 			unlinkIcon={unlinkIcon}
+			context={context}
 		/>
 	);
 	output.Desktop = (
@@ -220,6 +234,7 @@ export default function ResponsiveBorderControl({
 			fourthIcon={fourthIcon}
 			linkIcon={linkIcon}
 			unlinkIcon={unlinkIcon}
+			context={context}
 		/>
 	);
 	let currentDefault = deskDefault;
@@ -282,6 +297,13 @@ export default function ResponsiveBorderControl({
 							isTertiary={realControl !== 'individual' ? false : true}
 						/>
 					)}
+					{controlActions({
+						control: 'border',
+						index: null,
+						value: liveValue,
+						onChange: activeOnChange,
+						context,
+					})}
 				</div>
 				<div className="kb-responsive-border-control-inner">
 					{output[deviceType] ? output[deviceType] : output.Desktop}

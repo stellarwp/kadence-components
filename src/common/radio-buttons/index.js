@@ -25,6 +25,7 @@ export default function KadenceRadioButtons({
 	hideLabel = false,
 	wrap = false,
 	allowClear = false,
+	disabled = false,
 	...props
 }) {
 	const instanceId = useInstanceId(KadenceRadioButtons);
@@ -55,6 +56,7 @@ export default function KadenceRadioButtons({
 						isPrimary={value === option.value}
 						icon={undefined !== option.icon ? option.icon : undefined}
 						aria-pressed={value === option.value}
+						disabled={disabled}
 						onClick={() => {
 							if (undefined !== option?.isDisabled && option.isDisabled) {
 							} else {

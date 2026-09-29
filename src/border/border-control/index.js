@@ -85,6 +85,7 @@ export default function BorderControl({
 	unlinkIcon = linkOff,
 	styles = ['solid', 'dashed', 'dotted', 'double'],
 	reset,
+	context,
 }) {
 	const instanceId = useInstanceId(BorderControl);
 	const [theControl, setTheControl] = useState(control);
@@ -177,6 +178,7 @@ export default function BorderControl({
 							<SingleBorderControl
 								value={currentObject?.top || ['', '', '']}
 								onChange={(newVal) => onChangeAll(newVal)}
+								index={null}
 								min={min}
 								max={max}
 								step={step}
@@ -187,6 +189,7 @@ export default function BorderControl({
 								onUnit={(unit) => onChangeUnit(unit)}
 								defaultValue={defaultValue.top}
 								allowReset={false}
+								context={context}
 							/>
 						</>
 					)}
@@ -228,6 +231,7 @@ export default function BorderControl({
 							<SingleBorderControl
 								value={currentObject?.top || ['', '', '']}
 								onChange={(newVal) => onChangeSide(newVal, 'top')}
+								index={0}
 								min={min}
 								max={max}
 								step={step}
@@ -238,10 +242,12 @@ export default function BorderControl({
 								onUnit={(unit) => onChangeUnit(unit)}
 								defaultValue={defaultValue.top}
 								allowReset={false}
+								context={context}
 							/>
 							<SingleBorderControl
 								value={currentObject?.left || ['', '', '']}
 								onChange={(newVal) => onChangeSide(newVal, 'left')}
+								index={3}
 								min={min}
 								max={max}
 								step={step}
@@ -252,10 +258,12 @@ export default function BorderControl({
 								onUnit={(unit) => onChangeUnit(unit)}
 								defaultValue={defaultValue.left}
 								allowReset={false}
+								context={context}
 							/>
 							<SingleBorderControl
 								value={currentObject?.right || ['', '', '']}
 								onChange={(newVal) => onChangeSide(newVal, 'right')}
+								index={1}
 								min={min}
 								max={max}
 								step={step}
@@ -266,10 +274,12 @@ export default function BorderControl({
 								onUnit={(unit) => onChangeUnit(unit)}
 								defaultValue={defaultValue.right}
 								allowReset={false}
+								context={context}
 							/>
 							<SingleBorderControl
 								value={currentObject?.bottom || ['', '', '']}
 								onChange={(newVal) => onChangeSide(newVal, 'bottom')}
+								index={2}
 								min={min}
 								max={max}
 								step={step}
@@ -280,6 +290,7 @@ export default function BorderControl({
 								onUnit={(unit) => onChangeUnit(unit)}
 								defaultValue={defaultValue.bottom}
 								allowReset={false}
+								context={context}
 							/>
 						</div>
 					)}
