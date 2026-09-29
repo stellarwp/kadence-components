@@ -117,3 +117,90 @@ describe('TypographyControls font-family extension seam', () => {
 		expect(onFontArrayChange).toHaveBeenCalledWith(expect.objectContaining({ family: '', weight: 'inherit' }));
 	});
 });
+
+describe('TypographyControls renderFontFamily prop', () => {
+	it('renders its own font-family row when the prop is absent', () => {
+		render(<TypographyControls {...props()} />);
+
+		expect(screen.getByText('Font Family')).toBeInTheDocument();
+		expect(document.querySelector('.typography-family-select-form-row')).toBeInTheDocument();
+	});
+
+	it('renders what the host returns in place of its own row, receiving neutral context', () => {
+		const seen = [];
+		const renderFontFamily = (args) => {
+			seen.push(args);
+
+			return <div data-testid="host-row">host row</div>;
+		};
+
+		render(
+			<TypographyControls
+				{...props({ renderFontFamily, context: { blockName: 'kadence/advancedheading' } })}
+			/>
+		);
+
+		expect(screen.getByTestId('host-row')).toBeInTheDocument();
+		expect(document.querySelector('.typography-family-select-form-row')).not.toBeInTheDocument();
+		expect(seen[0]).toMatchObject({
+			label: 'Font Family',
+			value: 'Inter',
+			context: { blockName: 'kadence/advancedheading' },
+		});
+	});
+
+	it('writes a plain family string back through the host row, with the same resolution as its own select', () => {
+		const onFontArrayChange = jest.fn();
+
+		render(
+			<TypographyControls
+				{...props({
+					onFontArrayChange,
+					renderFontFamily: ({ onChange }) => (
+						<button type="button" data-testid="host-pick" onClick={() => onChange('Abril Fatface')}>
+							pick
+						</button>
+					),
+				})}
+			/>
+		);
+
+		screen.getByTestId('host-pick').click();
+
+		expect(onFontArrayChange).toHaveBeenCalledWith(expect.objectContaining({ family: 'Abril Fatface' }));
+	});
+
+	it('keeps the weight select when the host renders the row', () => {
+		render(
+			<TypographyControls
+				{...props({
+					onFontWeight: jest.fn(),
+					renderFontFamily: () => <div data-testid="host-row" />,
+				})}
+			/>
+		);
+
+		expect(screen.getByText('Font Weight')).toBeInTheDocument();
+	});
+
+	it('gives the host a way to clear the family', () => {
+		const onFontArrayChange = jest.fn();
+
+		render(
+			<TypographyControls
+				{...props({
+					onFontArrayChange,
+					renderFontFamily: ({ onClear }) => (
+						<button type="button" data-testid="host-clear" onClick={onClear}>
+							clear
+						</button>
+					),
+				})}
+			/>
+		);
+
+		screen.getByTestId('host-clear').click();
+
+		expect(onFontArrayChange).toHaveBeenCalledWith(expect.objectContaining({ family: '', weight: 'inherit' }));
+	});
+});

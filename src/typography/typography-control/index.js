@@ -369,6 +369,7 @@ class TypographyControls extends Component {
 			onLetterSpacingType,
 			reset,
 			context,
+			renderFontFamily,
 			defaultValue = {
 				size: ['', '', ''],
 				sizeType: 'px',
@@ -828,38 +829,48 @@ class TypographyControls extends Component {
 					)}
 					{onFontFamily && onTypoFontClear && (
 						<>
-							<div className="components-base-control">
-								<div className="kadence-component__header kadence-title-bar">
-									<label className="kadence-control-title kadence-component__header__title">
-										{__('Font Family', '__KADENCE__TEXT__DOMAIN__')}
-									</label>
-								</div>
-								<div className="typography-family-select-form-row">
-									{controlEditor(
-										<Select
-											options={typographyOptions}
-											value={fontFamilyValue}
-											classNamePrefix="kb-react-select"
-											isMulti={false}
-											maxMenuHeight={300}
-											isClearable={true}
-											placeholder={__('Select a font family', '__KADENCE__TEXT__DOMAIN__')}
-											onChange={onTypoFontChange}
-											styles={{
-												control: (baseStyles, state) => ({
-													...baseStyles,
-													borderColor: 'rgb(30, 30, 30)',
-													borderRadius: '2px',
-													':hover': {
+							{typeof renderFontFamily === 'function' ? (
+								renderFontFamily({
+									label: __('Font Family', '__KADENCE__TEXT__DOMAIN__'),
+									value: fontFamily,
+									onChange: onTypoFontPick,
+									onClear: onTypoFontClear,
+									context,
+								})
+							) : (
+								<div className="components-base-control">
+									<div className="kadence-component__header kadence-title-bar">
+										<label className="kadence-control-title kadence-component__header__title">
+											{__('Font Family', '__KADENCE__TEXT__DOMAIN__')}
+										</label>
+									</div>
+									<div className="typography-family-select-form-row">
+										{controlEditor(
+											<Select
+												options={typographyOptions}
+												value={fontFamilyValue}
+												classNamePrefix="kb-react-select"
+												isMulti={false}
+												maxMenuHeight={300}
+												isClearable={true}
+												placeholder={__('Select a font family', '__KADENCE__TEXT__DOMAIN__')}
+												onChange={onTypoFontChange}
+												styles={{
+													control: (baseStyles, state) => ({
+														...baseStyles,
 														borderColor: 'rgb(30, 30, 30)',
-													},
-												}),
-											}}
-										/>,
-										{ control: 'fontFamily', index: null, value: fontFamily, onChange: onTypoFontPick, context }
-									)}
+														borderRadius: '2px',
+														':hover': {
+															borderColor: 'rgb(30, 30, 30)',
+														},
+													}),
+												}}
+											/>,
+											{ control: 'fontFamily', index: null, value: fontFamily, onChange: onTypoFontPick, context }
+										)}
+									</div>
 								</div>
-							</div>
+							)}
 							{onFontWeight && (
 								<SelectControl
 									label={__('Font Weight', '__KADENCE__TEXT__DOMAIN__')}
