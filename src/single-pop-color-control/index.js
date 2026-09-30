@@ -7,11 +7,11 @@
  * Import Icons
  */
 import ColorPicker from '../color-picker';
+import { usePaletteSwatches } from '../common/palette-swatches';
 import ColorIcons from '../color-icons';
 import { hexToRGBA } from '@kadence/helpers';
 
 import { get, map } from 'lodash';
-import { useSetting } from '@wordpress/block-editor';
 import { useEffect, useState, useMemo } from '@wordpress/element';
 /**
  * Internal block libraries
@@ -57,7 +57,7 @@ export default function SinglePopColorControl({
 	useEffect(() => {
 		setCurrentOpacity(opacityValue !== '' ? opacityValue : 1);
 	}, [opacityValue]);
-	const allColors = useSetting('color.palette');
+	const allColors = usePaletteSwatches();
 
 	// Get Kadence Blocks color configuration
 	const kadenceColors = useMemo(() => {
@@ -275,13 +275,13 @@ export default function SinglePopColorControl({
 					/>
 					{colors && (
 						<div className="kadence-pop-color-palette-swatches">
-							{map(colors, ({ color, slug, name }) => {
+							{map(colors, ({ color, slug, name }, index) => {
 								const style = { color };
 								const palette = slug.replace('theme-', '');
 								const isActive =
 									palette === value || (!slug.startsWith('theme-palette') && value === color);
 								return (
-									<div key={color} className="kadence-color-palette__item-wrapper">
+									<div key={`${slug}-${index}`} className="kadence-color-palette__item-wrapper">
 										<Tooltip
 											text={
 												name ||
