@@ -7,12 +7,12 @@
  * Import Icons
  */
 import ColorPicker from '../color-picker';
+import { usePaletteSwatches } from '../common/palette-swatches';
 import ColorIcons from '../color-icons';
 import { hexToRGBA } from '@kadence/helpers';
 
 import { get, map } from 'lodash';
-import { useSetting } from '@wordpress/block-editor';
-import { useState, useMemo } from '@wordpress/element';
+import { useEffect, useState, useMemo } from '@wordpress/element';
 /**
  * Internal block libraries
  */
@@ -47,7 +47,17 @@ export default function SinglePopColorControl({
 	const [currentColor, setCurrentColor] = useState('');
 	const [currentOpacity, setCurrentOpacity] = useState(opacityValue !== '' ? opacityValue : 1);
 	const [isPalette, setIsPalette] = useState(value && value.startsWith('palette') ? true : false);
-	const allColors = useSetting('color.palette');
+
+	// A value changed from outside the control (undo, a reset, another control) replaces the one picked here.
+	useEffect(() => {
+		if (currentColor && currentColor !== value) {
+			setCurrentColor('');
+		}
+	}, [value]);
+	useEffect(() => {
+		setCurrentOpacity(opacityValue !== '' ? opacityValue : 1);
+	}, [opacityValue]);
+	const allColors = usePaletteSwatches();
 
 	// Get Kadence Blocks color configuration
 	const kadenceColors = useMemo(() => {
@@ -100,9 +110,11 @@ export default function SinglePopColorControl({
 	};
 	const convertedOpacityValue = 100 === opacityUnit ? convertOpacity(currentOpacity) : currentOpacity;
 	const colorVal = currentColor ? currentColor : value;
-	const paletteIndex = isPalette && colors && colorVal ? colorVal.match(/\d+$/)?.[0] - 1 : null;
+	// Derived on every render from the value, unless a colour is being picked here: an effect would lag a render.
+	const usesPalette = currentColor ? isPalette : !!(value && value.startsWith('palette'));
+	const paletteIndex = usesPalette && colors && colorVal ? colorVal.match(/\d+$/)?.[0] - 1 : null;
 	let currentColorString = paletteIndex !== null && colors[paletteIndex] ? colors[paletteIndex].color : colorVal;
-	if (!isPalette && currentColorString && currentColorString.startsWith('var(')) {
+	if (!usesPalette && currentColorString && currentColorString.startsWith('var(')) {
 		currentColorString = window
 			.getComputedStyle(document.documentElement)
 			.getPropertyValue(value.replace('var(', '').split(',')[0].replace(')', ''));
@@ -126,7 +138,7 @@ export default function SinglePopColorControl({
 	// if ( '' !== currentColorString && this.props.onOpacityChange && ! this.state.isPalette ) {
 	// 	currentColorString = hexToRGBA( ( undefined === currentColorString ? '' : currentColorString ), ( convertedOpacityValue !== undefined && convertedOpacityValue !== '' ? convertedOpacityValue : 1 ) );
 	// }
-	if (onOpacityChange && !isPalette) {
+	if (onOpacityChange && !usesPalette) {
 		if (
 			Number(convertedOpacityValue !== undefined && convertedOpacityValue !== '' ? convertedOpacityValue : 1) !==
 			1
@@ -138,7 +150,7 @@ export default function SinglePopColorControl({
 		}
 	}
 	let previewColorString = currentColorString;
-	if (isPalette && colorVal) {
+	if (usesPalette && colorVal) {
 		switch (colorVal) {
 			case 'palette1':
 				previewColorString = 'var(--global-palette1,#2B6CB0)';
@@ -263,13 +275,13 @@ export default function SinglePopColorControl({
 					/>
 					{colors && (
 						<div className="kadence-pop-color-palette-swatches">
-							{map(colors, ({ color, slug, name }) => {
+							{map(colors, ({ color, slug, name }, index) => {
 								const style = { color };
 								const palette = slug.replace('theme-', '');
 								const isActive =
 									palette === value || (!slug.startsWith('theme-palette') && value === color);
 								return (
-									<div key={color} className="kadence-color-palette__item-wrapper">
+									<div key={`${slug}-${index}`} className="kadence-color-palette__item-wrapper">
 										<Tooltip
 											text={
 												name ||

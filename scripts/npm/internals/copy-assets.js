@@ -12,12 +12,14 @@ const isJavaScriptFile = ( filePath ) => {
 	return ext === '.js' || ext === '.jsx';
 };
 
+const isTestDirectory = ( filePath ) => path.basename( filePath ) === '__tests__';
+
 const copyAssets = ( targetDir ) => {
 	fsExtra.copySync( srcDir, targetDir, {
 		filter: ( src ) => {
 			const stats = fs.statSync( src );
 			if ( stats.isDirectory() ) {
-				return true;
+				return ! isTestDirectory( src );
 			}
 
 			return ! isJavaScriptFile( src );
