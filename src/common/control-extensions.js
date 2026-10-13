@@ -27,7 +27,7 @@
  * single-element array, or spread across several handlers) adapts on its own side rather than leaking
  * that to the listener.
  *
- * @since TBD
+ * @since 1.1.10
  *
  * @typedef {Object} ControlContext
  *
@@ -56,7 +56,7 @@ import { applyFilters } from '@wordpress/hooks';
 /**
  * The editor hook name every control passes its value editor through.
  *
- * @since TBD
+ * @since 1.1.10
  *
  * @type {string}
  */
@@ -65,7 +65,7 @@ export const CONTROL_EDITOR_HOOK = 'kadence.components.control.editor';
 /**
  * The actions hook name every control passes its (empty) header-action list through.
  *
- * @since TBD
+ * @since 1.1.10
  *
  * @type {string}
  */
@@ -78,7 +78,7 @@ export const CONTROL_ACTIONS_HOOK = 'kadence.components.control.actions';
  * @param {*}              defaultEditor The control's own editor node for this site.
  * @param {ControlContext} ctx           Neutral site context; every field is always present.
  *
- * @since TBD
+ * @since 1.1.10
  *
  * @return {*} The editor node to render (the default, or a listener's replacement).
  */
@@ -92,7 +92,7 @@ export function controlEditor(defaultEditor, ctx) {
  *
  * @param {ControlContext} ctx Neutral control context; every field is always present.
  *
- * @since TBD
+ * @since 1.1.10
  *
  * @return {Array} The action nodes to render (empty when nothing is registered).
  */

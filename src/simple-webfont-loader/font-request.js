@@ -19,7 +19,7 @@
 /**
  * A Google variant string, as stored: `regular`, `italic`, `500`, `700italic`.
  *
- * @since TBD
+ * @since 1.1.10
  *
  * @type {RegExp}
  */
@@ -31,7 +31,7 @@ const VARIANT_PATTERN = /^(\d{3})?(italic)?$/;
  *
  * @param {string} variant The stored variant.
  *
- * @since TBD
+ * @since 1.1.10
  *
  * @return {{weight: string, italic: boolean}} The axes.
  */
@@ -68,7 +68,7 @@ export function parseVariant(variant) {
  *
  * @param {string|Object} font A `config` family string, or a `typography` entry.
  *
- * @since TBD
+ * @since 1.1.10
  *
  * @return {?{family: string, weight: string, italic: boolean}} The request, or null.
  */
@@ -119,7 +119,7 @@ export function toFontRequest(font) {
  *
  * @param {{family: string, weight: string, italic: boolean}} request The font request.
  *
- * @since TBD
+ * @since 1.1.10
  *
  * @return {string} The stylesheet URL.
  */
@@ -148,7 +148,7 @@ export function fontUrl(request) {
  * @param {Array}                 [props.typography] The block's typography attribute.
  * @param {{google: {families: Array}}} [props.config] The legacy config shape.
  *
- * @since TBD
+ * @since 1.1.10
  *
  * @return {Array<{key: string, url: string}>} The stylesheets to load, in order, without duplicates.
  */

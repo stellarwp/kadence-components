@@ -12,7 +12,7 @@ import { KadenceColorOutput } from '@kadence/helpers';
  * The Kadence Blocks color configuration, parsed from the localized params. Falls back to an empty,
  * non-override config when the global is absent or malformed.
  *
- * @since TBD
+ * @since 1.1.10
  *
  * @return {{ palette: Array, override: boolean }} The color configuration.
  */
@@ -37,7 +37,7 @@ export function getKadenceColorConfig() {
  * @param {Array}   allColors The full editor color palette (from useSetting('color.palette')).
  * @param {boolean} override  Whether the "Use only Custom Colors" override is on.
  *
- * @since TBD
+ * @since 1.1.10
  *
  * @return {Array} The swatches to render.
  */
@@ -61,7 +61,7 @@ export function getPopColorSwatches(allColors, override) {
  *
  * @param {string} value The current color value (token reference, palette slug, var, or literal).
  *
- * @since TBD
+ * @since 1.1.10
  *
  * @return {string} A concrete color the picker can render.
  */
