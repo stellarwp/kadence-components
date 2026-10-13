@@ -18,6 +18,7 @@ const eslintConfig = {
 		history: 'readonly',
 		location: 'readonly',
 		IntersectionObserver: 'readonly',
+		ResizeObserver: 'readonly',
 		kadenceFormAnalyticsParams: 'readonly',
 		Element: 'readonly',
 		kadence_blocks_params_fa: 'readonly',
@@ -132,6 +133,12 @@ const eslintConfig = {
 		'jsdoc/check-alignment': 'off',
 	},
 	ignorePatterns: [],
+	overrides: [
+		{
+			files: [ '**/__tests__/**/*.js', '**/*.test.js' ],
+			extends: [ 'plugin:@wordpress/eslint-plugin/test-unit' ],
+		},
+	],
 };
 
 module.exports = eslintConfig;

@@ -32,6 +32,7 @@ import {
 } from '@kadence/icons';
 import { OPTIONS_MAP } from './constants';
 import { isCustomOption, getOptionIndex, getOptionFromSize, getOptionSize } from './utils';
+import { controlActions } from '../common/control-extensions';
 /**
  * Build the Measure controls
  * @returns {object} Measure settings.
@@ -71,6 +72,7 @@ export default function ResponsiveMeasureRangeControl({
 	onMouseOver,
 	onMouseOut,
 	allowAuto = false,
+	context,
 }) {
 	const ref = useRef();
 	const measureIcons = {
@@ -189,6 +191,10 @@ export default function ResponsiveMeasureRangeControl({
 	} else if (deviceType === 'Mobile') {
 		liveValue = mobileValue ? mobileValue : ['', '', '', ''];
 	}
+	// The write handler for whichever device is live, so a header action injected through the seam
+	// targets the value the user is actually looking at.
+	const activeOnChange =
+		deviceType === 'Tablet' ? onChangeTablet : deviceType === 'Mobile' ? onChangeMobile : onChange;
 	const onReset = () => {
 		if (deviceType === 'Tablet') {
 			onChangeTablet(tabletDefault);
@@ -244,6 +250,7 @@ export default function ResponsiveMeasureRangeControl({
 			onMouseOver={onMouseOver}
 			onMouseOut={onMouseOut}
 			allowAuto={allowAuto}
+			context={context}
 		/>
 	);
 	output.Tablet = (
@@ -278,6 +285,7 @@ export default function ResponsiveMeasureRangeControl({
 			onMouseOver={onMouseOver}
 			onMouseOut={onMouseOut}
 			allowAuto={allowAuto}
+			context={context}
 		/>
 	);
 	output.Desktop = (
@@ -311,6 +319,7 @@ export default function ResponsiveMeasureRangeControl({
 			onMouseOver={onMouseOver}
 			onMouseOut={onMouseOut}
 			allowAuto={allowAuto}
+			context={context}
 		/>
 	);
 	let currentDefault = deskDefault;
@@ -394,6 +403,14 @@ export default function ResponsiveMeasureRangeControl({
 							isTertiary={realControl !== 'individual' ? false : true}
 						/>
 					)}
+					{!subLabel &&
+						controlActions({
+							control: 'measureRange',
+							index: null,
+							value: liveValue,
+							onChange: activeOnChange,
+							context,
+						})}
 				</Flex>
 				<div className="kb-responsive-measure-control-inner">
 					{output[deviceType] ? output[deviceType] : output.Desktop}
