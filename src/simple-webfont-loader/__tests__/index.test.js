@@ -41,6 +41,15 @@ describe('KadenceWebfontLoader', () => {
 		expect(loadedHrefs()).toEqual(['https://fonts.googleapis.com/css2?family=Inter:wght@400&display=swap']);
 	});
 
+	// The `WebfontLoader` export points here too, and its callers join a multi-word family and variant.
+	it('loads a multi-word family and variant from a legacy config', () => {
+		render(<SimpleWebfontLoader config={{ google: { families: ['Open Sans:700italic'] } }} />);
+
+		expect(loadedHrefs()).toEqual([
+			'https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@1,700&display=swap',
+		]);
+	});
+
 	// One stylesheet per font, so a picker listing the catalog never turns into a catalog of requests.
 	it('loads only what it was given, once', () => {
 		render(
