@@ -131,6 +131,12 @@ const eslintConfig = {
 		'no-alert': 'off',
 		'jsdoc/check-alignment': 'off',
 	},
+	overrides: [
+		{
+			files: [ '**/__tests__/**/*.js', '**/*.test.js' ],
+			extends: [ 'plugin:@wordpress/eslint-plugin/test-unit' ],
+		},
+	],
 	ignorePatterns: [],
 };
 
