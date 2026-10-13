@@ -44,6 +44,7 @@ import {
 	MenuGroup,
 	MenuItem,
 } from '@wordpress/components';
+import { controlEditor } from '../../common/control-extensions';
 /**
  * Build the Border controls
  * @returns {object} Border Control.
@@ -61,6 +62,8 @@ export default function SingleBorderControl({
 	units = ['px', 'em', 'rem'],
 	styles = ['solid', 'dashed', 'dotted', 'double'],
 	defaultLinked = true,
+	index = null,
+	context,
 }) {
 	const instanceId = useInstanceId(SingleBorderControl);
 	const onChangeStyle = (style) => {
@@ -204,15 +207,18 @@ export default function SingleBorderControl({
 						)}
 					</DropdownMenu>
 					<div className={'kadence-controls-content kadence-single-unit-control'}>
-						<UnitControl
-							min={min}
-							max={max}
-							step={step}
-							units={controlUnits}
-							value={currentSize}
-							disableUnits={true}
-							onChange={(newVal) => onChangeSize(newVal)}
-						/>
+						{controlEditor(
+							<UnitControl
+								min={min}
+								max={max}
+								step={step}
+								units={controlUnits}
+								value={currentSize}
+								disableUnits={true}
+								onChange={(newVal) => onChangeSize(newVal)}
+							/>,
+							{ control: 'singleBorder', index, value: currentSize, onChange: onChangeSize, context }
+						)}
 						<div className={'kadence-measure-control-select-wrapper'}>
 							<select
 								className={'kadence-measure-control-select components-unit-control__select'}

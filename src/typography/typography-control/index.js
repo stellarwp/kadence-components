@@ -23,6 +23,7 @@ import TwoColumn from '../../panels/two-column';
 import TagSelect from '../../tag-select';
 
 import Select from 'react-select';
+import { controlEditor } from '../../common/control-extensions';
 import { range, isEqual } from 'lodash';
 import HeadingLevelIcon from '../../heading-level-icon';
 
@@ -177,9 +178,12 @@ class TypographyControls extends Component {
 			[],
 			typographyOptions.map((option) => option.options)
 		);
-		const blockConfigObject = kadence_blocks_params.configuration
-			? JSON.parse(kadence_blocks_params.configuration)
-			: [];
+		// Guarded like every other read in this method: the global belongs to the consuming plugin, so
+		// the control must render standalone without it rather than throwing a ReferenceError.
+		const blockConfigObject =
+			typeof kadence_blocks_params !== 'undefined' && kadence_blocks_params.configuration
+				? JSON.parse(kadence_blocks_params.configuration)
+				: [];
 		if (
 			blockConfigObject['kadence/typography'] !== undefined &&
 			typeof blockConfigObject['kadence/typography'] === 'object'
@@ -364,6 +368,8 @@ class TypographyControls extends Component {
 			otherTags = [],
 			onLetterSpacingType,
 			reset,
+			context,
+			renderFontFamily,
 			defaultValue = {
 				size: ['', '', ''],
 				sizeType: 'px',
@@ -521,6 +527,23 @@ class TypographyControls extends Component {
 					onFontSubset(subset);
 				}
 			}
+		};
+		// The seam speaks plain family strings both ways: a listener reads `fontFamily` off the
+		// context and hands a family back, with no react-select option shape to reproduce. Resolving
+		// the family to its own option first keeps every google/variant/weight/subset derivation in
+		// onTypoFontChange rather than forking a second copy here. A family the option list does not
+		// carry still writes: it is synthesized as a non-google option, the same treatment a custom
+		// font already gets.
+		const onTypoFontPick = (family) => {
+			if (!family) {
+				onTypoFontClear();
+
+				return;
+			}
+
+			const matched = typographySelectOptions.find((option) => option.value === family);
+
+			onTypoFontChange(matched || { value: family, label: family, google: false });
 		};
 		const onTypoFontClear = () => {
 			if (onFontArrayChange) {
@@ -806,35 +829,48 @@ class TypographyControls extends Component {
 					)}
 					{onFontFamily && onTypoFontClear && (
 						<>
-							<div className="components-base-control">
-								<div className="kadence-component__header kadence-title-bar">
-									<label className="kadence-control-title kadence-component__header__title">
-										{__('Font Family', '__KADENCE__TEXT__DOMAIN__')}
-									</label>
+							{typeof renderFontFamily === 'function' ? (
+								renderFontFamily({
+									label: __('Font Family', '__KADENCE__TEXT__DOMAIN__'),
+									value: fontFamily,
+									onChange: onTypoFontPick,
+									onClear: onTypoFontClear,
+									context,
+								})
+							) : (
+								<div className="components-base-control">
+									<div className="kadence-component__header kadence-title-bar">
+										<label className="kadence-control-title kadence-component__header__title">
+											{__('Font Family', '__KADENCE__TEXT__DOMAIN__')}
+										</label>
+									</div>
+									<div className="typography-family-select-form-row">
+										{controlEditor(
+											<Select
+												options={typographyOptions}
+												value={fontFamilyValue}
+												classNamePrefix="kb-react-select"
+												isMulti={false}
+												maxMenuHeight={300}
+												isClearable={true}
+												placeholder={__('Select a font family', '__KADENCE__TEXT__DOMAIN__')}
+												onChange={onTypoFontChange}
+												styles={{
+													control: (baseStyles, state) => ({
+														...baseStyles,
+														borderColor: 'rgb(30, 30, 30)',
+														borderRadius: '2px',
+														':hover': {
+															borderColor: 'rgb(30, 30, 30)',
+														},
+													}),
+												}}
+											/>,
+											{ control: 'fontFamily', index: null, value: fontFamily, onChange: onTypoFontPick, context }
+										)}
+									</div>
 								</div>
-								<div className="typography-family-select-form-row">
-									<Select
-										options={typographyOptions}
-										value={fontFamilyValue}
-										classNamePrefix="kb-react-select"
-										isMulti={false}
-										maxMenuHeight={300}
-										isClearable={true}
-										placeholder={__('Select a font family', '__KADENCE__TEXT__DOMAIN__')}
-										onChange={onTypoFontChange}
-										styles={{
-											control: (baseStyles, state) => ({
-												...baseStyles,
-												borderColor: 'rgb(30, 30, 30)',
-												borderRadius: '2px',
-												':hover': {
-													borderColor: 'rgb(30, 30, 30)',
-												},
-											}),
-										}}
-									/>
-								</div>
-							</div>
+							)}
 							{onFontWeight && (
 								<SelectControl
 									label={__('Font Weight', '__KADENCE__TEXT__DOMAIN__')}
