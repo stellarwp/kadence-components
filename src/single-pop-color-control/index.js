@@ -9,7 +9,8 @@
 import ColorPicker from '../color-picker';
 import { usePaletteSwatches } from '../common/palette-swatches';
 import ColorIcons from '../color-icons';
-import { hexToRGBA } from '@kadence/helpers';
+import { getKadenceColorConfig, getPopColorSwatches, toConcreteColor } from '../common/pop-color';
+import { hexToRGBA, KadenceColorOutput } from '@kadence/helpers';
 
 import { get, map } from 'lodash';
 import { useEffect, useState, useMemo } from '@wordpress/element';
@@ -42,6 +43,7 @@ export default function SinglePopColorControl({
 	onClassChange,
 	onArrayChange = null,
 	disableCustomColors = false,
+	disabled = false,
 }) {
 	const [isVisible, setIsVisible] = useState(false);
 	const [currentColor, setCurrentColor] = useState('');
@@ -59,32 +61,14 @@ export default function SinglePopColorControl({
 	}, [opacityValue]);
 	const allColors = usePaletteSwatches();
 
-	// Get Kadence Blocks color configuration
-	const kadenceColors = useMemo(() => {
-		if (typeof kadence_blocks_params !== 'undefined' && kadence_blocks_params.colors) {
-			try {
-				return JSON.parse(kadence_blocks_params.colors);
-			} catch (e) {
-				return { palette: [], override: false };
-			}
-		}
-		return { palette: [], override: false };
-	}, []);
+	// Get Kadence Blocks color configuration.
+	const kadenceColors = useMemo(() => getKadenceColorConfig(), []);
 
-	// Filter colors based on override setting
-	const colors = useMemo(() => {
-		if (!allColors || !Array.isArray(allColors)) {
-			return [];
-		}
-
-		// If override is enabled, only show custom colors (kb-palette colors)
-		if (kadenceColors.override === true) {
-			return allColors.filter((color) => color.slug && color.slug.startsWith('kb-palette'));
-		}
-
-		// If override is disabled, show all colors (theme + custom)
-		return allColors;
-	}, [allColors, kadenceColors.override]);
+	// Filter colors based on the override setting, through the shared swatch-list seam.
+	const colors = useMemo(
+		() => getPopColorSwatches(allColors, kadenceColors.override),
+		[allColors, kadenceColors.override]
+	);
 	const toggleVisible = () => {
 		setIsVisible(true);
 	};
@@ -181,6 +165,11 @@ export default function SinglePopColorControl({
 				break;
 		}
 	}
+	// Delegate final resolution to @kadence/helpers: a swatch value that is a token reference or a
+	// palette slug becomes a renderable CSS color, a literal (hex/rgba/var) is returned unchanged.
+	previewColorString = KadenceColorOutput(previewColorString);
+	// The color picker needs a concrete color; flatten a token/palette reference to a literal.
+	const pickerColor = toConcreteColor(currentColorString);
 	const onChangeState = (tempColor, tempPalette) => {
 		let newColor;
 		let opacity = 100 === opacityUnit ? 100 : 1;
@@ -264,7 +253,7 @@ export default function SinglePopColorControl({
 			{isVisible && (
 				<Popover position="top left" className="kadence-pop-color-popover" onClose={toggleClose}>
 					<ColorPicker
-						color={currentColorString}
+						color={pickerColor}
 						onChange={(color) => onChangeState(color, '')}
 						onChangeComplete={(color) => {
 							onChangeComplete(color, '');
@@ -276,7 +265,7 @@ export default function SinglePopColorControl({
 					{colors && (
 						<div className="kadence-pop-color-palette-swatches">
 							{map(colors, ({ color, slug, name }, index) => {
-								const style = { color };
+								const style = { color: KadenceColorOutput(color) };
 								const palette = slug.replace('theme-', '');
 								const isActive =
 									palette === value || (!slug.startsWith('theme-palette') && value === color);
@@ -330,6 +319,7 @@ export default function SinglePopColorControl({
 					onClick={toggleVisible}
 					showTooltip={true}
 					label={label}
+					disabled={disabled}
 				>
 					<ColorIndicator className="kadence-pop-color-indicate" colorValue={previewColorString} />
 					{value && value.startsWith('palette') && (
@@ -343,6 +333,7 @@ export default function SinglePopColorControl({
 					onClick={toggleVisible}
 					showTooltip={true}
 					label={label}
+					disabled={disabled}
 				>
 					<ColorIndicator className="kadence-pop-color-indicate" colorValue={previewColorString} />
 					{value && value.startsWith('palette') && (
