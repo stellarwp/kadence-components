@@ -1,12 +1,88 @@
-import { useEffect, useState } from '@wordpress/element';
-import { useSelect, useDispatch } from '@wordpress/data';
+import { createInterpolateElement, useEffect, useState } from '@wordpress/element';
+import { useSelect, useDispatch, select, dispatch } from '@wordpress/data';
 import KadencePanelBody from '../panel-body/index.js';
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
+import { getBlockType } from '@wordpress/blocks';
+import { addQueryArgs } from '@wordpress/url';
 import { omit, head, get, isEqual } from 'lodash';
 import { store as noticesStore } from '@wordpress/notices';
 import { Button, Modal, __experimentalConfirmDialog as ConfirmDialog } from '@wordpress/components';
 import apiFetch from '@wordpress/api-fetch';
 import { SafeParseJSON, getTransferableAttributes } from '@kadence/helpers';
+/**
+ * The data store kadence-blocks registers in the Site Editor to open the Kadence
+ * panel. Looked up by name, so this package doesn't depend on kadence-blocks code.
+ */
+const SITE_STYLES_STORE = 'kadence/site-styles';
+
+/**
+ * @param {string} blockName Block name, e.g. `kadence/singlebtn`.
+ * @return {boolean} Whether site-level styles replace Block Defaults for the block: the
+ * Kadence theme runs in FSE mode and kadence-blocks lists the block.
+ */
+function usesSiteStyles(blockName) {
+	const params = typeof kadence_blocks_params === 'undefined' ? {} : kadence_blocks_params;
+
+	return !!params.isFseMode && Array.isArray(params.siteStylesBlocks) && params.siteStylesBlocks.includes(blockName);
+}
+
+/**
+ * Block Defaults for a block whose site-level styles are set in the Kadence panel:
+ * a button that opens the panel in the Site Editor, a note elsewhere.
+ *
+ * @param {object} props           Component props.
+ * @param {string} props.blockSlug Block name, e.g. `kadence/singlebtn`.
+ * @return {Element} The panel.
+ */
+function SiteStylesPointer({ blockSlug }) {
+	// kadence-blocks registers this store only where it mounts the panel: the Site Editor in FSE mode.
+	const canOpenPanel = !!select(SITE_STYLES_STORE);
+	const blockTitle = getBlockType(blockSlug)?.title || blockSlug;
+	// Relative to wp-admin, where both editors run. The block name is encoded once more inside `section`, as core does.
+	const stylesUrl = addQueryArgs('site-editor.php', {
+		p: '/styles',
+		section: '/blocks/' + encodeURIComponent(blockSlug),
+	});
+
+	return (
+		<KadencePanelBody
+			title={__('Block Defaults', '__KADENCE__TEXT__DOMAIN__')}
+			initialOpen={false}
+			panelName={`kb-${blockSlug}-defaults`}
+		>
+			{canOpenPanel
+				? sprintf(
+						/* translators: %1$s: block title, e.g. Single Button. */
+						__(
+							'Site styles replace Block Defaults for %1$s. They apply to every %1$s on the site, except where a block has its own setting.',
+							'__KADENCE__TEXT__DOMAIN__'
+						),
+						blockTitle
+				  )
+				: createInterpolateElement(
+						sprintf(
+							/* translators: %1$s: block title, e.g. Single Button. */
+							__(
+								'Site styles replace Block Defaults for %1$s. You can change them in the Site Editor, under <a>Styles > Blocks > %1$s</a>.',
+								'__KADENCE__TEXT__DOMAIN__'
+							),
+							blockTitle
+						),
+						{ a: <a href={stylesUrl} /> }
+				  )}
+			{canOpenPanel && (
+				<>
+					<br />
+					<br />
+					<Button variant="secondary" onClick={() => dispatch(SITE_STYLES_STORE).openSiteStyles(blockSlug)}>
+						{__('Edit site styles', '__KADENCE__TEXT__DOMAIN__')}
+					</Button>
+				</>
+			)}
+		</KadencePanelBody>
+	);
+}
+
 /**
  * Display Kadence Block Default settings -- intended for use in Inspector Controls.
  *
@@ -19,18 +95,32 @@ import { SafeParseJSON, getTransferableAttributes } from '@kadence/helpers';
  *
  * @public
  */
-export default function KadenceBlockDefaults({
+export default function KadenceBlockDefaults(props) {
+	const [user, setUser] = useState(kadence_blocks_params.userrole ? kadence_blocks_params.userrole : 'admin');
+	if (user !== 'admin') {
+		return null;
+	}
+
+	if (usesSiteStyles(props.blockSlug)) {
+		return <SiteStylesPointer blockSlug={props.blockSlug} />;
+	}
+
+	return <BlockDefaultsPanel {...props} />;
+}
+
+/**
+ * The Save / Modify / Reset Block Defaults panel. Kept apart from KadenceBlockDefaults so
+ * its hooks always run in the same order, whichever panel that component returns.
+ *
+ * @param {object} props Same as KadenceBlockDefaults.
+ */
+function BlockDefaultsPanel({
 	attributes,
 	defaultAttributes = {},
 	blockSlug,
 	excludedAttrs = [],
 	preventMultiple = [],
 }) {
-	const [user, setUser] = useState(kadence_blocks_params.userrole ? kadence_blocks_params.userrole : 'admin');
-	if (user !== 'admin') {
-		return null;
-	}
-
 	const {createErrorNotice, createSuccessNotice} = useDispatch(noticesStore);
 
 	const [isOpenResetConfirm, setIsOpenResetConfirm] = useState(false);

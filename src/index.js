@@ -22,6 +22,7 @@ export { default as ButtonStyleControls } from './button-style-controls';
 export { default as DynamicImageControl } from './dynamic-image-control';
 export { default as DynamicTextControl } from './dynamic-text-control';
 export { default as DynamicInlineReplaceControl } from './dynamic-inline-replace-control';
+export { usePaletteSwatches, getPaletteSwatches } from './common/palette-swatches';
 export { default as DynamicBackgroundControl } from './dynamic-background-control';
 export { default as DynamicGalleryControl } from './dynamic-gallery-control';
 export { default as DropShadowControl } from './drop-shadow-control';
