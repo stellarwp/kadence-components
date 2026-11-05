@@ -11,7 +11,7 @@
  * Builds the swatch list the Kadence color controls offer, in the order core's color panel shows the palette
  * origins: theme colors, then WordPress default colors when the default palette is enabled, then user colors.
  *
- * @since TBD
+ * @since 1.2.0
  *
  * @param {Object}              origins                The palette origins.
  * @param {PaletteColor[]}      [origins.theme]        Theme palette colors.

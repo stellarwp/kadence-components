@@ -17,7 +17,7 @@ export { getPaletteSwatches };
  * The resolved `color.palette` setting returns a single origin (user colors replace the theme colors), so each
  * origin is read on its own path.
  *
- * @since TBD
+ * @since 1.2.0
  *
  * @return {import('./get-palette-swatches').PaletteColor[]} Theme, default (when enabled) and user palette colors.
  */
