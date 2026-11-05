@@ -21,6 +21,7 @@ import { plus } from '@wordpress/icons';
 // import { ColorPicker } from '../../color-picker';
 // import { VisuallyHidden } from '../../visually-hidden';
 import ColorPicker from '../../color-picker';
+import { usePaletteSwatches } from '../../common/palette-swatches';
 import {
 	__experimentalHStack as HStack,
 	Button,
@@ -335,7 +336,7 @@ function ControlPoints({
 		};
 	}, []);
 	const disableCustomColors = !useSetting('color.custom');
-	const colors = useSetting('color.palette');
+	const colors = usePaletteSwatches();
 	return controlPoints.map((point, index) => {
 		const initialPosition = point?.position;
 		const pointColor = getReadableColor(point.color, colors);
@@ -432,7 +433,7 @@ function ControlPoints({
 							)}
 							{colors && (
 								<div className="kadence-pop-color-palette-swatches">
-									{map(colors, ({ color, slug, name }) => {
+									{map(colors, ({ color, slug, name }, swatchIndex) => {
 										const style = { color };
 										const palette = slug.replace('theme-', '');
 										const isActive =
@@ -443,7 +444,7 @@ function ControlPoints({
 											color.startsWith('var(') &&
 											(pointColor === color || color === point.color);
 										return (
-											<div key={color} className="kadence-color-palette__item-wrapper">
+											<div key={`${slug}-${swatchIndex}`} className="kadence-color-palette__item-wrapper">
 												<Tooltip
 													text={
 														name ||
@@ -558,7 +559,7 @@ function InsertPoint({
 }) {
 	const [alreadyInsertedPoint, setAlreadyInsertedPoint] = useState(false);
 	const disableCustomColors = !useSetting('color.custom');
-	const colors = useSetting('color.palette');
+	const colors = usePaletteSwatches();
 	const [tempColor, setTempColor] = useState('');
 	const pointColor = getReadableColor(tempColor, colors);
 	return (
@@ -628,7 +629,7 @@ function InsertPoint({
 					)}
 					{colors && (
 						<div className="kadence-pop-color-palette-swatches">
-							{map(colors, ({ color, slug, name }) => {
+							{map(colors, ({ color, slug, name }, swatchIndex) => {
 								const style = { color };
 								const palette = slug.replace('theme-', '');
 								//const isActive = ( ( slug.startsWith( 'theme-palette' ) && pointColor === color ) );
@@ -640,7 +641,7 @@ function InsertPoint({
 									color.startsWith('var(') &&
 									tempColor === color;
 								return (
-									<div key={color} className="kadence-color-palette__item-wrapper">
+									<div key={`${slug}-${swatchIndex}`} className="kadence-color-palette__item-wrapper">
 										<Tooltip
 											text={
 												name ||
